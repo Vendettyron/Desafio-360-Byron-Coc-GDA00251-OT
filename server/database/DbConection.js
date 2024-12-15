@@ -1,31 +1,38 @@
+// backend/config/db.js
 import sql from 'mssql';
+import dotenv from 'dotenv';
+dotenv.config();
 
-// Objeto con las credenciales y la configuración de la base de datos
 const dbConfig = {
-    user: 'userDB2',      
-    password: 'root', 
-    server: 'localhost',       
-    database: 'MiTienditaOnlineDB', 
+    user: process.env.DB_USER,  
+    password: process.env.DB_PASSWORD, 
+    server: process.env.DB_SERVER, 
+    database: process.env.DB_DATABASE,
+    port: parseInt(process.env.DB_PORT, 10) || 1433,
     options: {
         encrypt: false, 
         trustServerCertificate: true 
     }
 };
 
-// Función para conectar a la base de datos
-
-export const getConnection = async () => {
-    try {
-        const pool = await sql.connect(dbConfig);
-
-        const result = await pool.request().query('SELECT * FROM Categorias');
-        console.log(result);
-
+// Crear una pool de conexiones para usar en toda la aplicación
+const poolPromise = new sql.ConnectionPool(dbConfig)
+    .connect()
+    .then(pool => {
+        console.log('Conectado a la base de datos');
         return pool;
-    } catch (error) {
-        console.error('Error de conexión: ', error);
-    }
-};
+    })
+    .catch(err => {
+        console.error('Error de conexión: ', err);
+        process.exit(1); // Termina el proceso si no puede conectar
+    });
+
+export { sql, poolPromise };
+
+
+
+
+
 
 
 
