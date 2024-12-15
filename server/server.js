@@ -3,10 +3,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { poolPromise } from './database/DbConection.js'; // Importar la pool de conexiones
 
 // Importar rutas
 import authRoutes from './routes/auth.routes.js';
+import productosClientesRoutes from './routes/productosClientes.routes.js';
 
 // Importar middleware de manejo de errores
 
@@ -14,6 +16,7 @@ import authRoutes from './routes/auth.routes.js';
 dotenv.config();
 
 const app = express();
+app.use(cookieParser()); // Usar cookie-parser
 
 // Middlewares
 app.use(helmet());
@@ -34,6 +37,7 @@ app.get('/test-db', async (req, res) => {
 
 // Montar las rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/productos', productosClientesRoutes);
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {

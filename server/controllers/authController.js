@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Iniciar sesión de un usuario
 export const login = async (req, res) => {
     const { correo, password } = req.body;
 
@@ -36,19 +37,28 @@ export const login = async (req, res) => {
 
         // Generar el token JWT
         const token = jwt.sign(
-            { id: usuario.pk_id_usuario, rol: usuario.fk_rol },
+            { id: usuario.pk_id_usuario, rol: Number(usuario.fk_rol) },
             process.env.JWT_SECRET,
             { expiresIn: '24h' } // Token válido por 24 horas
         );
 
-        // Enviar el token al cliente
-        res.json({ token });
+         // Enviar el token como una cookie httpOnly
+         res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Usa secure en producción
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        });
+
+        return res.json({ message: 'Login exitoso.', token });
     } catch (error) {
         console.error('Error en login:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
 
+
+// Registro de un nuevo usuario
 export const register = async (req, res) => {
     const { nombre, apellido, correo, password, direccion, telefono } = req.body;
 
@@ -75,22 +85,25 @@ export const register = async (req, res) => {
 
         // Insertar el nuevo usuario en la base de datos
         await pool.request()
-            .input('nombre', sql.VarChar(100), nombre)
-            .input('apellido', sql.VarChar(100), apellido)
-            .input('correo', sql.VarChar(100), correo)
-            .input('password', sql.VarChar(255), hashedPassword)
-            .input('direccion', sql.VarChar(255), direccion)
-            .input('telefono', sql.VarChar(15), telefono)
-            .input('fk_rol', sql.Int, 2) // Asignar rol de 'Cliente' por defecto (puedes ajustarlo)
-            .input('fk_estado', sql.Int, 1) // Estado 'Activo'
-            .query(`
-                INSERT INTO Usuarios (nombre, apellido, correo, password, direccion, telefono, fk_rol, fk_estado)
-                VALUES (@nombre, @apellido, @correo, @password, @direccion, @telefono, @fk_rol, @fk_estado)
-            `);
+        .input('nombre', sql.VarChar(100), nombre)
+        .input('apellido', sql.VarChar(100), apellido)
+        .input('correo', sql.VarChar(100), correo)
+        .input('password', sql.VarChar(255), hashedPassword)
+        .input('direccion', sql.VarChar(255), direccion)
+        .input('telefono', sql.VarChar(15), telefono)
+        .input('fk_rol', sql.Int, 2) // Asignar rol de 'Cliente'
+        .input('fk_estado', sql.Int, 1) // Estado 'Activo'
+        .execute('InsertarUsuario'); // Ejecutar el SP
 
         res.status(201).json({ message: 'Usuario registrado exitosamente.' });
     } catch (error) {
         console.error('Error en registro:', error);
+
+        // Manejar errores específicos del SP
+        if (error.number === 50000) { // RAISERROR con severidad 16
+            return res.status(400).json({ message: error.message });
+        }
+
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };

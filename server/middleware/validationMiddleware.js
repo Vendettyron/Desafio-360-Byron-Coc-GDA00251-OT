@@ -1,3 +1,4 @@
+// middlewaree para validar los campos de registro de usuario
 export const validateRegister = (req, res, next) => {
     const { nombre, apellido, correo, password, direccion, telefono } = req.body;
 
