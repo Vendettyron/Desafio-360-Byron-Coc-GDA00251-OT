@@ -9,6 +9,7 @@ import { poolPromise } from './database/DbConection.js'; // Importar la pool de 
 // Importar rutas
 import authRoutes from './routes/auth.routes.js';
 import productosClientesRoutes from './routes/productosClientes.routes.js';
+import productosRoutes from './routes/productos.routes.js';
 
 // Importar middleware de manejo de errores
 
@@ -37,7 +38,8 @@ app.get('/test-db', async (req, res) => {
 
 // Montar las rutas
 app.use('/api/auth', authRoutes);
-app.use('/api/productos', productosClientesRoutes);
+app.use('/api/productosClientes', productosClientesRoutes);
+app.use('/api/productos', productosRoutes);
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {

@@ -12,4 +12,5 @@ const router = express.Router();
  */
 router.get('/', authMiddleware,roleMiddleware([1,2]), obtenerProductosClientes);
 
+
 export default router;
