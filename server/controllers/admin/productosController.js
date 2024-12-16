@@ -1,4 +1,4 @@
-import { poolPromise, sql } from '../../database/DbConection.js';
+import { poolPromise} from '../../database/DbConection.js';
 import productosService from '../../services/admin/productosService.js'
 /**
  * Obtener la lista de productos
