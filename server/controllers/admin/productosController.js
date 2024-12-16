@@ -1,8 +1,8 @@
-import { poolPromise, sql } from '../database/DbConection.js';
-
+import { poolPromise, sql } from '../../database/DbConection.js';
+import productosService from '../../services/admin/productosService.js'
 /**
  * Obtener la lista de productos
- * Accesible para Admin y Cliente
+ * Accesible para Admin
  */
 export const obtenerProductos = async (req, res) => {
     try {
@@ -31,17 +31,16 @@ export const crearProducto = async (req, res) => {
     }
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('fk_categoria', sql.Int, fk_categoria)
-            .input('fk_estado', sql.Int, fk_estado)
-            .input('fk_proveedor', sql.Int, fk_proveedor)
-            .input('nombre', sql.VarChar(100), nombre)
-            .input('descripcion', sql.NVarChar, descripcion)
-            .input('precio', sql.Decimal(10, 2), precio)
-            .input('stock', sql.Int, stock)
-            .input('fk_id_usuario', sql.Int, fk_id_usuario)
-            .execute('InsertarProducto'); // Llamar al SP InsertarProducto
+        await productosService.crearProducto({
+            fk_categoria,
+            fk_estado,
+            fk_proveedor,
+            nombre,
+            descripcion,
+            precio,
+            stock,
+            fk_id_usuario
+        });
 
         res.status(201).json({ message: 'Producto creado exitosamente.' });
     } catch (error) {
@@ -54,7 +53,6 @@ export const crearProducto = async (req, res) => {
  * Actualizar un producto existente
  *   Accesible solo para Admin
  */
-// server/controllers/productosController.js
 
 export const actualizarProducto = async (req, res) => {
     const { fk_categoria, fk_estado, fk_proveedor, nombre, descripcion, precio, stock } = req.body;
@@ -79,18 +77,17 @@ export const actualizarProducto = async (req, res) => {
     }
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('id_producto', sql.Int, id_producto)
-            .input('fk_categoria', sql.Int, fk_categoria)
-            .input('fk_estado', sql.Int, fk_estado)
-            .input('fk_proveedor', sql.Int, fk_proveedor)
-            .input('nombre', sql.VarChar(100), nombre)
-            .input('descripcion', sql.NVarChar, descripcion)
-            .input('precio', sql.Decimal(10, 2), precio)
-            .input('stock', sql.Int, stock)
-            .input('fk_id_usuario', sql.Int, fk_id_usuario)
-            .execute('ActualizarProducto'); // Llamar al SP ActualizarProducto
+        await productosService.actualizarProducto({
+            id_producto,
+            fk_categoria,
+            fk_estado,
+            fk_proveedor,
+            nombre,
+            descripcion,
+            precio,
+            stock,
+            fk_id_usuario
+        });
 
         res.json({ message: 'Producto actualizado exitosamente.' });
     } catch (error) {
@@ -110,11 +107,10 @@ export const inactivarProducto = async (req, res) => {
     const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('id_producto', sql.Int, id_producto)
-            .input('fk_id_usuario', sql.Int, fk_id_usuario)
-            .execute('InactivarProducto'); // Llamar al SP InactivarProducto
+        await productosService.inactivarProducto({
+            id_producto,
+            fk_id_usuario
+        });
 
         res.json({ message: 'Producto inactivado exitosamente.' });
     } catch (error) {
@@ -133,12 +129,10 @@ export const activarProducto = async (req, res) => {
     const id_usuario_accion = req.user.id; // Obtener el ID del usuario desde req.user
 
     try {
-        const pool = await poolPromise;
-        await pool.request()
-            .input('pk_id_producto', sql.Int, pk_id_producto)
-            .input('id_usuario_accion', sql.Int, id_usuario_accion)
-            .execute('ActivarProducto'); // Llamar al SP ActivarProducto
-
+        await productosService.activarProducto({
+            pk_id_producto,
+            id_usuario_accion
+        });
         res.json({ message: 'Producto activado exitosamente.' });
     } catch (error) {
         console.error('Error activando producto:', error);

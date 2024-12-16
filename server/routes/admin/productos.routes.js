@@ -1,18 +1,18 @@
 import express from "express";
-import authMiddleware from "../middleware/authMiddleware.js";
-import roleMiddleware from "../middleware/roleMiddleware.js";
+import authMiddleware from "../../middleware/authMiddleware.js";
+import roleMiddleware from "../../middleware/roleMiddleware.js";
 import {
   crearProducto,
   obtenerProductos,
   actualizarProducto,
   activarProducto,
   inactivarProducto,
-} from "../controllers/productosController.js";
+} from "../../controllers/admin/productosController.js";
 
 const router = express.Router();
 
 /**
- * @route POST /api/CrearProducto
+ * @route POST /api/admin/productos/CrearProducto
  * @desc Crear un nuevo producto
  * @access Privado (Admin)
  */
@@ -23,7 +23,7 @@ router.post(
   crearProducto
 );
 /**
- * @route GET /api/actualizarProducto
+ * @route GET /api/admin/productos/actualizarProducto
  * @desc obtener los productos
  * @access Cualuiera
  */
@@ -35,7 +35,7 @@ router.get(
 );
 
 /**
- * @route PUT /api/ActualizarProducto
+ * @route PUT /api/admin/productos/ActualizarProducto
  * @desc Actualizar un producto existente
  * @access Privado (Admin)
  */
@@ -47,7 +47,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/ActivarProducto
+ * @route PUT /api/admin/productos/ActivarProducto
  * @desc Activar un producto
  * @access Privado (Admin)
  */
@@ -59,7 +59,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/InactivarProducto
+ * @route PUT /api/admin/productos/InactivarProducto
  * @desc inactivr un producto existente
  * @access Privado (Admin)
  */
