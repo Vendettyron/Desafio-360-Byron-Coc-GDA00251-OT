@@ -13,6 +13,7 @@ import productosAdminRoutes from './routes/admin/productos.routes.js';
 import categoriasAdminRoutes from './routes/admin/categorias.routes.js';
 import proveedorAdminRoutes from './routes/admin/proveedor.routes.js';
 import estadosAdminRoutes from './routes/admin/estados.routes.js';
+import usuariosAdminRoutes from './routes/admin/usuarios.routes.js';
 
 // Importar middleware de manejo de errores
 
@@ -46,6 +47,7 @@ app.use('/api/admin/productos', productosAdminRoutes);
 app.use('/api/admin/categorias', categoriasAdminRoutes);
 app.use('/api/admin/proveedor', proveedorAdminRoutes);
 app.use('/api/admin/estados', estadosAdminRoutes);
+app.use('/api/admin/usuarios', usuariosAdminRoutes);
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {
