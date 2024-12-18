@@ -14,6 +14,28 @@ export const obtenerProveedor = async (req, res) => {
     }
 }
 
+
+export const obtenerProveedorPorId = async (req, res) => {
+   const { id } = req.params; // Obtener el ID del proveedor desde req.params
+   const pk_id_proveedor = Number(id); // Convertir a número
+
+    // Validar que el ID sea válido
+    if (!pk_id_proveedor || isNaN(pk_id_proveedor)) {
+        return res.status(400).json({ message: 'ID del proveedor invalido.' });
+    }
+
+   try{
+         const proveedor = await proveedoresService.obtenerProveedorPorId(pk_id_proveedor);
+         if(!proveedor){
+              return res.status(404).json({ message: 'Proveedor no encontrado.' });
+         }
+         res.json(proveedor);
+   }catch (error) {
+        console.error('Error obteniendo proveeeedor por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+}
+
 /**
  * Crear un nuevo proveedor
  * Accesible solo para Admin

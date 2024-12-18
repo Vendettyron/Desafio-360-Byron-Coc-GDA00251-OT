@@ -7,6 +7,7 @@ import {
   actualizarProducto,
   activarProducto,
   inactivarProducto,
+  obtenerProductoPorId
 } from "../../controllers/admin/productosController.js";
 
 const router = express.Router();
@@ -32,6 +33,17 @@ router.get(
   authMiddleware,
   roleMiddleware([1, 2]),
   obtenerProductos
+);
+/**
+ * @route GET /api/admin/productos/:id
+ * @desc Obtener un producto por su ID
+ * @access Privado (Admin y Cliente)
+ */
+router.get(
+  "/ObtenerProductosPorId/:id",
+  authMiddleware,
+  roleMiddleware([1, 2]),
+  obtenerProductoPorId
 );
 
 /**

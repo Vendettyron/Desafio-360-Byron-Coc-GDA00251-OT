@@ -6,7 +6,8 @@ import { obtenerProveedor,
         crearProveedor,
         actualizarProveedor,
         activarProveedor,
-        inactivarProveedor
+        inactivarProveedor,
+        obtenerProveedorPorId
 } from "../../controllers/admin/proveedorController.js";
 
 const router = express.Router();
@@ -24,6 +25,18 @@ router.get(
     obtenerProveedor
 );
 
+/**
+ * @route POST /api/admin/proveedor/ObtenerProveedorPorId/:id
+ * @desc Ver proveedor individual
+ * @access admin y cliente
+ */
+
+router.get( 
+    "/ObtenerProveedorPorId/:id",
+    authMiddleware,
+    roleMiddleware([1]),
+    obtenerProveedorPorId
+);
 /**
  * @route POST /api/admin/proveedor/CrearProveedor
  * @desc Crear una nuevo proveedor

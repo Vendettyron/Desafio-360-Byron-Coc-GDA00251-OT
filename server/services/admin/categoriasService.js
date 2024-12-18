@@ -1,5 +1,18 @@
 import { poolPromise, sql } from '../../database/DbConection.js';
 
+export const obtenerCategoriaPorId = async (pk_id_categoria) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('pk_id_categoria', sql.Int, pk_id_categoria)
+            .execute('ObtenerCategoriaPorId'); // Llamar al SP ObtenerCategoriaPorId
+
+        return result.recordset[0];
+    }catch (error) {
+        throw error;
+    }
+}
+
 export const crearCategoria = async (data) => {
     const { nombre, descripcion, fk_estado, fk_id_usuario } = data;
 
@@ -65,5 +78,6 @@ export default {
     crearCategoria,
     actualizarCategoria,
     activarCategoria,
-    inactivarCategoria
+    inactivarCategoria,
+    obtenerCategoriaPorId
 };

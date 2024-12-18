@@ -17,6 +17,33 @@ export const obtenerProductos = async (req, res) => {
     }
 };
 
+
+/**
+ * Obtener un producto por su IDe
+ */
+export const obtenerProductoPorId = async (req, res) => {
+    const { id } = req.params; // Obtener el ID del producto desde req.params
+    const pk_id_producto = Number(id); // Convertir a número
+
+    // Validar que el ID sea válido
+    if (!pk_id_producto || isNaN(pk_id_producto)) {
+        return res.status(400).json({ message: 'ID del producto inválido.' });
+    }
+
+    try {
+        const producto = await productosService.obtenerProductoPorId(pk_id_producto);
+        
+        if (!producto) {
+            return res.status(404).json({ message: 'Producto no encontrado.' });
+        }
+
+        res.json(producto);
+    } catch (error) {
+        console.error('Error obteniendo producto por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
 /**
  * Crear un nuevo producto
  *  * Accesible solo para Admin

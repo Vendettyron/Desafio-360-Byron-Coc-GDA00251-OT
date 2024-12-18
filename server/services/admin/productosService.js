@@ -20,6 +20,21 @@ export const crearProducto = async (data) => {
     }
 };
 
+/**
+ * Obtener un producto por su ID
+ */
+export const obtenerProductoPorId = async (pk_id_producto) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('pk_id_producto', sql.Int, pk_id_producto)
+            .execute('ObtenerProductoPorId'); // Llamar al SP ObtenerProductoPorId
+        return result.recordset[0]; // Retornar el primer registro encontrado
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const actualizarProducto = async (data) => {
     const { id_producto, fk_categoria, fk_estado, fk_proveedor, nombre, descripcion, precio, stock, fk_id_usuario } = data;
 
@@ -86,4 +101,5 @@ export default {
     inactivarProducto,
     activarProducto,
     obtenerProductos,
+    obtenerProductoPorId
 };

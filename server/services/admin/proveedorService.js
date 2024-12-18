@@ -75,10 +75,24 @@ const inactivarProveedor = async (data) => {
     }
 };
 
+const obtenerProveedorPorId = async (pk_id_proveedor) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('pk_id_proveedor', sql.Int,  pk_id_proveedor)
+            .execute('ObtenerProveedorPorId'); // Llamar al SP ObtenerProveedorPorId
+
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 export default {
     crearProveedor,
     actualizarProveedor,
     activarProveedor,
-    inactivarProveedor
+    inactivarProveedor,
+    obtenerProveedorPorId
 };

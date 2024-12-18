@@ -6,7 +6,8 @@ import {
     actualizarUsuario,
     inactivarUsuario,
     activarUsuario,
-    obtenerUsuarios
+    obtenerUsuarios,
+    ObtenerUsuarioPorId
 } from "../../controllers/admin/usuariosController.js";
 
 const router = express.Router();
@@ -21,6 +22,18 @@ router.get(
     authMiddleware,
     roleMiddleware([1]),
     obtenerUsuarios
+);
+
+/**
+ * @route GET /api/admin/usuarios/ObtenerUsuarioPorId/:id
+ * @desc Ver Usuario individual
+ * @access Privado (Admin)
+ */
+router.get(
+    "/ObtenerUsuarioPorId/:id",
+    authMiddleware,
+    roleMiddleware([1]),
+    ObtenerUsuarioPorId
 );
 
 /**

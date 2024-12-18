@@ -19,6 +19,31 @@ export const obtenerCategorias = async (req, res) => {
     }
 };
 /**
+ * Obtener una categoria por ID
+ * Accesible para Admin y cliente
+ */
+
+export const obtenerCategoriaPorId = async (req, res) => {
+    const { id } = req.params; // Obtener el ID de la categoria desde req.params
+    const pk_id_categoria = Number(id); // Convertir a número
+
+    // Validar que el ID sea válido
+    if (!pk_id_categoria || isNaN(pk_id_categoria)) {
+        return res.status(400).json({ message: 'ID de la categoria invalido.' });
+    }
+
+    try {
+        const categoria = await categoriasService.obtenerCategoriaPorId(pk_id_categoria);
+        if (!categoria) {
+            return res.status(404).json({ message: 'Categoria no encontrada.' });
+        }
+        res.json(categoria);
+    } catch (error) {
+        console.error('Error obteniendo categoria por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+}
+/**
  * Crear una nueva Categoria
  * Accesible para Admin
  */

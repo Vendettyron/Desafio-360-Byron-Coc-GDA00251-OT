@@ -1,6 +1,29 @@
 import { poolPromise} from '../../database/DbConection.js';
 import usuariosService from '../../services/admin/usuariosService.js';
-import bcrypt from 'bcrypt';
+
+export const ObtenerUsuarioPorId = async (req, res) => {
+    const {id} = req.params; // Obtener el ID del usuario desde req.params
+    const pk_id_usuario = Number(id); // Convertir a número
+
+    // Validar que el ID sea válido
+
+    if (!pk_id_usuario) {
+        return res.status(400).json({ message: 'ID del usuario invalido.' });
+    }
+
+    try {
+        const usuario = await usuariosService.obtnerUsuarioPorId(pk_id_usuario);
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        res.json(usuario);
+    } catch (error) {   
+        console.error('Error obteniendo usuario por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+}
+
+
 
 export const obtenerUsuarios = async (req, res) => {
     try {

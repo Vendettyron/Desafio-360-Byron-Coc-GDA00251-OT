@@ -1,5 +1,21 @@
 import { poolPromise, sql } from '../../database/DbConection.js';
 import bcrypt from 'bcrypt';
+
+/**
+ * Obtener un usuario por su ID
+ */
+export const obtnerUsuarioPorId = async (pk_id_usuario) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('id_usuario', sql.Int, pk_id_usuario)
+            .execute('ObtenerUsuarioPorId'); // Llamar al SP ObtenerUsuarioPorId
+
+        return result.recordset[0];
+    } catch (error) {
+        throw error;
+    }
+}
 /**
  * Actualizar un usuario existente
  */
@@ -67,4 +83,5 @@ export default {
     actualizarUsuario,
     inactivarUsuario,
     activarUsuario,
+    obtnerUsuarioPorId
 };

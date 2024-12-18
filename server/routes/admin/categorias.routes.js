@@ -6,7 +6,8 @@ import { obtenerCategorias,
         crearCategoria,
         actualizarCategoria,
         activarCategoria,
-        inactivarCategoria
+        inactivarCategoria,
+        obtenerCategoriaPorId
 } from "../../controllers/admin/categoriasController.js";
 
 const router = express.Router();
@@ -22,6 +23,19 @@ router.get(
     authMiddleware,
     roleMiddleware([1]),
     obtenerCategorias
+);
+
+/**
+ * @route POST /api/admin/categorias/ObtenerCategoriasPorId/:id
+ * @desc Ver categoria individual
+ * @access Privado (Admin)
+ */
+
+router.get( 
+    "/ObtenerCategoriasPorId/:id",
+    authMiddleware,
+    roleMiddleware([1,2]),
+    obtenerCategoriaPorId
 );
 
 /**
