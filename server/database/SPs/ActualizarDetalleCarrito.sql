@@ -2,40 +2,49 @@ USE MiTienditaOnlineDB;
 GO
 
 CREATE PROCEDURE ActualizarDetalleCarrito
-    @fk_id_carrito INT,
+    @fk_id_usuario INT,
     @fk_id_producto INT,
-    @nueva_cantidad INT,
-    @fk_id_usuario_operacion INT = NULL
+    @nueva_cantidad INT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     BEGIN TRANSACTION;
 
     BEGIN TRY
+        DECLARE @pk_id_carrito INT;
         DECLARE @estadoCarrito INT;
         DECLARE @precio_unitario DECIMAL(10,2);
         DECLARE @subtotal DECIMAL(10,2);
 
-        -- Validar que el carrito exista y esté pendiente
-        SELECT @estadoCarrito = fk_estado
+        -- 1. Obtener el ID del carrito pendiente del usuario
+        SELECT @pk_id_carrito = pk_id_carrito
         FROM Carrito
-        WHERE pk_id_carrito = @fk_id_carrito;
+        WHERE fk_id_usuario = @fk_id_usuario
+          AND fk_estado = 3; -- Estado "Pendiente"
 
-        IF @estadoCarrito IS NULL
+        -- 2. Validar que el carrito exista
+        IF @pk_id_carrito IS NULL
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50000, 'El carrito no existe.', 1;
+            THROW 50000, 'No existe un carrito pendiente para este usuario.', 1;
         END
+
+        -- 3. Validar que el carrito esté en estado "Pendiente"
+        SELECT @estadoCarrito = fk_estado
+        FROM Carrito
+        WHERE pk_id_carrito = @pk_id_carrito;
 
         IF @estadoCarrito <> 3
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50001, 'No se pueden actualizar detalles de un carrito que no esté pendiente.', 1;
+            THROW 50001, 'No se pueden actualizar detalles de un carrito que no está pendiente.', 1;
         END
 
-        -- Validar que el producto exista en el detalle del carrito
+        -- 4. Validar que el producto exista en el detalle del carrito
         SELECT @precio_unitario = precio_unitario
         FROM Detalle_Carrito
-        WHERE fk_id_carrito = @fk_id_carrito
+        WHERE fk_id_carrito = @pk_id_carrito
           AND fk_id_producto = @fk_id_producto;
 
         IF @precio_unitario IS NULL
@@ -44,7 +53,7 @@ BEGIN
             THROW 50002, 'El producto no existe en el detalle del carrito.', 1;
         END
 
-        -- Validar nueva cantidad
+        -- 5. Validar nueva cantidad
         IF @nueva_cantidad < 0
         BEGIN
             ROLLBACK TRANSACTION;
@@ -55,22 +64,22 @@ BEGIN
         BEGIN
             -- Eliminar el detalle del carrito
             DELETE FROM Detalle_Carrito
-            WHERE fk_id_carrito = @fk_id_carrito
+            WHERE fk_id_carrito = @pk_id_carrito
               AND fk_id_producto = @fk_id_producto;
 
             -- Actualizar total del carrito
             UPDATE Carrito
-            SET total = ISNULL((SELECT SUM(subtotal) FROM Detalle_Carrito WHERE fk_id_carrito = @fk_id_carrito), 0)
-            WHERE pk_id_carrito = @fk_id_carrito;
+            SET total = ISNULL((SELECT SUM(subtotal) FROM Detalle_Carrito WHERE fk_id_carrito = @pk_id_carrito), 0)
+            WHERE pk_id_carrito = @pk_id_carrito;
 
             -- Registrar en el log
             INSERT INTO Log (fechaHora, fk_id_usuario, entidadAfectada, operacion, detalles, resultado)
             VALUES (
                 GETDATE(),
-                @fk_id_usuario_operacion,
+                @fk_id_usuario,
                 'Detalle_Carrito',
                 'DELETE',
-                CONCAT('Detalle eliminado. Carrito ID: ', @fk_id_carrito, 
+                CONCAT('Detalle eliminado. Usuario ID: ', @fk_id_usuario, 
                        ', Producto ID: ', @fk_id_producto),
                 'Éxito'
             );
@@ -84,22 +93,22 @@ BEGIN
             UPDATE Detalle_Carrito
             SET cantidad = @nueva_cantidad,
                 subtotal = @subtotal
-            WHERE fk_id_carrito = @fk_id_carrito
+            WHERE fk_id_carrito = @pk_id_carrito
               AND fk_id_producto = @fk_id_producto;
 
             -- Actualizar el total del carrito
             UPDATE Carrito
-            SET total = (SELECT SUM(subtotal) FROM Detalle_Carrito WHERE fk_id_carrito = @fk_id_carrito)
-            WHERE pk_id_carrito = @fk_id_carrito;
+            SET total = (SELECT SUM(subtotal) FROM Detalle_Carrito WHERE fk_id_carrito = @pk_id_carrito)
+            WHERE pk_id_carrito = @pk_id_carrito;
 
             -- Registrar en el log
             INSERT INTO Log (fechaHora, fk_id_usuario, entidadAfectada, operacion, detalles, resultado)
             VALUES (
                 GETDATE(),
-                @fk_id_usuario_operacion,
+                @fk_id_usuario,
                 'Detalle_Carrito',
                 'UPDATE',
-                CONCAT('Detalle actualizado. Carrito ID: ', @fk_id_carrito,
+                CONCAT('Detalle actualizado. Usuario ID: ', @fk_id_usuario,
                        ', Producto ID: ', @fk_id_producto, 
                        ', Nueva cantidad: ', @nueva_cantidad,
                        ', Nuevo subtotal: ', @subtotal),
@@ -117,7 +126,7 @@ BEGIN
         INSERT INTO Log (fechaHora, fk_id_usuario, entidadAfectada, operacion, detalles, resultado)
         VALUES (
             GETDATE(),
-            @fk_id_usuario_operacion,
+            @fk_id_usuario,
             'Detalle_Carrito',
             'UPDATE',
             ERROR_MESSAGE(),
@@ -125,5 +134,6 @@ BEGIN
         );
 
         THROW; -- Re-lanzar el error original
-    END CATCH;
+    END CATCH
 END;
+GO

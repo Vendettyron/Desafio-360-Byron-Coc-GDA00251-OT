@@ -1,124 +1,96 @@
 USE MiTienditaOnlineDB;
 GO
-CREATE PROCEDURE EliminarDetallePedido
-    @fk_id_pedido INT,
-    @fk_id_producto INT,
-    @fk_id_usuario_operacion INT = NULL -- Opcional, para el log
+
+CREATE PROCEDURE EliminarDetalleCarrito
+    @fk_id_usuario INT,
+    @fk_id_producto INT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     BEGIN TRANSACTION;
 
     BEGIN TRY
-        DECLARE @estadoPedido INT;
-        DECLARE @fk_cliente INT;
-        DECLARE @total_antiguo DECIMAL(10,2);
-        DECLARE @total_nuevo DECIMAL(10,2);
-        DECLARE @cantidad_eliminada INT;
-        DECLARE @precio_unitario DECIMAL(10,2);
-        DECLARE @subtotal_eliminado DECIMAL(10,2);
+        DECLARE @pk_id_carrito INT;
+        DECLARE @estadoCarrito INT;
+        DECLARE @existeDetalle INT;
 
-        -- 1. Verificar que el pedido existe y está en estado "4" (pendiente)
-        SELECT 
-            @estadoPedido = fk_estado,
-            @fk_cliente = fk_cliente,
-            @total_antiguo = total
-        FROM 
-            Pedidos
-        WHERE 
-            pk_id_pedido = @fk_id_pedido;
+        -- 1. Obtener el ID del carrito pendiente del usuario
+        SELECT @pk_id_carrito = pk_id_carrito
+        FROM Carrito
+        WHERE fk_id_usuario = @fk_id_usuario
+          AND fk_estado = 3; -- Estado "Pendiente"
 
-        IF @estadoPedido IS NULL
+        -- 2. Validar que el carrito exista
+        IF @pk_id_carrito IS NULL
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50000, 'El pedido especificado no existe.', 1;
+            THROW 50000, 'No existe un carrito pendiente para este usuario.', 1;
         END
 
-        IF @estadoPedido <> 4 -- 4 es "pendiente"
+        -- 3. Validar que el carrito esté en estado "Pendiente"
+        SELECT @estadoCarrito = fk_estado
+        FROM Carrito
+        WHERE pk_id_carrito = @pk_id_carrito;
+
+        IF @estadoCarrito <> 3
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50001, 'Solo se pueden eliminar detalles de pedidos en estado "pendiente".', 1;
+            THROW 50001, 'No se pueden eliminar detalles de un carrito que no está pendiente.', 1;
         END
 
-        -- 2. Verificar que el detalle del pedido (producto) existe
-        SELECT 
-            @cantidad_eliminada = cantidad,
-            @precio_unitario = precio_unitario,
-            @subtotal_eliminado = subtotal
-        FROM 
-            Detalle_Pedido
-        WHERE 
-            fk_id_pedido = @fk_id_pedido
-            AND fk_id_producto = @fk_id_producto;
+        -- 4. Validar que el producto exista en el detalle del carrito
+        SELECT @existeDetalle = COUNT(*)
+        FROM Detalle_Carrito
+        WHERE fk_id_carrito = @pk_id_carrito
+          AND fk_id_producto = @fk_id_producto;
 
-        IF @precio_unitario IS NULL
+        IF @existeDetalle = 0
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50002, 'El producto especificado no existe en el pedido.', 1;
+            THROW 50002, 'El producto no existe en el detalle del carrito.', 1;
         END
 
-        -- 3. Eliminar el detalle del pedido
-        DELETE FROM Detalle_Pedido
-        WHERE 
-            fk_id_pedido = @fk_id_pedido
-            AND fk_id_producto = @fk_id_producto;
+        -- 5. Eliminar el detalle del carrito
+        DELETE FROM Detalle_Carrito
+        WHERE fk_id_carrito = @pk_id_carrito
+          AND fk_id_producto = @fk_id_producto;
 
-        -- 4. Recalcular y actualizar el total del pedido
-        SELECT @total_nuevo = SUM(subtotal)
-        FROM Detalle_Pedido
-        WHERE fk_id_pedido = @fk_id_pedido;
+        -- 6. Actualizar el total del carrito
+        UPDATE Carrito
+        SET total = ISNULL((SELECT SUM(subtotal) FROM Detalle_Carrito WHERE fk_id_carrito = @pk_id_carrito), 0)
+        WHERE pk_id_carrito = @pk_id_carrito;
 
-        UPDATE Pedidos
-        SET total = ISNULL(@total_nuevo, 0)
-        WHERE pk_id_pedido = @fk_id_pedido;
-
-        -- 5. Registrar la operación en el Log
-        INSERT INTO Log (
-            fechaHora, 
-            fk_id_usuario, 
-            entidadAfectada, 
-            operacion, 
-            detalles, 
-            resultado
-        )
+        -- 7. Registrar la operación en el log
+        INSERT INTO Log (fechaHora, fk_id_usuario, entidadAfectada, operacion, detalles, resultado)
         VALUES (
-            GETDATE(), 
-            @fk_id_usuario_operacion, 
-            'Detalle_Pedido', 
-            'DELETE', 
-            CONCAT('Detalle eliminado de Pedido ID: ', @fk_id_pedido, 
-                   ', Producto ID: ', @fk_id_producto, 
-                   ', Cantidad eliminada: ', @cantidad_eliminada, 
-                   ', Subtotal eliminado: ', @subtotal_eliminado), 
+            GETDATE(),
+            @fk_id_usuario,
+            'Detalle_Carrito',
+            'DELETE',
+            CONCAT('Detalle eliminado. Usuario ID: ', @fk_id_usuario, 
+                   ', Producto ID: ', @fk_id_producto),
             'Éxito'
         );
 
-        -- 6. Confirmar la transacción
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Revertir la transacción en caso de error
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
 
-        -- Registrar el error en el Log
-        INSERT INTO Log (
-            fechaHora, 
-            fk_id_usuario, 
-            entidadAfectada, 
-            operacion, 
-            detalles, 
-            resultado
-        )
+        -- Registrar el error en el log
+        INSERT INTO Log (fechaHora, fk_id_usuario, entidadAfectada, operacion, detalles, resultado)
         VALUES (
-            GETDATE(), 
-            @fk_id_usuario_operacion, 
-            'Detalle_Pedido', 
-            'DELETE', 
-            ERROR_MESSAGE(), 
+            GETDATE(),
+            @fk_id_usuario,
+            'Detalle_Carrito',
+            'DELETE',
+            ERROR_MESSAGE(),
             'Error'
         );
-
-        -- Re-lanzar el error para manejo externo
-        THROW;
-    END CATCH;
+        
+        THROW; -- Re-lanzar el error original
+    END CATCH
 END;
+GO

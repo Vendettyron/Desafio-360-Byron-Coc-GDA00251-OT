@@ -4,7 +4,7 @@ GO
 CREATE PROCEDURE ActualizarEstadoPedido
     @id_pedido INT,
     @fk_estado INT,
-    @fk_id_usuario INT -- Usuario que realiza la operación
+    @fk_id_usuario INT -- Usuario que realiza la operaciï¿½n
 AS
 BEGIN
     BEGIN TRANSACTION;
@@ -22,7 +22,7 @@ BEGIN
             'Pedidos',
             'UPDATE',
             CONCAT('Estado de pedido actualizado: ID=', @id_pedido, ', Nuevo Estado=', @fk_estado),
-            'Éxito'
+            'ï¿½xito'
         );
 
         COMMIT TRANSACTION;
