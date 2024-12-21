@@ -16,10 +16,12 @@ CREATE TABLE Estados (
 
 -- para carrito:
 -- pendiente = 3
--- En proceso = 4
+
+-- PARA PEDIDOS
+--  id = 4 -- En proceso 
 --  ID = 5 -- confirmado por el admin
 --  ID = 6 -- cancelado por el admin
- -- ID = 7 --Pedido Cancelado por Cliente
+ -- ID = 7 -- Pedido Cancelado por Cliente
 
 -- para productos
 -- descontinuado = 7
@@ -33,7 +35,7 @@ CREATE TABLE Roles (
 -- Administrador = 1
 -- cliente = 2
 
--- Tabla: Categorías
+-- Tabla: Categorï¿½as
 CREATE TABLE Categorias (
     pk_id_categoria INT PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
@@ -135,11 +137,11 @@ CREATE TABLE Detalle_Carrito (
 CREATE TABLE log (
     pk_id_log INT IDENTITY(1,1) PRIMARY KEY,
     fechaHora DATETIME NOT NULL,         -- Fecha y hora del evento
-    fk_id_usuario INT NULL,              -- Usuario que realizó la operación
-    entidadAfectada VARCHAR(50) NOT NULL, -- Nombre de la tabla o módulo afectado
-    operacion VARCHAR(20) NOT NULL,      -- Tipo de operación (INSERT, UPDATE, DELETE, etc.)
-    detalles VARCHAR(MAX) NULL,                  -- Descripción detallada del evento
-    resultado VARCHAR(20) NOT NULL,      -- Resultado de la operación (Éxito, Error, etc.)
+    fk_id_usuario INT NULL,              -- Usuario que realizï¿½ la operaciï¿½n
+    entidadAfectada VARCHAR(50) NOT NULL, -- Nombre de la tabla o mï¿½dulo afectado
+    operacion VARCHAR(20) NOT NULL,      -- Tipo de operaciï¿½n (INSERT, UPDATE, DELETE, etc.)
+    detalles VARCHAR(MAX) NULL,                  -- Descripciï¿½n detallada del evento
+    resultado VARCHAR(20) NOT NULL,      -- Resultado de la operaciï¿½n (ï¿½xito, Error, etc.)
     CONSTRAINT FK_Log_Usuario FOREIGN KEY (fk_id_usuario) REFERENCES Usuarios(pk_id_usuario) 
         ON DELETE SET NULL ON UPDATE CASCADE
 );

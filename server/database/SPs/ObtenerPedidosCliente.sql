@@ -1,48 +1,51 @@
 USE MiTienditaOnlineDB;
 GO
 
-CREATE PROCEDURE CancelarPedidoCliente
-    @fk_id_cliente INT,        -- ID del cliente que desea cancelar el pedido
-    @fk_id_pedido INT          -- ID del pedido que se desea cancelar
+CREATE PROCEDURE ObtenerPedidosCliente
+    @fk_cliente INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Iniciar la transacción
-    BEGIN TRANSACTION;
-
     BEGIN TRY
-        DECLARE @estadoPedido INT;
-        DECLARE @total DECIMAL(10,2);
+        -- Iniciar la transacción
+        BEGIN TRANSACTION;
 
-        -- 1. Verificar que el cliente exista
-        IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE pk_id_usuario = @fk_id_cliente)
+        DECLARE @total_pedidos INT;
+
+        -- 1. Verificar que el cliente existe
+        IF NOT EXISTS (SELECT 1 FROM Usuarios WHERE pk_id_usuario = @fk_cliente)
         BEGIN
             ROLLBACK TRANSACTION;
             THROW 50000, 'El cliente especificado no existe.', 1;
         END
 
-        -- 2. Verificar que el pedido exista, pertenezca al cliente y esté en estado "En proceso" (4)
+        -- 2. Verificar si el cliente tiene pedidos en estado "4" (pendiente)
         SELECT 
-            @estadoPedido = fk_estado,
-            @total = total
+            @total_pedidos = COUNT(*)
         FROM 
             Pedidos
         WHERE 
-            pk_id_pedido = @fk_id_pedido
-            AND fk_cliente = @fk_id_cliente
-            AND fk_estado = 4; -- Estado "En proceso"
+            fk_cliente = @fk_cliente
+            AND fk_estado = 4; -- Estado "4" es "Pendiente"
 
-        IF @estadoPedido IS NULL
+        IF @total_pedidos = 0
         BEGIN
             ROLLBACK TRANSACTION;
-            THROW 50001, 'No existe un pedido en estado "En proceso" para este usuario con el ID proporcionado.', 1;
+            THROW 50001, 'No existen pedidos en estado "Pendiente" para este cliente.', 1;
         END
 
-        -- 3. Actualizar el estado del pedido a "Cancelado por Cliente" (7)
-        UPDATE Pedidos
-        SET fk_estado = 7 -- 7 es "Cancelado por Cliente"
-        WHERE pk_id_pedido = @fk_id_pedido;
+        -- 3. Obtener los detalles de los pedidos en estado "4"
+        SELECT 
+            p.fk_estado AS estado,
+            p.total,
+            p.fecha_pedido,
+            p.pk_id_pedido AS id_pedido
+        FROM 
+            Pedidos p
+        WHERE 
+            p.fk_cliente = @fk_cliente
+            AND p.fk_estado = 4; -- Estado "4" es "Pendiente"
 
         -- 4. Registrar la operación en la tabla Log
         INSERT INTO Log (
@@ -55,12 +58,10 @@ BEGIN
         )
         VALUES (
             GETDATE(), 
-            @fk_id_cliente, 
+            @fk_cliente, 
             'Pedidos', 
-            'UPDATE', 
-            CONCAT('Pedido cancelado por Cliente ID: ', @fk_id_pedido, 
-                   ', Cliente ID: ', @fk_id_cliente, 
-                   ', Total: ', @total), 
+            'SELECT', 
+            CONCAT('Se obtuvieron ', @total_pedidos, ' pedidos pendientes para el Cliente ID: ', @fk_cliente), 
             'Éxito'
         );
 
@@ -93,9 +94,9 @@ BEGIN
         )
         VALUES (
             GETDATE(), 
-            @fk_id_cliente, 
+            @fk_cliente, 
             'Pedidos', 
-            'UPDATE', 
+            'SELECT', 
             @ErrorMessage, 
             'Error'
         );
