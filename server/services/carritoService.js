@@ -1,4 +1,4 @@
-import { poolPromise,sql} from '../../database/DbConection.js';
+import { poolPromise,sql} from '../database/DbConection.js';
 
 const obtenerDetallesCarritoPorUsuario = async (fk_id_usuario) => {
     try {

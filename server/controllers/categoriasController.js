@@ -1,6 +1,5 @@
-import { poolPromise} from '../../database/DbConection.js';
-
-import categoriasService from '../../services/admin/categoriasService.js'
+import { poolPromise} from '../database/DbConection.js';
+import categoriasService from '../services/categoriasService.js'
 /**
  * Obtener la lista de Categorias
  * Accesible para Admin

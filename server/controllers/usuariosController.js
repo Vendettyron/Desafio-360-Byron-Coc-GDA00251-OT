@@ -1,5 +1,5 @@
-import { poolPromise} from '../../database/DbConection.js';
-import usuariosService from '../../services/admin/usuariosService.js';
+import { poolPromise} from '../database/DbConection.js';
+import usuariosService from '../services/usuariosService.js';
 
 export const ObtenerUsuarioPorId = async (req, res) => {
     const {id} = req.params; // Obtener el ID del usuario desde req.params

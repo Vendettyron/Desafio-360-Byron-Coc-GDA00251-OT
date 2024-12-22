@@ -1,6 +1,6 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 import {
   crearProducto,
   obtenerProductos,
@@ -8,12 +8,15 @@ import {
   activarProducto,
   inactivarProducto,
   obtenerProductoPorId
-} from "../../controllers/admin/productosController.js";
+} from "../controllers/productosController.js";
 
 const router = express.Router();
 
+// Role 1: Administrador
+// Role 2: Cliente
+
 /**
- * @route POST /api/admin/productos/CrearProducto
+ * @route POST /api/productos/CrearProducto
  * @desc Crear un nuevo producto
  * @access Privado (Admin)
  */
@@ -24,20 +27,20 @@ router.post(
   crearProducto
 );
 /**
- * @route GET /api/admin/productos/actualizarProducto
+ * @route GET /api/productos/actualizarProducto
  * @desc obtener los productos
- * @access Cualuiera
+ * @access Admin y Cliente
  */
 router.get(
-  "/obtenerProductos",
+  "/ObtenerProductos",
   authMiddleware,
   roleMiddleware([1, 2]),
   obtenerProductos
 );
 /**
- * @route GET /api/admin/productos/:id
+ * @route GET /api/productos/:id
  * @desc Obtener un producto por su ID
- * @access Privado (Admin y Cliente)
+ * @access Admin y Cliente
  */
 router.get(
   "/ObtenerProductosPorId/:id",
@@ -47,7 +50,7 @@ router.get(
 );
 
 /**
- * @route PUT /api/admin/productos/ActualizarProducto
+ * @route PUT /api/productos/ActualizarProducto
  * @desc Actualizar un producto existente
  * @access Privado (Admin)
  */
@@ -59,7 +62,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/admin/productos/ActivarProducto
+ * @route PUT /api/productos/ActivarProducto
  * @desc Activar un producto
  * @access Privado (Admin)
  */
@@ -71,7 +74,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/admin/productos/InactivarProducto
+ * @route PUT /api/productos/InactivarProducto
  * @desc inactivr un producto existente
  * @access Privado (Admin)
  */

@@ -1,5 +1,5 @@
-import { poolPromise} from '../../database/DbConection.js';
-import proveedoresService from '../../services/admin/proveedorService.js';
+import { poolPromise} from '../database/DbConection.js';
+import proveedoresService from '../services/proveedorService.js';
 
 export const obtenerProveedor = async (req, res) => {
     try {

@@ -8,14 +8,13 @@ import { poolPromise } from './database/DbConection.js'; // Importar la pool de 
 
 // Importar rutas
 import authRoutes from './routes/auth.routes.js';
-import productosClientesRoutes from './routes/productosClientes.routes.js';
-import productosAdminRoutes from './routes/admin/productos.routes.js';
-import categoriasAdminRoutes from './routes/admin/categorias.routes.js';
-import proveedorAdminRoutes from './routes/admin/proveedor.routes.js';
-import estadosAdminRoutes from './routes/admin/estados.routes.js';
-import usuariosAdminRoutes from './routes/admin/usuarios.routes.js';
-import carritoRoutes from './routes/cliente/carrito.routes.js';
-import pedidoRoutes from './routes/cliente/pedido.routes.js';
+import productosRoutes from './routes/productos.routes.js';
+import categoriasRoutes from './routes/categorias.routes.js';
+import proveedorRoutes from './routes/proveedor.routes.js';
+import estadosRoutes from './routes/estados.routes.js';
+import usuariosRoutes from './routes/usuarios.routes.js';
+import carritoRoutes from './routes/carrito.routes.js';
+import pedidoRoutes from './routes/pedido.routes.js';
 
 // Importar middleware de manejo de errores
 
@@ -44,14 +43,13 @@ app.get('/test-db', async (req, res) => {
 
 // Montar las rutas
 app.use('/api/auth', authRoutes);
-app.use('/api/productosClientes', productosClientesRoutes);
-app.use('/api/admin/productos', productosAdminRoutes);
-app.use('/api/admin/categorias', categoriasAdminRoutes);
-app.use('/api/admin/proveedor', proveedorAdminRoutes);
-app.use('/api/admin/estados', estadosAdminRoutes);
-app.use('/api/admin/usuarios', usuariosAdminRoutes);
-app.use('/api/cliente/carrito', carritoRoutes);
-app.use('/api/cliente/pedido', pedidoRoutes);
+app.use('/api/productos', productosRoutes);
+app.use('/api/categorias', categoriasRoutes);
+app.use('/api/proveedor', proveedorRoutes);
+app.use('/api/estados', estadosRoutes);
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/carrito', carritoRoutes);
+app.use('/api/pedido', pedidoRoutes);
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {

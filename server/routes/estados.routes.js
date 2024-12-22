@@ -1,16 +1,19 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 import {
     obtenerEstados,
     crearEstado,
     actualizarEstado
-} from "../../controllers/admin/estadosController.js";
+} from "../controllers/estadosController.js";
 
 const router = express.Router();
 
+// Role 1: Administrador
+// Role 2: Cliente
+
 /**
- * @route GET /api/admin/estados/ObtenerEstados
+ * @route GET /api/estados/ObtenerEstados
  * @desc Obtener la lista de estados
  * @access Privado (Admin)
  */
@@ -22,7 +25,7 @@ router.get(
 );
 
 /**
- * @route POST /api/admin/estados/CrearEstado
+ * @route POST /api/estados/CrearEstado
  * @desc Crear un nuevo estado
  * @access Privado (Admin)
  */
@@ -34,7 +37,7 @@ router.post(
 );
 
 /**
- * @route PUT /api/admin/estados/ActualizarEstado/:id
+ * @route PUT /api/estados/ActualizarEstado/:id
  * @desc Actualizar un estado existente
  * @access Privado (Admin)
  */

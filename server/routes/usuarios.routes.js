@@ -1,6 +1,6 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 
 import {
     actualizarUsuario,
@@ -8,12 +8,15 @@ import {
     activarUsuario,
     obtenerUsuarios,
     ObtenerUsuarioPorId
-} from "../../controllers/admin/usuariosController.js";
+} from "../controllers/usuariosController.js";
 
 const router = express.Router();
 
+// Role 1: Administrador
+// Role 2: Cliente
+
 /**
- * @route GET /api/admin/usuarios/ObtenerUsuarios
+ * @route GET /api/usuarios/ObtenerUsuarios
  * @desc Ver la lista de usuarios
  * @access Privado (Admin)
  */
@@ -25,7 +28,7 @@ router.get(
 );
 
 /**
- * @route GET /api/admin/usuarios/ObtenerUsuarioPorId/:id
+ * @route GET /api/usuarios/ObtenerUsuarioPorId/:id
  * @desc Ver Usuario individual
  * @access Privado (Admin)
  */
@@ -37,7 +40,7 @@ router.get(
 );
 
 /**
- * @route PUT /api/admin/usuarios/ActualizarUsuario/:id
+ * @route PUT /api/usuarios/ActualizarUsuario/:id
  * @desc Actualizar un usuario existente
  * @access Privado (Admin)
  */
@@ -49,7 +52,7 @@ router.put(
 );
 
 /**
- * @route PUT /api/admin/usuarios/InactivarUsuario/:id
+ * @route PUT /api/usuarios/InactivarUsuario/:id
  * @desc Inactivar un usuario existente
  * @access Privado (Admin)
  */
@@ -61,7 +64,7 @@ router.put(
 );
 
 /**
- * @route PUT /api/admin/usuarios/ActivarUsuario/:id
+ * @route PUT /api/usuarios/ActivarUsuario/:id
  * @desc Activar un usuario existente
  * @access Privado (Admin)
  */

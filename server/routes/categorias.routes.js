@@ -1,6 +1,6 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 
 import { obtenerCategorias, 
         crearCategoria,
@@ -8,25 +8,28 @@ import { obtenerCategorias,
         activarCategoria,
         inactivarCategoria,
         obtenerCategoriaPorId
-} from "../../controllers/admin/categoriasController.js";
+} from "../controllers/categoriasController.js";
+
+// Role 1: Administrador
+// Role 2: Cliente
 
 const router = express.Router();
 
 /**
- * @route POST /api/admin/categorias/obtenerCategorias
+ * @route POST /api/categorias/obtenerCategorias
  * @desc Ver la lista de categorias
  * @access Privado (Admin)
  */
 
 router.get( 
-    "/obtenerCategorias",
+    "/ObtenerCategorias",
     authMiddleware,
     roleMiddleware([1]),
     obtenerCategorias
 );
 
 /**
- * @route POST /api/admin/categorias/ObtenerCategoriasPorId/:id
+ * @route POST /api/categorias/ObtenerCategoriasPorId/:id
  * @desc Ver categoria individual
  * @access Privado (Admin)
  */
@@ -39,7 +42,7 @@ router.get(
 );
 
 /**
- * @route POST /api/admin/categorias/CrearCategoria
+ * @route POST /api/categorias/CrearCategoria
  * @desc Crear una nueva categoria
  * @access Privado (Admin)
  */
@@ -52,7 +55,7 @@ router.post(
 );
 
 /**
- * @route POST /api/admin/categorias/ActualizarCategoria
+ * @route POST /api/categorias/ActualizarCategoria
  * @desc Actualizar una categoria
  * @access Privado (Admin)
  */
@@ -65,7 +68,7 @@ router.put(
 );
 
 /**
- * @route POST /api/admin/categorias/ActivarCategoria
+ * @route POST /api/categorias/ActivarCategoria
  * @desc Activar una categoria
  * @access Privado (Admin)
  */
@@ -78,7 +81,7 @@ router.put(
 );
 
 /**
- * @route POST /api/admin/categorias/InactivarCategoria
+ * @route POST /api/categorias/InactivarCategoria
  * @desc Inactivar una categoria
  * @access Privado (Admin)
  */

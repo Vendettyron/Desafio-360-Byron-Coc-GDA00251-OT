@@ -1,5 +1,5 @@
-import { poolPromise} from '../../database/DbConection.js';
-import estadosService from '../../services/admin/estadosService.js';
+import { poolPromise} from '../database/DbConection.js';
+import estadosService from '../services/estadosService.js';
 
 /**
  * Obtener la lista de Estados

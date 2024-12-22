@@ -1,4 +1,4 @@
-import { poolPromise, sql } from '../../database/DbConection.js';
+import { poolPromise, sql } from '../database/DbConection.js';
 
 export const crearProducto = async (data) => {
     const { fk_categoria, fk_estado, fk_proveedor, nombre, descripcion, precio, stock, fk_id_usuario } = data;

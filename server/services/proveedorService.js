@@ -1,4 +1,4 @@
-import { poolPromise, sql } from '../../database/DbConection.js';
+import { poolPromise, sql } from '../database/DbConection.js';
 
 /**
  * Crear un nuevo proveedor

@@ -1,5 +1,4 @@
-import { poolPromise} from '../../database/DbConection.js';
-import carritoService from '../../services/cliente/carritoService.js';
+import carritoService from '../services/carritoService.js';
 
 export const obtenerDetallesCarritoPorUsuario = async (req, res) => {
     const fk_id_usuario = Number(req.user.id); // Obtener el ID del usuario desde req.user JWT

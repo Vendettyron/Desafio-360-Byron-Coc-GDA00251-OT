@@ -1,6 +1,6 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 
 import { obtenerProveedor,
         crearProveedor,
@@ -8,12 +8,15 @@ import { obtenerProveedor,
         activarProveedor,
         inactivarProveedor,
         obtenerProveedorPorId
-} from "../../controllers/admin/proveedorController.js";
+} from "../controllers/proveedorController.js";
 
 const router = express.Router();
 
+// Role 1: Administrador
+// Role 2: Cliente
+
 /**
- * @route POST /api/admin/proveedor/ObtenerProveedor
+ * @route POST /api/proveedor/ObtenerProveedor
  * @desc Ver la lista de proveedores
  * @access Privado (Admin)
  */
@@ -26,9 +29,9 @@ router.get(
 );
 
 /**
- * @route POST /api/admin/proveedor/ObtenerProveedorPorId/:id
+ * @route POST /api/proveedor/ObtenerProveedorPorId/:id
  * @desc Ver proveedor individual
- * @access admin y cliente
+ * @access admin
  */
 
 router.get( 
@@ -38,7 +41,7 @@ router.get(
     obtenerProveedorPorId
 );
 /**
- * @route POST /api/admin/proveedor/CrearProveedor
+ * @route POST /api/proveedor/CrearProveedor
  * @desc Crear una nuevo proveedor
  * @access Privado (Admin)
  */
@@ -51,7 +54,7 @@ router.post(
 );
 
 /**
- * @route POST /api/admin/proveedor/ActualizarProveedor
+ * @route POST /api/proveedor/ActualizarProveedor
  * @desc Actualizar un proveedor
  * @access Privado (Admin)
  */
@@ -64,7 +67,7 @@ router.put(
 );
 
 /**
- * @route POST /api/admin/proveedor/ActivarProveedor
+ * @route POST /api/proveedor/ActivarProveedor
  * @desc Activar un proveedor
  * @access Privado (Admin)
  */
@@ -77,7 +80,7 @@ router.put(
 );
 
 /**
- * @route POST /api/admin/proveedor/InactivarProveedor
+ * @route POST /api/proveedor/InactivarProveedor
  * @desc Inactivar un proveedor
  * @access Privado (Admin)
  */

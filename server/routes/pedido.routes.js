@@ -1,6 +1,6 @@
 import express from "express";
-import authMiddleware from "../../middleware/authMiddleware.js";
-import roleMiddleware from "../../middleware/roleMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import roleMiddleware from "../middleware/roleMiddleware.js";
 
 import {
   actualizarDetallePedido,
@@ -11,13 +11,18 @@ import {
   aprobarPedido,
   cancelarPedidoAdministrador,
   eliminarDetallePedido
-} from "../../controllers/cliente/pedido.Controller.js";
+} from "../controllers/pedido.Controller.js";
+
 
 const router = express.Router();
+
+// Role 1: Administrador
+// Role 2: Cliente
+
 /**
  * @route GET /api/cliente/pedido/ObtenerPedidosCliente
- * @desc Obtener todos los pedidos en Espera "4"del cliente 
- * @access Clientes
+ * @desc Obtener todos los pedidos en Espera "4" del cliente 
+ * @access Clientes y admin
  */
 router.get(
     "/ObtenerPedidosCliente", 
@@ -29,7 +34,7 @@ router.get(
 
 /**
  * @route GET /api/pedido/ObtenerDetallesPedidoCliente/:id
- * @desc Obtener los detalles del pedido del usuario Cliente
+ * @desc Obtener los detalles del pedido exacto del usuario Cliente
  * @access Clientes
  */
 router.get(
@@ -67,7 +72,7 @@ router.put(
 /**
  * @route DELETE /api/pedido/:pedidoId/EliminarDetallePedido/:productoId
  * @desc Eliminar un detalle en el pedido del usuario
- * @access Clientes
+ * @access Clientes y admin
  */
 router.delete(
     "/:pedidoId/EliminarDetallePedido/:productoId", 
@@ -78,8 +83,8 @@ router.delete(
 
 /**
  * @route PUT /api/pedido/CancelarPedidoCliente/:id
- * @desc Cancelar el pedido en estado "En proceso" del usuario
- * @access Clientes
+ * @desc Cancelar el pedido en estado "En proceso" por parte del Cliente
+ * @access Clientes y admin
  */
 router.put(
     "/CancelarPedidoCliente/:id", 
@@ -90,7 +95,7 @@ router.put(
 
 /**
  * @route POST /api/pedido/AprobarPedido/:id
- * @desc Aprobar un pedido (Acción administrativa)
+ * @desc Aprobar un pedido (Acción admin)
  * @access Privado (Administradores)
  */
 router.post(

@@ -1,4 +1,4 @@
-import pedidoService from '../../services/cliente/pedidoService.js';
+import pedidoService from '../services/pedidoService.js';
 
 export const obtenerPedidosCliente = async (req, res) => {
     const fk_cliente = req.user.id; // Obtener el ID del usuario desde req.user JWT
