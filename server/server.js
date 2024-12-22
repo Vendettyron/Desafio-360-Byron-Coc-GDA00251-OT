@@ -26,7 +26,6 @@ app.use(cookieParser()); // Usar cookie-parser
 
 // Middlewares
 app.use(helmet());
-app.use(cors());
 app.use(express.json());
 
 // Ruta de prueba para la base de datos
