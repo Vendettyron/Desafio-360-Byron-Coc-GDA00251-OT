@@ -10,6 +10,11 @@ const ProtectedRoute = ({ roles }) => {
     return <div>Cargando...</div>;
   }
 
+  if (!auth.token) {
+    // Si no está autenticado, redirigir al login
+    return <Navigate to="/" replace />;
+  }
+
   if (roles && !roles.includes(auth.usuario.fk_rol)) {
     // Si el usuario no tiene el rol adecuado, redirigir al inicio o mostrar un error
     return <Navigate to="/rol eequivocado" replace />;
