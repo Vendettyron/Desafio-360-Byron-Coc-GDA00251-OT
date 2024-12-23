@@ -17,6 +17,11 @@ import carritoRoutes from './routes/carrito.routes.js';
 import pedidoRoutes from './routes/pedido.routes.js';
 
 // Importar middleware de manejo de errores
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+};
+
 
 //variables de entorno
 dotenv.config();
@@ -39,7 +44,7 @@ app.get('/test-db', async (req, res) => {
         res.status(500).json({ error: 'Error al conectar con la base de datos.' });
     }
 });
-
+app.use(cors(corsOptions));
 // Montar las rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/productos', productosRoutes);
@@ -49,6 +54,10 @@ app.use('/api/estados', estadosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/carrito', carritoRoutes);
 app.use('/api/pedido', pedidoRoutes);
+
+app.get('/api', (req, res) => {
+    res.json({ message: 'API de la tienda online' });
+});
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {
