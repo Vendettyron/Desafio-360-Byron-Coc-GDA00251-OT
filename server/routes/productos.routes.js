@@ -33,8 +33,8 @@ router.post(
  */
 router.get(
   "/ObtenerProductos",
-  // authMiddleware,
-  // roleMiddleware([1, 2]),
+  authMiddleware,
+  roleMiddleware([1, 2]),
   obtenerProductos
 );
 /**

@@ -27,11 +27,11 @@ const corsOptions = {
 dotenv.config();
 
 const app = express();
-app.use(cookieParser()); // Usar cookie-parser
 
 // Middlewares
 app.use(helmet());
 app.use(express.json());
+app.use(cookieParser()); // Usar cookie-parser
 
 // Ruta de prueba para la base de datos
 app.get('/test-db', async (req, res) => {

@@ -17,7 +17,7 @@ const ProtectedRoute = ({ roles }) => {
 
   if (roles && !roles.includes(auth.usuario.fk_rol)) {
     // Si el usuario no tiene el rol adecuado, redirigir al inicio o mostrar un error
-    return <Navigate to="/rol eequivocado" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Si cumple con los requisitos, renderizar el componente hijo

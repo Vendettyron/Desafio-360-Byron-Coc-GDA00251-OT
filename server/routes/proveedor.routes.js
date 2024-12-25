@@ -16,7 +16,7 @@ const router = express.Router();
 // Role 2: Cliente
 
 /**
- * @route POST /api/proveedor/ObtenerProveedor
+ * @route Get /api/proveedor/ObtenerProveedor
  * @desc Ver la lista de proveedores
  * @access Privado (Admin)
  */
@@ -27,6 +27,21 @@ router.get(
     roleMiddleware([1]),
     obtenerProveedor
 );
+
+
+/**
+ * @route POST /api/proveedor/ObtenerProveedoresActivos
+ * @desc Ver la lista de proveedores
+ * @access Privado (Admin)
+ */
+
+router.get( 
+    "/ObtenerProveedoresActivos",
+    authMiddleware,
+    roleMiddleware([1]),
+   
+);
+
 
 /**
  * @route POST /api/proveedor/ObtenerProveedorPorId/:id

@@ -5,9 +5,13 @@ import axios from 'axios';
 // Define la URL base de la API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-// Crear una instancia de Axios
+// Crear una instancia de Axios con la configuración base
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: 'http://localhost:3000/api', 
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true, // Permitir el envío de cookies en solicitudes CORS
 });
 
 // Interceptor para añadir el token a cada solicitud

@@ -41,18 +41,28 @@ export const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' } // Token válido por 24 horas
         );
-        
-        return  res.json({
+
+        // Enviar el token como una cookie httpOnly
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Usa secure en producción
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000, // 24 horas
+            path: '/', 
+        });
+
+        return res.json({ 
             token,
             usuario: {
-              id: usuario.id,
-              nombre: usuario.nombre,
-              apellido: usuario.apellido,
-              correo: usuario.correo,
-              fk_rol: usuario.fk_rol,
-              fk_estado: usuario.fk_estado,
+                id: usuario.id,
+                nombre: usuario.nombre,
+                apellido: usuario.apellido,
+                correo: usuario.correo,
+                fk_rol: usuario.fk_rol,
+                fk_estado: usuario.fk_estado,
             }
-          });
+        });
+        
           
     } catch (error) {
         console.error('Error en login:', error);
