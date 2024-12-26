@@ -51,3 +51,19 @@ export const proveedorCrearSchema = Yup.object().shape({
     .required('El estado es requerido')
     .oneOf([1, 2], 'Estado inválido'), // 1 = Activo, 2 = Inactivo
 });
+
+// Schema para crear y actualizar categorías
+export const categoriaCrearSchema = Yup.object().shape({
+  nombre: Yup
+    .string()
+    .required('El nombre de la categoría es obligatorio')
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),
+  descripcion: Yup
+    .string()
+    .required('La descripción es obligatoria')
+    .max(500, 'La descripción no puede exceder los 500 caracteres'),
+  fk_estado: Yup
+    .number()
+    .required('El estado es obligatorio')
+    .oneOf([1, 2], 'Estado inválido'), // 1: Activo, 2: Inactivo
+});

@@ -121,10 +121,7 @@ const Proveedores = () => {
     );
   }
 
-  const tableData = {
-    columns,
-    data: proveedores,
-  }
+
 // =============== 5. Personalizar Tabla =============== //
   createTheme(
     'custom',
@@ -156,7 +153,10 @@ const Proveedores = () => {
     'dark',
   );
   
-  
+  const tableData = {
+    columns,
+    data: proveedores,
+  }
 // =============== 6. Mostrar los datos en Data Tables =============== //
   return (
     <>

@@ -110,7 +110,7 @@ const data = {
         },
         {
           title: "Crear Categoria",
-          url: "/admin/catgorias/crear",
+          url: "/admin/categorias/crear",
         },
       ],
     },

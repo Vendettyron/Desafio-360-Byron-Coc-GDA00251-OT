@@ -19,11 +19,16 @@ import Proveedores from '../../components/Admin/Proveedores/Proveedores'; // Com
 import ActualizarProveedor from '../../components/Admin/Proveedores/ActualizarProveedor'; // Componente de Actualizar Proveedor
 import CrearProveedor from '../../components/Admin/Proveedores/CrearProveedor'; // Componente de Crear Proveedor
 import AdminHome from '../../components/Admin/AdminHome'; // Componente principal del Admin
+//Componentes categorias
+import Categorias from '@/components/Admin/Categorias/Categorias';
+import CrearCategoria from '@/components/Admin/Categorias/CrearCategoria';
+import ActualizarCategoria from '@/components/Admin/Categorias/ActualizarCategoria';
 
 const AdminLayout  = () => {
   return (
     <>
       <SidebarProvider>
+        
         <AppSidebar />
         <SidebarInset>
           <header
@@ -38,9 +43,16 @@ const AdminLayout  = () => {
           <div className="flex flex-col  justify-center gap-4 p-4 pt-0 items-center">
             <Routes>
               <Route path='/' element={<AdminHome/>}/>
+
+              {/* Rutas de proveedores */}
               <Route path="proveedores" element={<Proveedores/>} />
-              <Route path="proveedores/actualizar/:id" element={<ActualizarProveedor />} />
               <Route path="proveedores/crear" element={<CrearProveedor />} />
+              <Route path="proveedores/actualizar/:id" element={<ActualizarProveedor />} />
+             
+              <Route path="categorias" element={<Categorias/>} />
+              <Route path="categorias/crear" element={<CrearCategoria />} />
+              <Route path="categorias/actualizar/:id" element={<ActualizarCategoria />} />
+
             </Routes>
           </div>
         </SidebarInset>
