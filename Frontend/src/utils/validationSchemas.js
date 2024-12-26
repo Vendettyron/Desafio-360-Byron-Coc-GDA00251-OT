@@ -28,7 +28,7 @@ export const proveedorSchema = Yup.object().shape({
   fk_estado: Yup
     .number()
     .required('El estado es requerido')
-    .oneOf([1, 2], 'Estado inválido'),
+    .oneOf([1,2], 'Estado inválido'),
 });
 
 // esquema de validación para el formulario de Crear Proveedor

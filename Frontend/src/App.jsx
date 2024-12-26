@@ -1,10 +1,9 @@
 import { useState,lazy,Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminLayout from './layouts/admin/AdminLayout';
 const Register = lazy(() => import('./components/Auth/Register/Register'));
 const Login = lazy(() => import('./components/Auth/Login/Login'));
-import {Page} from './app/dashboard/page'; // Componente de Page
+import {AdminLayout } from './layouts/admin/AdminLayout'; // Componente de Page
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,7 +17,7 @@ function App() {
 
             {/* Rutas protegidas para usuarios con rol 'Operador' */}
             <Route element={<ProtectedRoute roles={[1]} />}>
-              <Route path="/admin/*" element={<Page/>} />
+              <Route path="/admin/*" element={<AdminLayout/>} />
             </Route>
 
 

@@ -15,6 +15,9 @@ import { proveedorSchema } from '../../../utils/validationSchemas';
 // Componentes reutilizables
 import FormInput from '../../Forms/FormInput';
 import FormSelect from '../../Forms/FormSelect';
+import FormLayout from '@/components/Forms/FormLayout';
+import { Button} from '@/components/ui/button';
+
 
 const EditarProveedor = () => {
   const { id } = useParams();
@@ -78,48 +81,51 @@ const EditarProveedor = () => {
   };
 
   return (
-    <div>
-      <h2>Editar Proveedor</h2>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '400px' }}>
+    <>
+      <FormLayout title="Actualizar proveedor">
+      <form onSubmit={handleSubmit(onSubmit)} style={{ minWidth: 'auto' }}>
         <FormInput
-          label="Nombre:"
-          id="nombre"
-          register={register('nombre')}
-          error={errors.nombre?.message}
+        label="Nombre:"
+        id="nombre"
+        register={register('nombre')}
+        error={errors.nombre?.message}
         />
 
         <FormInput
-          label="Teléfono:"
-          id="telefono"
-          register={register('telefono')}
-          error={errors.telefono?.message}
+        label="Teléfono:"
+        id="telefono"
+        register={register('telefono')}
+        error={errors.telefono?.message}
         />
 
         <FormInput
-          label="Correo:"
-          id="correo"
-          type="email"
-          register={register('correo')}
-          error={errors.correo?.message}
+        label="Correo:"
+        id="correo"
+        type="email"
+        register={register('correo')}
+        error={errors.correo?.message}
         />
 
         <FormSelect
-          label="Estado:"
-          id="fk_estado"
-          register={register('fk_estado')}
-          error={errors.fk_estado?.message}
-          options={[
-            { label: 'Activo', value: 1 },
-            { label: 'Inactivo', value: 2 },
-          ]}
+        label="Estado:"
+        id="fk_estado"
+        register={register('fk_estado')}
+        error={errors.fk_estado?.message}
+        options={[
+          { label: 'Activo', value: 1 },
+          { label: 'Inactivo', value: 2 },
+        ]}
         />
 
-        <button type="submit" disabled={isSubmitting || !isDirty}>
+        <div style={{ display: 'flex', justifyContent: 'center', }}>
+          <Button className="" type="submit" disabled={isSubmitting || !isDirty}>
           {isSubmitting ? 'Guardando...' : 'Actualizar'}
-        </button>
+          </Button>
+        </div>
       </form>
-    </div>
-  );
+      </FormLayout >
+    </>
+    );
 };
 
 export default EditarProveedor;

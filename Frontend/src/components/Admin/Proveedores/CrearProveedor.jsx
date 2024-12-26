@@ -1,13 +1,14 @@
-// src/components/Admin/Proveedores/CrearProveedor.jsx
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-import FormInput from '../../Forms/FormInput';
-import FormSelect from '../../Forms/FormSelect';
 import { proveedorCrearSchema } from '../../../utils/validationSchemas';
 import { crearProveedor } from '../../../services/proveedoresService';
+
+import { Button } from '@/components/ui/button';
+import FormLayout from '@/components/Forms/FormLayout';
+import FormInput from '../../Forms/FormInput';
+import FormSelect from '../../Forms/FormSelect';
+import { isDirty } from 'zod';
 
 const CrearProveedor = () => {
   const [error, setError] = useState('');
@@ -16,7 +17,7 @@ const CrearProveedor = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: yupResolver(proveedorCrearSchema),
     defaultValues: {
@@ -51,59 +52,57 @@ const CrearProveedor = () => {
   };
 
   return (
-    <div>
-      <h2>Crear Proveedor</h2>
+    <>
+      <FormLayout title="Crear Proveedor">
 
-      {/* Mensaje de error global */}
-      {error && (
-        <div style={{ color: 'red', marginBottom: '1rem' }}>
-          {error}
-        </div>
-      )}
+        <form onSubmit={handleSubmit(onSubmit)} style={{ minWidth: 'auto' }}>
+          {/* NOMBRE */}
+          <FormInput
+            label="Nombre:"
+            id="nombre"
+            register={register('nombre')}
+            error={errors.nombre?.message}
+          />
 
-      <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '400px' }}>
-        {/* NOMBRE */}
-        <FormInput
-          label="Nombre:"
-          id="nombre"
-          register={register('nombre')}
-          error={errors.nombre?.message}
-        />
+          {/* TELEFONO */}
+          <FormInput
+            label="Teléfono:"
+            id="telefono"
+            register={register('telefono')}
+            error={errors.telefono?.message}
+          />
 
-        {/* TELEFONO */}
-        <FormInput
-          label="Teléfono:"
-          id="telefono"
-          register={register('telefono')}
-          error={errors.telefono?.message}
-        />
+          {/* CORREO */}
+          <FormInput
+            label="Correo:"
+            id="correo"
+            type="email"
+            register={register('correo')}
+            error={errors.correo?.message}
+          />
 
-        {/* CORREO */}
-        <FormInput
-          label="Correo:"
-          id="correo"
-          type="email"
-          register={register('correo')}
-          error={errors.correo?.message}
-        />
+          {/* ESTADO */}
+          <FormSelect
+            label="Estado:"
+            id="fk_estado"
+            register={register('fk_estado')}
+            error={errors.fk_estado?.message}
+            options={[
+              { label: 'Activo', value: 1 },
+              { label: 'Inactivo', value: 2 },
+            ]}
+          />
+        
+          <div style={{ display: 'flex', justifyContent: 'center', }}>
+            <Button type="submit" disabled={isSubmitting || !isDirty}>
+              {isSubmitting ? 'Creando...' : 'Crear Proveedor'}
+            </Button>
+          </div>
 
-        {/* ESTADO */}
-        <FormSelect
-          label="Estado:"
-          id="fk_estado"
-          register={register('fk_estado')}
-          error={errors.fk_estado?.message}
-          options={[
-            { label: 'Activo', value: 1 },
-            { label: 'Inactivo', value: 2 },
-          ]}
-        />
-
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Creando...' : 'Crear Proveedor'}
-        </button>
-      </form>
-    </div>
+          </form>
+      
+      </FormLayout  >
+    </>
   );
 };
 

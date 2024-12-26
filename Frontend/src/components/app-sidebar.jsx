@@ -58,7 +58,7 @@ const data = {
       title: "Estados",
       url: "#",
       icon: SquareTerminal,
-      isActive: true,
+      isActive: false,
       items: [
         {
           title: "Ver Estados",
