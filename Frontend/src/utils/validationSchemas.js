@@ -103,3 +103,46 @@ export const estadoSchema = Yup.object().shape({
     .required('El nombre del estado es obligatorio')
     .max(100, 'El nombre no puede exceder los 100 caracteres'),   
 });
+
+// Schema para crear y actualizar un producto
+
+export const productosSchema = Yup.object().shape({
+  fk_categoria: Yup
+    .number()
+    .required('La categoría es obligatoria')
+    .integer('La categoría debe ser un número entero'),
+  
+  fk_estado: Yup
+    .number()
+    .required('El estado es obligatorio')
+    .oneOf([Estados.ACTIVO, Estados.INACTIVO, Estados.DESCONTINUADO], 'Estado inválido'), // 1: Activo, 2: Inactivo 8: Descontinuado
+  
+  fk_proveedor: Yup
+    .number()
+    .required('El proveedor es obligatorio')
+    .integer('El proveedor debe ser un número entero'),
+  
+  nombre: Yup
+    .string()
+    .required('El nombre del producto es obligatorio')
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),
+  
+  descripcion: Yup
+    .string()
+    .required('La descripción es obligatoria')
+    .max(500, 'La descripción no puede exceder los 500 caracteres'),
+  
+  precio: Yup
+    .number()
+    .required('El precio es obligatorio')
+    .positive('El precio debe ser un número positivo')
+    .typeError('El precio debe ser un número'),
+  
+  stock: Yup
+    .number()
+    .required('El stock es obligatorio')
+    .integer('El stock debe ser un número entero')
+    .min(0, 'El stock no puede ser negativo')
+    .typeError('El stock debe ser un número'),
+});
+

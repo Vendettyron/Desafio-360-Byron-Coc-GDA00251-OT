@@ -34,6 +34,11 @@ import Usuarios from '@/components/Admin/Usuarios/Usuarios';
 import CrearUsuario from '@/components/Admin/Usuarios/CrearUsuario';
 import ActualizarUsuario from '@/components/Admin/Usuarios/ActualizarUsuario';
 
+//componentes de productos
+import Productos from '@/components/Admin/Productos/Productos';
+import CrearProducto from '@/components/Admin/Productos/CrearProducto';
+import ActualizarProducto from '@/components/Admin/Productos/ActualizarProducto';
+
 
 const AdminLayout  = () => {
   return (
@@ -74,6 +79,11 @@ const AdminLayout  = () => {
               <Route path="usuarios" element={<Usuarios/>} />
               <Route path="usuarios/crear" element={<CrearUsuario />} />
               <Route path="usuarios/actualizar/:id" element={<ActualizarUsuario />} />
+
+              {/* Rutas de productos */}
+              <Route path="productos" element={<Productos/>} />
+              <Route path="productos/crear" element={<CrearProducto />} />
+              <Route path="productos/actualizar/:id" element={<ActualizarProducto />} />
               
               
             </Routes>
