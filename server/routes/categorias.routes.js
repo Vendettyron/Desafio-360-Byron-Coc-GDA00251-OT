@@ -1,13 +1,14 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
+import Roles from "../config/roles.js";
 
 import { obtenerCategorias, 
-        crearCategoria,
-        actualizarCategoria,
-        activarCategoria,
-        inactivarCategoria,
-        obtenerCategoriaPorId
+    crearCategoria,
+    actualizarCategoria,
+    activarCategoria,
+    inactivarCategoria,
+    obtenerCategoriaPorId
 } from "../controllers/categoriasController.js";
 
 // Role 1: Administrador
@@ -24,7 +25,7 @@ const router = express.Router();
 router.get( 
     "/ObtenerCategorias",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     obtenerCategorias
 );
 
@@ -37,7 +38,7 @@ router.get(
 router.get( 
     "/ObtenerCategoriasPorId/:id",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     obtenerCategoriaPorId
 );
 
@@ -50,7 +51,7 @@ router.get(
 router.post( 
     "/CrearCategoria",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     crearCategoria
 );
 
@@ -63,7 +64,7 @@ router.post(
 router.put( 
     "/ActualizarCategoria/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     actualizarCategoria
 );
 
@@ -76,7 +77,7 @@ router.put(
 router.put( 
     "/ActivarCategoria/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     activarCategoria
 );
 
@@ -89,7 +90,7 @@ router.put(
 router.put( 
     "/InactivarCategoria/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     inactivarCategoria
 );
 

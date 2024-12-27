@@ -1,14 +1,15 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
-
 import { obtenerProveedor,
-        crearProveedor,
-        actualizarProveedor,
-        activarProveedor,
-        inactivarProveedor,
-        obtenerProveedorPorId
+    crearProveedor,
+    actualizarProveedor,
+    activarProveedor,
+    inactivarProveedor,
+    obtenerProveedorPorId
 } from "../controllers/proveedorController.js";
+
+import Roles from "../config/roles.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ const router = express.Router();
 router.get( 
     "/ObtenerProveedor",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     obtenerProveedor
 );
 
@@ -38,7 +39,7 @@ router.get(
 router.get( 
     "/ObtenerProveedoresActivos",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
    
 );
 
@@ -52,7 +53,7 @@ router.get(
 router.get( 
     "/ObtenerProveedorPorId/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     obtenerProveedorPorId
 );
 /**
@@ -64,7 +65,7 @@ router.get(
 router.post( 
     "/CrearProveedor",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     crearProveedor
 );
 
@@ -77,7 +78,7 @@ router.post(
 router.put( 
     "/ActualizarProveedor/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     actualizarProveedor
 );
 
@@ -90,7 +91,7 @@ router.put(
 router.put( 
     "/ActivarProveedor/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     activarProveedor
 );
 
@@ -103,7 +104,7 @@ router.put(
 router.put( 
     "/InactivarProveedor/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     inactivarProveedor
 );
 

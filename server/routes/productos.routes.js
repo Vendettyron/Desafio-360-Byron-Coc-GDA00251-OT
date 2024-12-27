@@ -9,6 +9,7 @@ import {
   inactivarProducto,
   obtenerProductoPorId
 } from "../controllers/productosController.js";
+import  Roles  from "../config/roles.js"; // Assuming you have a roles.js file that exports Roles
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ const router = express.Router();
 router.post(
   "/CrearProducto",
   authMiddleware,
-  roleMiddleware([1]),
+  roleMiddleware([Roles.ADMIN]),
   crearProducto
 );
 /**
@@ -34,7 +35,7 @@ router.post(
 router.get(
   "/ObtenerProductos",
   authMiddleware,
-  roleMiddleware([1, 2]),
+  roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
   obtenerProductos
 );
 /**
@@ -45,7 +46,7 @@ router.get(
 router.get(
   "/ObtenerProductosPorId/:id",
   authMiddleware,
-  roleMiddleware([1, 2]),
+  roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
   obtenerProductoPorId
 );
 
@@ -57,7 +58,7 @@ router.get(
 router.put(
     "/ActualizarProducto/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     actualizarProducto
   );
 
@@ -69,7 +70,7 @@ router.put(
 router.put(
     "/ActivarProducto/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     activarProducto
   );
 
@@ -81,7 +82,7 @@ router.put(
 router.put(
     "/InactivarProducto/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     inactivarProducto
   );
 export default router;

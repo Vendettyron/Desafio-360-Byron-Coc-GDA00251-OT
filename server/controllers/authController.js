@@ -2,6 +2,8 @@ import { poolPromise, sql } from '../database/DbConection.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import Roles from '../config/roles.js';
+import Estados from '../config/estados.js';
 
 dotenv.config();
 
@@ -104,8 +106,8 @@ export const register = async (req, res) => {
         .input('password', sql.VarChar(255), hashedPassword)
         .input('direccion', sql.VarChar(255), direccion)
         .input('telefono', sql.VarChar(15), telefono)
-        .input('fk_rol', sql.Int, 2) // Asignar rol de 'Cliente'
-        .input('fk_estado', sql.Int, 1) // Estado 'Activo'
+        .input('fk_rol', sql.Int, Roles.CLIENTE) // Asignar rol de 'Cliente'
+        .input('fk_estado', sql.Int, Estados.ACTIVO) // Estado 'Activo'
         .execute('InsertarUsuario'); // Ejecutar el SP
 
         res.status(201).json({ message: 'Usuario registrado exitosamente.' });

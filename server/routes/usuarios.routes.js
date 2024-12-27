@@ -1,6 +1,7 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
+import Roles from "../config/roles.js";
 
 import {
     actualizarUsuario,
@@ -23,7 +24,7 @@ const router = express.Router();
 router.get(
     "/ObtenerUsuarios",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     obtenerUsuarios
 );
 
@@ -35,7 +36,7 @@ router.get(
 router.get(
     "/ObtenerUsuarioPorId/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     ObtenerUsuarioPorId
 );
 
@@ -47,7 +48,7 @@ router.get(
 router.put(
     "/ActualizarUsuario/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     actualizarUsuario
 );
 
@@ -59,7 +60,7 @@ router.put(
 router.put(
     "/InactivarUsuario/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     inactivarUsuario
 );
 
@@ -71,7 +72,7 @@ router.put(
 router.put(
     "/ActivarUsuario/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     activarUsuario
 );
 

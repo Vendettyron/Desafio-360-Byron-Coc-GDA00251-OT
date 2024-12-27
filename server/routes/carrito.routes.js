@@ -1,12 +1,13 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
+import Roles from "../config/roles.js";
 
 import { obtenerDetallesCarritoPorUsuario,
-        AgregarProductoAlCarrito,
-        EliminarDetalleCarrito,
-        ActualizarDetalleCarrito,
-        ConfirmarCarrito
+    AgregarProductoAlCarrito,
+    EliminarDetalleCarrito,
+    ActualizarDetalleCarrito,
+    ConfirmarCarrito
 } from "../controllers/carrito.Controller.js";
 // Role 1: Administrador
 // Role 2: Cliente
@@ -22,7 +23,7 @@ const router = express.Router();
 router.get( 
     "/ObtenerDetallesCarritoPorUsuario",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     obtenerDetallesCarritoPorUsuario
 );
 
@@ -36,7 +37,7 @@ router.get(
 router.post( 
     "/AgregarProductoAlCarrito/:id",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     AgregarProductoAlCarrito
 );
 
@@ -49,7 +50,7 @@ router.post(
 router.delete( 
     "/EliminarDetalleCarrito/:id",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     EliminarDetalleCarrito
 );
 
@@ -62,7 +63,7 @@ router.delete(
 router.put( 
     "/ConfirmarCarrito",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     ConfirmarCarrito
 );
 
@@ -75,9 +76,8 @@ router.put(
 router.put( 
     "/ActualizarDetalleCarrito/:id",
     authMiddleware,
-    roleMiddleware([1,2]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     ActualizarDetalleCarrito
 );
 
 export default router;
-

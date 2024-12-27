@@ -6,6 +6,7 @@ import {
     crearEstado,
     actualizarEstado
 } from "../controllers/estadosController.js";
+import Roles from "../config/roles.js";
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ const router = express.Router();
 router.get(
     "/ObtenerEstados",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     obtenerEstados
 );
 
@@ -32,7 +33,7 @@ router.get(
 router.post(
     "/CrearEstado",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     crearEstado
 );
 
@@ -44,7 +45,7 @@ router.post(
 router.put(
     "/ActualizarEstado/:id",
     authMiddleware,
-    roleMiddleware([1]),
+    roleMiddleware([Roles.ADMIN]),
     actualizarEstado
 );
 

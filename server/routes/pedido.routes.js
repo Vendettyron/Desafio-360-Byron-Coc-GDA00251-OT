@@ -3,16 +3,17 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
 
 import {
-  actualizarDetallePedido,
-  obtenerDetallesPedidoCliente,
-  insertarDetallePedido,
-  obtenerPedidosCliente,
-  cancelarPedidoCliente,
-  aprobarPedido,
-  cancelarPedidoAdministrador,
-  eliminarDetallePedido
+    actualizarDetallePedido,
+    obtenerDetallesPedidoCliente,
+    insertarDetallePedido,
+    obtenerPedidosCliente,
+    cancelarPedidoCliente,
+    aprobarPedido,
+    cancelarPedidoAdministrador,
+    eliminarDetallePedido
 } from "../controllers/pedido.Controller.js";
 
+import Roles from "../config/roles.js";
 
 const router = express.Router();
 
@@ -25,12 +26,11 @@ const router = express.Router();
  * @access Clientes y admin
  */
 router.get(
-    "/ObtenerPedidosCliente", 
-    authMiddleware,
-    roleMiddleware([1,2]),
-    obtenerPedidosCliente
+        "/ObtenerPedidosCliente", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+        obtenerPedidosCliente
 );
-
 
 /**
  * @route GET /api/pedido/ObtenerDetallesPedidoCliente/:id
@@ -38,10 +38,10 @@ router.get(
  * @access Clientes
  */
 router.get(
-    "/ObtenerDetallesPedidoCliente/:id", 
-    authMiddleware,
-    roleMiddleware([1,2]),
-    obtenerDetallesPedidoCliente
+        "/ObtenerDetallesPedidoCliente/:id", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+        obtenerDetallesPedidoCliente
 );
 
 /**
@@ -50,10 +50,10 @@ router.get(
  * @access Clientes
  */
 router.post(
-    "/:pedidoId/InsertarDetallePedido/:productoId", 
-    authMiddleware,
-    roleMiddleware([1,2]), 
-    insertarDetallePedido
+        "/:pedidoId/InsertarDetallePedido/:productoId", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]), 
+        insertarDetallePedido
 );
 
 /**
@@ -62,12 +62,11 @@ router.post(
  * @access Clientes
  */
 router.put(
-    "/:pedidoId/ActualizarDetallePedido/:productoId", 
-    authMiddleware,
-    roleMiddleware([1,2]),
-    actualizarDetallePedido
+        "/:pedidoId/ActualizarDetallePedido/:productoId", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+        actualizarDetallePedido
 );
-
 
 /**
  * @route DELETE /api/pedido/:pedidoId/EliminarDetallePedido/:productoId
@@ -75,10 +74,10 @@ router.put(
  * @access Clientes y admin
  */
 router.delete(
-    "/:pedidoId/EliminarDetallePedido/:productoId", 
-    authMiddleware,
-    roleMiddleware([1,2]),
-    eliminarDetallePedido   
+        "/:pedidoId/EliminarDetallePedido/:productoId", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+        eliminarDetallePedido   
 );
 
 /**
@@ -87,10 +86,10 @@ router.delete(
  * @access Clientes y admin
  */
 router.put(
-    "/CancelarPedidoCliente/:id", 
-    authMiddleware,
-    roleMiddleware([1,2]), 
-    cancelarPedidoCliente
+        "/CancelarPedidoCliente/:id", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN, Roles.CLIENTE]), 
+        cancelarPedidoCliente
 );
 
 /**
@@ -99,10 +98,10 @@ router.put(
  * @access Privado (Administradores)
  */
 router.post(
-    "/AprobarPedido/:id", 
-    authMiddleware,
-    roleMiddleware([1]),  
-    aprobarPedido
+        "/AprobarPedido/:id", 
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN]),  
+        aprobarPedido
 );
 
 /**
@@ -111,11 +110,10 @@ router.post(
  * @access Privado (Administradores)
  */
 router.post(
-  "/CancelarPedidoAdmin/:id",
-  authMiddleware,
-  roleMiddleware([1]),
-  cancelarPedidoAdministrador
+    "/CancelarPedidoAdmin/:id",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    cancelarPedidoAdministrador
 );
-
 
 export default router;
