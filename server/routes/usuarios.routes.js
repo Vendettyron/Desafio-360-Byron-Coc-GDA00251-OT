@@ -13,8 +13,6 @@ import {
 
 const router = express.Router();
 
-// Role 1: Administrador
-// Role 2: Cliente
 
 /**
  * @route GET /api/usuarios/ObtenerUsuarios

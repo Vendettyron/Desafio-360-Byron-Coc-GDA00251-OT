@@ -75,10 +75,11 @@ export const login = async (req, res) => {
 
 // Registro de un nuevo usuario
 export const register = async (req, res) => {
-    const { nombre, apellido, correo, password, direccion, telefono } = req.body;
+    // asignar default CLIENTE y ACTIVO
+    const { nombre, apellido, correo, password, direccion, telefono, fk_rol = Roles.CLIENTE, fk_estado = Estados.ACTIVO } = req.body;
 
     // Validar que se proporcionaron todos los campos necesarios
-    if (!nombre || !apellido || !correo || !password || !direccion || !telefono) {
+    if (!nombre || !apellido || !correo || !password || !direccion || !telefono || !fk_rol || !fk_estado) {
         return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
     }
 
@@ -100,15 +101,15 @@ export const register = async (req, res) => {
 
         // Insertar el nuevo usuario en la base de datos
         await pool.request()
-        .input('nombre', sql.VarChar(100), nombre)
-        .input('apellido', sql.VarChar(100), apellido)
-        .input('correo', sql.VarChar(100), correo)
-        .input('password', sql.VarChar(255), hashedPassword)
-        .input('direccion', sql.VarChar(255), direccion)
-        .input('telefono', sql.VarChar(15), telefono)
-        .input('fk_rol', sql.Int, Roles.CLIENTE) // Asignar rol de 'Cliente'
-        .input('fk_estado', sql.Int, Estados.ACTIVO) // Estado 'Activo'
-        .execute('InsertarUsuario'); // Ejecutar el SP
+            .input('nombre', sql.VarChar(100), nombre)
+            .input('apellido', sql.VarChar(100), apellido)
+            .input('correo', sql.VarChar(100), correo)
+            .input('password', sql.VarChar(255), hashedPassword)
+            .input('direccion', sql.VarChar(255), direccion)
+            .input('telefono', sql.VarChar(15), telefono)
+            .input('fk_rol', sql.Int, fk_rol) 
+            .input('fk_estado', sql.Int, fk_estado) 
+            .execute('InsertarUsuario'); // Ejecutar el SP
 
         res.status(201).json({ message: 'Usuario registrado exitosamente.' });
     } catch (error) {

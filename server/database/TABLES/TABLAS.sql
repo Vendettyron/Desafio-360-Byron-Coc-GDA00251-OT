@@ -24,7 +24,7 @@ CREATE TABLE Estados (
  -- ID = 7 -- Pedido Cancelado por Cliente
 
 -- para productos
--- descontinuado = 7
+-- descontinuado = 8
 
 -- Tabla: Roles
 CREATE TABLE Roles (

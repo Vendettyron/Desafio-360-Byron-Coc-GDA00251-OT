@@ -29,6 +29,12 @@ import Estados from '@/components/Admin/Estados/Estados';
 import CrearEstado from '@/components/Admin/Estados/CrearEstado';
 import ActualizarEstado from '@/components/Admin/Estados/ActualizarEstado';
 
+//componentes de usuarios
+import Usuarios from '@/components/Admin/Usuarios/Usuarios';
+import CrearUsuario from '@/components/Admin/Usuarios/CrearUsuario';
+import ActualizarUsuario from '@/components/Admin/Usuarios/ActualizarUsuario';
+
+
 const AdminLayout  = () => {
   return (
     <>
@@ -63,6 +69,12 @@ const AdminLayout  = () => {
               <Route path="estados" element={<Estados/>} />
               <Route path="estados/crear" element={<CrearEstado />} />
               <Route path="estados/actualizar/:id" element={<ActualizarEstado />} />
+
+              {/* Rutas de usuarios */}
+              <Route path="usuarios" element={<Usuarios/>} />
+              <Route path="usuarios/crear" element={<CrearUsuario />} />
+              <Route path="usuarios/actualizar/:id" element={<ActualizarUsuario />} />
+              
               
             </Routes>
           </div>

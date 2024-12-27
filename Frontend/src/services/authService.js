@@ -1,5 +1,3 @@
-// src/services/authService.js
-
 import api from './api';
 
 /**
@@ -22,10 +20,10 @@ export const login = async (correo, password) => {
  * @param {Object} userData - Datos del usuario a registrar.
  * @returns {Promise<Object>} - Respuesta del servidor.
  */
-export const register = async (userData) => {
+export const registerUser = async (userData) => {
   try {
     const response = await api.post('/auth/register', userData);
-    return response.data; // Suponiendo que la respuesta contiene { token, user }
+    return response.data; 
   } catch (error) {
     throw error;
   }

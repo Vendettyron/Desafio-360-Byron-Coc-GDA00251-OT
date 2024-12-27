@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // Context y servicios
-import { AuthContext } from '../../../context/AuthContext';
-import { obtenerProveedorPorId, actualizarProveedor } from '../../../services/proveedoresService';
+import { AuthContext } from '@/context/AuthContext';
+import { obtenerProveedorPorId, actualizarProveedor } from '@/services/proveedoresService';
 
 // Schema de validación
 import { proveedorSchema } from '@/utils/validationSchemas';

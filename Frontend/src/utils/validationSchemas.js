@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import Roles from '@/config/roles';
+import Estados from '@/config/estados';
 
 // esquema de validación para el formulario de inicio de sesión
 export const loginSchema = Yup.object().shape({
@@ -11,7 +13,54 @@ export const loginSchema = Yup.object().shape({
     .required('La contraseña es requerida'),
 });
 
-// esquema de validación para el formulario de Actualizar Proveedor
+/**
+ * Schema para regsitrar un usuario nuevo.
+ * Schema para actualizar un usuario existente.
+ */
+export const usuariosSchema = Yup.object().shape({
+  nombre: Yup
+    .string()
+    .required('El nombre es obligatorio')
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),
+  
+  apellido: Yup
+    .string()
+    .required('El apellido es obligatorio')
+    .max(100, 'El apellido no puede exceder los 100 caracteres'),
+  
+  direccion: Yup
+    .string()
+    .required('La dirección es obligatoria')
+    .max(200, 'La dirección no puede exceder los 200 caracteres'),
+  
+  correo: Yup
+    .string()
+    .required('El correo es obligatorio')
+    .email('Debe ser un correo electrónico válido'),
+  
+  telefono: Yup
+    .string()
+    .required('El teléfono es obligatorio')
+    .matches(/^\d{8}$/, 'El teléfono debe tener 8 dígitos'),
+  
+  password: Yup
+    .string()
+    .required('La contraseña es obligatoria')
+    .min(6, 'La contraseña debe tener al menos 6 caracteres'),
+  
+  fk_rol: Yup
+    .number()
+    .required('El rol es obligatorio')
+    .oneOf([Roles.ADMIN, Roles.CLIENTE], 'Rol inválido'), // 1: Administrador, 2: Cliente
+  
+  fk_estado: Yup
+    .number()
+    .required('El estado es obligatorio')
+    .oneOf([Estados.ACTIVO, Estados.INACTIVO], 'Estado inválido'), // 1: Activo, 2: Inactivo
+});
+
+
+// esquema de validación para actualizar o crear un proveedor
 export const proveedorSchema = Yup.object().shape({
   nombre: Yup
     .string()
@@ -28,7 +77,7 @@ export const proveedorSchema = Yup.object().shape({
   fk_estado: Yup
     .number()
     .required('El estado es requerido')
-    .oneOf([1,2], 'Estado inválido'),
+    .oneOf([Estados.ACTIVO,Estados.INACTIVO], 'Estado inválido'),
 });
 
 // Schema para crear y actualizar categorías
@@ -44,7 +93,7 @@ export const categoriaCrearSchema = Yup.object().shape({
   fk_estado: Yup
     .number()
     .required('El estado es obligatorio')
-    .oneOf([1, 2], 'Estado inválido'), // 1: Activo, 2: Inactivo
+    .oneOf([Estados.ACTIVO, Estados.INACTIVO], 'Estado inválido'), // 1: Activo, 2: Inactivo
 });
 
 // Schema para crear y actualizar un estado 

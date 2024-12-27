@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { proveedorSchema } from '@/utils/validationSchemas';
-import { crearProveedor } from '../../../services/proveedoresService';
+import { crearProveedor } from '@/services/proveedoresService';
 import Estados from '@/config/estados';
 
 // Componentes reutilizables
