@@ -166,8 +166,8 @@ const ActualizarUsuario = () => {
             register={register('fk_rol')}
             error={errors.fk_rol?.message}
             options={[
-              { label: 'Administrador', value: 1 },
-              { label: 'Cliente', value: 2 },
+              { label: 'Administrador', value: Roles.ADMIN },
+              { label: 'Cliente', value: Roles.CLIENTE },
             ]}
           />
 
@@ -178,8 +178,8 @@ const ActualizarUsuario = () => {
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[
-              { label: 'Activo', value: 1 },
-              { label: 'Inactivo', value: 2 },
+              { label: 'Activo', value: Estados.ACTIVO },
+              { label: 'Inactivo', value: Estados.INACTIVO },
             ]}
           />
 
