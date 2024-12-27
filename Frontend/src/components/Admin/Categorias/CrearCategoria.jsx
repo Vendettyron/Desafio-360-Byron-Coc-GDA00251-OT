@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { categoriaCrearSchema } from '../../../utils/validationSchemas'; // Asegúrate de tener este schema
-import { crearCategoria } from '../../../services/categoriasService'; // Importa el servicio correspondiente
+import { categoriaCrearSchema } from '../../../utils/validationSchemas'; 
+import { crearCategoria } from '../../../services/categoriasService'; 
+import Estados from '@/config/estados';
 
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
@@ -23,7 +24,7 @@ const CrearCategoria = () => {
     defaultValues: {
       nombre: '',
       descripcion: '',
-      fk_estado: 1, // Por defecto, asignamos 1 (Activo)
+      fk_estado: Estados.ACTIVO, // Por defecto, asignamos 1 (Activo)
     },
   });
 

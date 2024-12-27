@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { proveedorCrearSchema } from '../../../utils/validationSchemas';
+import { proveedorSchema } from '@/utils/validationSchemas';
 import { crearProveedor } from '../../../services/proveedoresService';
+import Estados from '@/config/estados';
 
+// Componentes reutilizables
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
-import FormInput from '../../Forms/FormInput';
-import FormSelect from '../../Forms/FormSelect';
-import { isDirty } from 'zod';
+import FormInput from '@/components/Forms/FormInput';
+import FormSelect from '@/components/Forms/FormSelect';
 
 const CrearProveedor = () => {
   const [error, setError] = useState('');
@@ -19,12 +20,12 @@ const CrearProveedor = () => {
     reset,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
-    resolver: yupResolver(proveedorCrearSchema),
+    resolver: yupResolver(proveedorSchema),
     defaultValues: {
       nombre: '',
       telefono: '',
       correo: '',
-      fk_estado: 1, // Por defecto, asignamos 1 (Activo)
+      fk_estado: Estados.ACTIVO, // Por defecto, asignamos 1 (Activo)
     },
   });
 

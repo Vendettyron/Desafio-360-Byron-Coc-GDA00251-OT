@@ -1,5 +1,6 @@
 
-import React, { useEffect, useContext } from 'react';import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // react-hook-form
 import { useForm } from 'react-hook-form';
@@ -10,11 +11,11 @@ import { AuthContext } from '../../../context/AuthContext';
 import { obtenerProveedorPorId, actualizarProveedor } from '../../../services/proveedoresService';
 
 // Schema de validación
-import { proveedorSchema } from '../../../utils/validationSchemas';
+import { proveedorSchema } from '@/utils/validationSchemas';
 
 // Componentes reutilizables
-import FormInput from '../../Forms/FormInput';
-import FormSelect from '../../Forms/FormSelect';
+import FormInput from '@/components/Forms/FormInput';
+import FormSelect from '@/components/Forms/FormSelect';
 import FormLayout from '@/components/Forms/FormLayout';
 import { Button} from '@/components/ui/button';
 
