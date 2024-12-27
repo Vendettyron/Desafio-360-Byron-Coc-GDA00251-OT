@@ -24,11 +24,16 @@ import Categorias from '@/components/Admin/Categorias/Categorias';
 import CrearCategoria from '@/components/Admin/Categorias/CrearCategoria';
 import ActualizarCategoria from '@/components/Admin/Categorias/ActualizarCategoria';
 
+// componentes de estados
+import Estados from '@/components/Admin/Estados/Estados';
+import CrearEstado from '@/components/Admin/Estados/CrearEstado';
+import ActualizarEstado from '@/components/Admin/Estados/ActualizarEstado';
+
 const AdminLayout  = () => {
   return (
     <>
       <SidebarProvider>
-        
+        {/* componente NAV lateral*/}
         <AppSidebar />
         <SidebarInset>
           <header
@@ -48,11 +53,17 @@ const AdminLayout  = () => {
               <Route path="proveedores" element={<Proveedores/>} />
               <Route path="proveedores/crear" element={<CrearProveedor />} />
               <Route path="proveedores/actualizar/:id" element={<ActualizarProveedor />} />
-             
+
+              {/* Rutas de categorias */}
               <Route path="categorias" element={<Categorias/>} />
               <Route path="categorias/crear" element={<CrearCategoria />} />
               <Route path="categorias/actualizar/:id" element={<ActualizarCategoria />} />
 
+              {/* Rutas de estados */}
+              <Route path="estados" element={<Estados/>} />
+              <Route path="estados/crear" element={<CrearEstado />} />
+              <Route path="estados/actualizar/:id" element={<ActualizarEstado />} />
+              
             </Routes>
           </div>
         </SidebarInset>

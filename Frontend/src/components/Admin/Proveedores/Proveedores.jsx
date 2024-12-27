@@ -162,7 +162,12 @@ const Proveedores = () => {
     <>
       <h2 className='text-3xl'>Gestión de Proveedores</h2>
 
-      <DataTableExtensions {...tableData}>
+      <DataTableExtensions 
+        {...tableData} 
+        fileName="Proveedores Listado" 
+        export={true}
+        exportHeaders={true}
+      >
         <DataTable
           columns={columns}
           data={proveedores}

@@ -1,3 +1,6 @@
+Use MiTienditaOnlineDB
+GO
+
 CREATE PROCEDURE ObtenerEstadoPorId
 	@pk_id_estado INT
 AS

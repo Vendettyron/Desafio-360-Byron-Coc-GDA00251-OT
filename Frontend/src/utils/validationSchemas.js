@@ -31,27 +31,6 @@ export const proveedorSchema = Yup.object().shape({
     .oneOf([1,2], 'Estado inválido'),
 });
 
-// esquema de validación para el formulario de Crear Proveedor
-
-export const proveedorCrearSchema = Yup.object().shape({
-  nombre: Yup
-    .string()
-    .required('El nombre es requerido')
-    .max(100, 'Máximo 100 caracteres'),
-  telefono: Yup
-    .string()
-    .required('El teléfono es requerido')
-    .matches(/^\d{8}$/, 'El teléfono debe tener 8 dígitos'),
-  correo: Yup
-    .string()
-    .required('El correo es requerido')
-    .email('Debe ser un correo válido'),
-  fk_estado: Yup
-    .number()
-    .required('El estado es requerido')
-    .oneOf([1, 2], 'Estado inválido'), // 1 = Activo, 2 = Inactivo
-});
-
 // Schema para crear y actualizar categorías
 export const categoriaCrearSchema = Yup.object().shape({
   nombre: Yup
@@ -66,4 +45,12 @@ export const categoriaCrearSchema = Yup.object().shape({
     .number()
     .required('El estado es obligatorio')
     .oneOf([1, 2], 'Estado inválido'), // 1: Activo, 2: Inactivo
+});
+
+// Schema para crear y actualizar un estado 
+export const estadoSchema = Yup.object().shape({
+  nombre: Yup
+    .string()
+    .required('El nombre del estado es obligatorio')
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),
 });

@@ -19,6 +19,29 @@ export const obtenerEstados = async (req, res) => {
 };
 
 /**
+ * Obtener un estado por ID
+ * Accesible para Admin
+ */
+export const obtenerEstadoPorId = async (req, res) => {
+    const { id } = req.params; // Obtener el ID de la categoria desde req.params
+    const pk_id_estado = Number(id); // Convertir a número
+
+    // Validar que el ID sea válido
+    if (!pk_id_estado || isNaN(pk_id_estado)) {
+        return res.status(400).json({ message: 'ID de la categoria invalido.' });
+    }
+
+    try {
+        const estado = await estadosService.obtenerEstadoPorId(pk_id_estado);
+        res.json(estado);
+    } catch (error) {
+        console.error('Error obteniendo estado por ID:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+
+/**
  * Crear un nuevo Estado
  * Accesible solo para Admin
  */

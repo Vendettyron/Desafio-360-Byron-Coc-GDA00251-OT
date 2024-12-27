@@ -4,14 +4,13 @@ import roleMiddleware from "../middleware/roleMiddleware.js";
 import {
     obtenerEstados,
     crearEstado,
-    actualizarEstado
+    actualizarEstado,
+    obtenerEstadoPorId
 } from "../controllers/estadosController.js";
 import Roles from "../config/roles.js";
 
 const router = express.Router();
 
-// Role 1: Administrador
-// Role 2: Cliente
 
 /**
  * @route GET /api/estados/ObtenerEstados
@@ -24,6 +23,21 @@ router.get(
     roleMiddleware([Roles.ADMIN]),
     obtenerEstados
 );
+
+/**
+ * @route GET /api/estados/ObtenerEstadoPorId/:id
+ * @desc Obtener un estado por su ID
+ * @access Privado (Admin)
+ */
+router.get(
+    "/ObtenerEstadoPorId/:id",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    obtenerEstadoPorId
+);
+
+
+
 
 /**
  * @route POST /api/estados/CrearEstado

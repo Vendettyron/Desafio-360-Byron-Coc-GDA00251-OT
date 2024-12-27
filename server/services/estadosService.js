@@ -17,6 +17,18 @@ const crearEstado = async (data) => {
     }
 };
 
+const obtenerEstadoPorId = async (pk_id_estado) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('pk_id_estado', sql.Int, pk_id_estado)
+            .execute('ObtenerEstadoPorId'); // Llamar al SP ObtenerEstadoPorId
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
 /**
  * Actualizar un Estado existente
  */
@@ -39,4 +51,5 @@ const actualizarEstado = async (data) => {
 export default {
     crearEstado,
     actualizarEstado,
+    obtenerEstadoPorId
 };
