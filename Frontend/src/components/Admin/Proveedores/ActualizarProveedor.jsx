@@ -12,6 +12,7 @@ import { obtenerProveedorPorId, actualizarProveedor } from '../../../services/pr
 
 // Schema de validación
 import { proveedorSchema } from '@/utils/validationSchemas';
+import Estados from '@/config/estados';
 
 // Componentes reutilizables
 import FormInput from '@/components/Forms/FormInput';
@@ -36,7 +37,7 @@ const EditarProveedor = () => {
       nombre: '',
       telefono: '',
       correo: '',
-      fk_estado: 1, // Activo por defecto
+      fk_estado: Estados.ACTIVO, // Activo por defecto
     },
   });
 

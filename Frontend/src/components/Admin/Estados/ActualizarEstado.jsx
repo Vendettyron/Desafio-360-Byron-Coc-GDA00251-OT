@@ -40,9 +40,16 @@ const ActualizarEstado = () => {
     const fetchEstado = async () => {
       try {
         const data = await obtenerEstadoPorId(id);
-        if (data) {
-          // Llenar los campos con los datos del estado
+        console.log('Datos del estado:', data); // Log para depuración
+
+        if (Array.isArray(data) && data.length > 0) {
+          // Si data es un arreglo con al menos un elemento
+          setValue('nombre', data[0].nombre || '');
+        } else if (data && typeof data === 'object') {
+          // Si data es un objeto único
           setValue('nombre', data.nombre || '');
+        } else {
+          setError('No se encontró el estado con el ID proporcionado.');
         }
       } catch (error) {
         console.error('Error al obtener estado por ID:', error);
@@ -57,7 +64,6 @@ const ActualizarEstado = () => {
     const estadoActualizado = {
       pk_id_estado: parseInt(id, 10),
       nombre: formData.nombre,
-      fk_id_usuario: auth?.usuario?.id, // ID de quien actualiza (admin)
     };
 
     try {
@@ -81,6 +87,7 @@ const ActualizarEstado = () => {
             register={register('nombre')}
             error={errors.nombre?.message}
           />
+
            {/* BOTÓN DE ACTUALIZAR */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button type="submit" disabled={isSubmitting || !isDirty}>

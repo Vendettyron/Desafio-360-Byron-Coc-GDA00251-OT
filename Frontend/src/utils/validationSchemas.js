@@ -52,5 +52,5 @@ export const estadoSchema = Yup.object().shape({
   nombre: Yup
     .string()
     .required('El nombre del estado es obligatorio')
-    .max(100, 'El nombre no puede exceder los 100 caracteres'),
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),   
 });
