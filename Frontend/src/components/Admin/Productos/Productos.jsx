@@ -1,5 +1,3 @@
-// src/components/Admin/Productos/Productos.jsx
-
 import React, { useEffect, useState } from 'react';
 import { obtenerProductos, activarProducto, inactivarProducto } from '@/services/productosService';
 import { obtenerCategorias } from '@/services/categoriasService';
@@ -8,6 +6,7 @@ import { Link } from 'react-router-dom';
 import DataTable, { createTheme } from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
+import Estados from '@/config/estados';
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -109,45 +108,45 @@ const Productos = () => {
         return proveedor ? proveedor.nombre : 'N/A';
           },
           sortable: true,
-        },
-        {
-          name: 'Precio',
-          selector: row => `Q${row.precio.toFixed(2)}`,
-          sortable: true,
-        },
-        {
-          name: 'Stock',
-          selector: row => row.stock,
-          cell: row => <p>{row.stock}</p>,
-          sortable: true,
-        },
-        {
-          name: 'Estado',
-          selector: row => {
-        switch (row.fk_estado) {
-          case 1:
-            return 'Activo';
-          case 8:
-            return 'Descontinuado';
-          case 2:
-            return 'Inactivo';
-          default:
-            return 'Desconocido';
-        }
-          },
-          sortable: true,
-          ignoreExport: true,
-        },
-        {
-          name: 'Acción',
-          cell: (row) =>
-        row.fk_estado === 1 ? (
-          <button onClick={() => handleInactivate(row.pk_id_producto)}>Inactivar</button>
-        ) : (
-          <button onClick={() => handleActivate(row.pk_id_producto)}>Activar</button>
-        ),
-          ignoreExport: true,
-          cellExport: row => ({}), // No exportar este campo
+    },
+    {
+      name: 'Precio',
+      cell: (row) => `Q${row.precio.toFixed(2)}`,
+      sortable: true,
+    },
+    {
+      name: 'Stock',
+      selector: row => row.stock,
+      cell: row => <p>{row.stock}</p>,
+      sortable: true,
+    },
+    {
+      name: 'Estado',
+      cell: (row) => {
+    switch (row.fk_estado) {
+      case Estados.ACTIVO:
+        return 'Activo';
+      case Estados.DESACTIVADO:
+        return 'Descontinuado';
+      case Estados.INACTIVO:
+        return 'Inactivo';
+      default:
+        return 'Desconocido';
+    }
+      },
+      sortable: true,
+      ignoreExport: true,
+    },
+    {
+      name: 'Acción',
+      cell: (row) =>
+    row.fk_estado === Estados.ACTIVO ? (
+      <button onClick={() => handleInactivate(row.pk_id_producto)}>Inactivar</button>
+    ) : (
+      <button onClick={() => handleActivate(row.pk_id_producto)}>Activar</button>
+    ),
+      ignoreExport: true,
+      cellExport: row => ({}), // No exportar este campo
     },
     {
       name: 'Actualizar',

@@ -1,5 +1,3 @@
-// src/components/Admin/Productos/CrearProducto.jsx
-
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +10,6 @@ import { AuthContext } from '@/context/AuthContext';
 import { crearProducto } from '@/services/productosService';
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
-import Roles from '@/config/roles';
 import Estados from '@/config/estados';
 // Schema de validación
 import { productosSchema } from '@/utils/validationSchemas';

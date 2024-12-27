@@ -9,10 +9,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // Context y servicios
 import { AuthContext } from '@/context/AuthContext';
 import { obtenerProveedorPorId, actualizarProveedor } from '@/services/proveedoresService';
+import Estados from '@/config/estados';
 
 // Schema de validación
 import { proveedorSchema } from '@/utils/validationSchemas';
-import Estados from '@/config/estados';
 
 // Componentes reutilizables
 import FormInput from '@/components/Forms/FormInput';
@@ -50,7 +50,7 @@ const EditarProveedor = () => {
           setValue('nombre', data.nombre || '');
           setValue('telefono', data.telefono || '');
           setValue('correo', data.correo || '');
-          setValue('fk_estado', data.fk_estado || 1);
+          setValue('fk_estado', data.fk_estado || Estados.ACTIVO);
         }
       } catch (error) {
         console.error('Error al obtener proveedor por ID:', error);
@@ -114,8 +114,8 @@ const EditarProveedor = () => {
         register={register('fk_estado')}
         error={errors.fk_estado?.message}
         options={[
-          { label: 'Activo', value: 1 },
-          { label: 'Inactivo', value: 2 },
+          { label: 'Activo', value: Estados.ACTIVO },
+          { label: 'Inactivo', value: Estados.INACTIVO },
         ]}
         />
 

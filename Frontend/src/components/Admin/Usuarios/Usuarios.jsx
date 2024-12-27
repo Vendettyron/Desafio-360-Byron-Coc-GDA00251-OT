@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import DataTable, { createTheme } from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
+import Estados from '@/config/estados';
+import Roles from '@/config/roles';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -100,14 +102,14 @@ const Usuarios = () => {
     },
     {
       name: 'Rol',
-      selector: row => (row.fk_rol === 1 ? 'Administrador' : 'Cliente'),
-      cell: row => (row.fk_rol === 1 ? 'Administrador' : 'Cliente'),
+      selector: row => (row.fk_rol === Roles.ADMIN ? 'Administrador' : 'Cliente'),
+      cell: row => (row.fk_rol === Roles.ADMIN ? 'Administrador' : 'Cliente'),
       sortable: true,
     },
     {
       name: 'Estado',
-      selector: row => (row.fk_estado === 1 ? 'Activo' : 'Inactivo'),
-      cell: row => (row.fk_estado === 1 ? 'Activo' : 'Inactivo'),
+      selector: row => (row.fk_estado === Estados.ACTIVO ? 'Activo' : 'Inactivo'),
+      cell: row => (row.fk_estado === Estados.ACTIVO ? 'Activo' : 'Inactivo'),
       sortable: true,
       ignoreExport: true,
     },

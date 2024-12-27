@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { estadoSchema } from '../../../utils/validationSchemas';
-import { crearEstado } from '../../../services/estadosService';
+import { estadoSchema } from '@/utils/validationSchemas';
+import { crearEstado } from '@/services/estadosService';
 
 // Componentes reutilizables
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
 import FormInput from '@/components/Forms/FormInput';
-import FormSelect from '@/components/Forms/FormSelect';
 
 const CrearEstado = () => {
   const [error, setError] = useState('');

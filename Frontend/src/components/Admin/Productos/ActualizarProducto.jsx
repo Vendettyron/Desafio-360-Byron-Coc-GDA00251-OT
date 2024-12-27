@@ -10,6 +10,7 @@ import { AuthContext } from '@/context/AuthContext';
 import { obtenerProductoPorId, actualizarProducto } from '@/services/productosService';
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
+import Estados from '@/config/estados';
 
 // Schema de validación
 import { productosSchema } from '@/utils/validationSchemas';
@@ -182,9 +183,9 @@ const ActualizarProducto = () => {
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[
-              { label: 'Activo', value: 1 },
-              { label: 'Inactivo', value: 2 },
-              { label: 'Descontinuado', value: 8 },
+              { label: 'Activo', value: Estados.ACTIVO },
+              { label: 'Inactivo', value: Estados.INACTIVO },
+              { label: 'Descontinuado', value: Estados.DESCONTINUADO },
             ]}
           />
 

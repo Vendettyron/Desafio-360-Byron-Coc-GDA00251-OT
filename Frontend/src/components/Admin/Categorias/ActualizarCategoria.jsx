@@ -6,15 +6,16 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // Context y servicios
-import { AuthContext } from '../../../context/AuthContext';
-import { obtenerCategoriaPorId, actualizarCategoria } from '../../../services/categoriasService';
+import { AuthContext } from '@/context/AuthContext';
+import { obtenerCategoriaPorId, actualizarCategoria } from '@/services/categoriasService';
+import Estados from '@/config/estados';
 
 // Schema de validación
-import { categoriaCrearSchema } from '../../../utils/validationSchemas'; // Reutiliza el mismo schema si no hay diferencias
+import { categoriaCrearSchema } from '@/utils/validationSchemas'; 
 
 // Componentes reutilizables
-import FormInput from '../../Forms/FormInput';
-import FormSelect from '../../Forms/FormSelect';
+import FormInput from '@/components/Forms/FormInput';
+import FormSelect from '@/components/Forms/FormSelect';
 import FormLayout from '@/components/Forms/FormLayout';
 import { Button } from '@/components/ui/button';
 
@@ -35,7 +36,7 @@ const ActualizarCategoria = () => {
     defaultValues: {
       nombre: '',
       descripcion: '',
-      fk_estado: 1, // Activo por defecto
+      fk_estado: Estados.ACTIVO, // Activo por defecto
     },
   });
 
@@ -104,8 +105,8 @@ const ActualizarCategoria = () => {
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[
-              { label: 'Activo', value: 1 },
-              { label: 'Inactivo', value: 2 },
+              { label: 'Activo', value: Estados.ACTIVO },
+              { label: 'Inactivo', value: Estados.INACTIVO },
             ]}
           />
 

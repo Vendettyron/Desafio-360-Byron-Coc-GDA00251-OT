@@ -1,5 +1,3 @@
-// src/components/Admin/Usuarios/ActualizarUsuario.jsx
-
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 

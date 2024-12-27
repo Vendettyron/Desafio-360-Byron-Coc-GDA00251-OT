@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { categoriaCrearSchema } from '../../../utils/validationSchemas'; 
-import { crearCategoria } from '../../../services/categoriasService'; 
-import Estados from '@/config/estados';
+import { categoriaCrearSchema } from '@/utils/validationSchemas'; 
+import { crearCategoria } from '@/services/categoriasService'; 
 
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
-import FormInput from '../../Forms/FormInput';
-import FormSelect from '../../Forms/FormSelect';
+import FormInput from '@/components/Forms/FormInput';
+import FormSelect from '@/components/Forms/FormSelect';
+import Estados from '@/config/estados';
 
 const CrearCategoria = () => {
   const [error, setError] = useState('');
@@ -76,8 +76,8 @@ const CrearCategoria = () => {
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[
-              { label: 'Activo', value: 1 },
-              { label: 'Inactivo', value: 2 },
+              { label: 'Activo', value: Estados.ACTIVO },
+              { label: 'Inactivo', value: Estados.INACTIVO },
             ]}
           />
 

@@ -10,6 +10,8 @@ import {
   inactivarCategoria,
 } from '@/services/categoriasService';
 
+import Estados from '@/config/estados';
+
 const Categorias = () => {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,19 +90,20 @@ const Categorias = () => {
     {
       name: 'Estado',
       selector: row => row.fk_estado,
-      cell: (row) => (row.fk_estado === 1 ? 'Activo' : 'Inactivo'), // Para mostrar en la tabla
+      cell: (row) => (row.fk_estado === Estados.ACTIVO ? 'Activo' : 'Inactivo'), // Para mostrar en la tabla
       sortable: true,
       ignoreExport: true, 
     },
     {
       name: 'Acción',
       cell: (row) =>
-        row.fk_estado === 1 ? (
+        row.fk_estado === Estados.ACTIVO ? (
           <button onClick={() => handleInactivate(row.pk_id_categoria)}>Inactivar</button>
         ) : (
           <button onClick={() => handleActivate(row.pk_id_categoria)}>Activar</button>
         ),
       ignoreExport: true, // Ignorar en la exportación
+      cellExport: row => ({}), // No exportar este campo
     },
     {
       name: 'Actualizar',
@@ -163,7 +166,12 @@ const Categorias = () => {
     <>
       <h2 className="text-3xl">Gestión de Categorías</h2>
 
-      <DataTableExtensions {...tableData}>
+      <DataTableExtensions 
+      {...tableData}
+      fileName="Categorias Listado" 
+      export={true}
+      exportHeaders={true}
+      >
         <DataTable
           columns={columns}
           data={categorias}
