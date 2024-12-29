@@ -3,6 +3,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { categoriaCrearSchema } from '@/utils/validationSchemas'; 
 import { crearCategoria } from '@/services/categoriasService'; 
+import toast from 'react-hot-toast';
+
+
+// Componentes reutilizables
 
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
@@ -42,10 +46,11 @@ const CrearCategoria = () => {
       // Limpia el formulario
       reset();
       setError('');
-      alert('¡Categoría creada exitosamente!');
+      toast.success('¡Categoría creada exitosamente!');
     } catch (err) {
       console.error('Error al crear categoría:', err);
       setError('Hubo un problema al crear la categoría. Intente nuevamente.');
+      toast.error('Hubo un problema al crear la categoría. Intente nuevamente.');
     }
   };
 

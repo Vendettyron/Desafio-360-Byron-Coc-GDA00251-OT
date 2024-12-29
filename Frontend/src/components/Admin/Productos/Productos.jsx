@@ -3,11 +3,12 @@ import { obtenerProductos, activarProducto, inactivarProducto } from '@/services
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
 import { Link } from 'react-router-dom';
-import DataTable, { createTheme } from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
 import Estados from '@/config/estados';
+import toast from 'react-hot-toast';
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -48,9 +49,11 @@ const Productos = () => {
       await activarProducto(id);
       const updatedData = await obtenerProductos();
       setProductos(updatedData);
+      toast.success('¡Producto activado exitosamente!');
     } catch (err) {
       console.error('Error al activar producto:', err);
       setError('Error al activar el producto.');
+      toast.error('Error al activar el producto.');
     }
   };
 
@@ -59,9 +62,11 @@ const Productos = () => {
       await inactivarProducto(id);
       const updatedData = await obtenerProductos();
       setProductos(updatedData);
+      toast.success('¡Producto inactivado exitosamente!');
     } catch (err) {
       console.error('Error al inactivar producto:', err);
       setError('Error al inactivar el producto.');
+      toast.error('Error al inactivar el producto.');
     }
   };
 

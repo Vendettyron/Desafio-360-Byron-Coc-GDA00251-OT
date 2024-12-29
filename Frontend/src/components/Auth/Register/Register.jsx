@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { register as registerService } from '../../../services/authService';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const Register = () => {
       console.log('Mi Token:', response.token); // Registrar el token en la consola
 
       setSuccessMessage('Registro exitoso. Puedes iniciar sesión ahora.');
+      toast.success('Registro exitoso. Puedes iniciar sesión ahora.');
       setErrorMessage('');
       reset(); // Reiniciar el formulario
 
@@ -72,6 +74,7 @@ const Register = () => {
     } catch (error) {
       console.error('Error al registrar:', error);
       setErrorMessage(error.message || 'Error al registrar el usuario.');
+      toast.error('Error al registrar el usuario.');
       setSuccessMessage('');
     }
   };

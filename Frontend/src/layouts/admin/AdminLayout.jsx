@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/ui/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,

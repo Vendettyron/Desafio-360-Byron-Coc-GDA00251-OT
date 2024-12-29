@@ -7,6 +7,7 @@ import 'react-data-table-component-extensions/dist/index.css';
 import Estados from '@/config/estados';
 import Roles from '@/config/roles';
 import configureDataTableTheme from '@/config/dataTableTheme';
+import toast from 'react-hot-toast';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -37,9 +38,11 @@ const Usuarios = () => {
       await activarUsuario(id);
       const updatedData = await obtenerUsuarios();
       setUsuarios(updatedData);
+      toast.success('¡Usuario activado exitosamente!');
     } catch (err) {
       console.error('Error al activar usuario:', err);
       setError('Error al activar el usuario.');
+      toast.error('Error al activar el usuario.');
     }
   };
 
@@ -48,9 +51,11 @@ const Usuarios = () => {
       await inactivarUsuario(id);
       const updatedData = await obtenerUsuarios();
       setUsuarios(updatedData);
+      toast.success('¡Usuario inactivado exitosamente!');
     } catch (err) {
       console.error('Error al inactivar usuario:', err);
       setError('Error al inactivar el usuario.');
+      toast.error('Error al inactivar el usuario.');
     }
   };
 

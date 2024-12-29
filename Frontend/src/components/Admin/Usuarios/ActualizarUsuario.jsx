@@ -19,6 +19,7 @@ import FormInput from '@/components/Forms/FormInput';
 import FormSelect from '@/components/Forms/FormSelect';
 import FormLayout from '@/components/Forms/FormLayout';
 import { Button} from '@/components/ui/button';
+import toast from 'react-hot-toast';
 
 const ActualizarUsuario = () => {
   const { id } = useParams();
@@ -97,11 +98,14 @@ const ActualizarUsuario = () => {
 
     try {
       await actualizarUsuario(id, usuarioActualizado);
+      toast.success('¡Usuario actualizado exitosamente!');
       // Redirecciona al listado de usuarios
       navigate('/admin/usuarios');
+      
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
       setError('Hubo un problema al actualizar el usuario. Intente nuevamente.');
+      toast.error('Hubo un problema al actualizar el usuario. Intente nuevamente.');
     }
   };
 

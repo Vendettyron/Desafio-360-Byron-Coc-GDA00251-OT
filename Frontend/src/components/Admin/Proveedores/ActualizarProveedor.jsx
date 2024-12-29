@@ -1,7 +1,7 @@
 
 import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 // react-hook-form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,6 +25,7 @@ const EditarProveedor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext); // Datos de autenticación
+
 
   const {
     register,
@@ -74,10 +75,12 @@ const EditarProveedor = () => {
 
     try {
       await actualizarProveedor(proveedorActualizado);
+      toast.success('¡Proveedor actualizado exitosamente!');
       // Redirecciona al listado
       navigate('/admin/proveedores');
     } catch (error) {
       console.error('Error al actualizar proveedor:', error);
+      toast.error('Hubo un problema al actualizar el proveedor. Intente nuevamente.');
       // Manejo de error
     }
   };

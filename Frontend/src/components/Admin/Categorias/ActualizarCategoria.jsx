@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 // react-hook-form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -72,9 +72,11 @@ const ActualizarCategoria = () => {
       await actualizarCategoria(id, categoriaActualizada);
       // Redirecciona al listado
       navigate('/admin/categorias');
+      toast.success('¡Categoría actualizada exitosamente!');
     } catch (error) {
       console.error('Error al actualizar categoría:', error);
       setError('Hubo un problema al actualizar la categoría. Intente nuevamente.');
+      toast.error('Hubo un problema al actualizar la categoría. Intente nuevamente.');
     }
   };
 

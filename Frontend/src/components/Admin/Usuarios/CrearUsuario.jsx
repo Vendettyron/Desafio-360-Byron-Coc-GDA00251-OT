@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 // react-hook-form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -59,10 +59,12 @@ const CrearUsuario = () => {
     try {
       await registerUser(nuevoUsuario);
       // Redirecciona al listado de usuarios
+      toast.success('¡Usuario creado exitosamente!');
       navigate('/admin/usuarios');
     } catch (error) {
       console.error('Error al crear usuario:', error);
       setError('Hubo un problema al crear el usuario. Intente nuevamente.');
+      toast.error('Hubo un problema al crear el usuario. Intente nuevamente.');
     }
   };
 

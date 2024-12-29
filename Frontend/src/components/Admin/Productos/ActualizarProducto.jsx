@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 // react-hook-form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -107,9 +107,11 @@ const ActualizarProducto = () => {
       await actualizarProducto(id, productoActualizado);
       // Redirecciona al listado de productos
       navigate('/admin/productos');
+      toast.success('¡Producto actualizado exitosamente!');
     } catch (error) {
       console.error('Error al actualizar producto:', error);
       setError('Hubo un problema al actualizar el producto. Intenta nuevamente.');
+      toast.error('Hubo un problema al actualizar el producto. Intenta nuevamente.');
     }
   };
 

@@ -1,11 +1,9 @@
-// src/components/Pedidos/Pedidos.js
-
 import React, { useEffect, useState } from 'react';
 import { obtenerPedidos } from '@/services/pedidosService'; 
 import { obtenerUsuarios } from '@/services/usuariosService';
 import Estados from '@/config/estados'; 
-import { Link, useNavigate } from 'react-router-dom';
-import DataTable, { createTheme } from 'react-data-table-component';
+import { useNavigate } from 'react-router-dom';
+import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';

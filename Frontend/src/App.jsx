@@ -1,6 +1,6 @@
 import { useState,lazy,Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './hooks/ProtectedRoute';
 
 import {AdminLayout } from './layouts/admin/AdminLayout'; // Layout de Admin
 import Roles from '@/config/roles';
@@ -14,8 +14,9 @@ function App() {
     <>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            
 
             {/* Rutas protegidas para usuarios con rol 'Operador' */}
             <Route element={<ProtectedRoute roles={[Roles.ADMIN]} />}>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getProveedores, activarProveedor,inactivarProveedor } from '@/services/proveedoresService';
 import { Link } from 'react-router-dom';
-import DataTable, {createTheme} from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css'
 import configureDataTableTheme from '@/config/dataTableTheme';
+import toast from 'react-hot-toast';
 
 const Proveedores = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -35,6 +36,7 @@ const Proveedores = () => {
       await activarProveedor(id);
       const updatedData = await getProveedores();
       setProveedores(updatedData);
+      toast.success('¡Proveedor activado exitosamente!');
     } catch (err) {
       console.error('Error al activar proveedor:', err);
       setError('Error al activar el proveedor.');
@@ -46,6 +48,7 @@ const Proveedores = () => {
       await inactivarProveedor(id);
       const updatedData = await getProveedores();
       setProveedores(updatedData);
+      toast.success('¡Proveedor inactivado exitosamente!');
     } catch (err) {
       console.error('Error al inactivar proveedor:', err);
       setError('Error al inactivar el proveedor.');

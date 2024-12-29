@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { estadoSchema } from '@/utils/validationSchemas';
 import { crearEstado } from '@/services/estadosService';
+import toast from 'react-hot-toast';
 
 // Componentes reutilizables
 import { Button } from '@/components/ui/button';
@@ -36,10 +37,11 @@ const CrearEstado = () => {
       // Limpia el formulario
       reset();
       setError('');
-      alert('¡Estado creado exitosamente!');
+      toast.success('¡Estado creado exitosamente!');
     } catch (err) {
       console.error('Error al crear estado:', err);
       setError('Hubo un problema al crear el estado. Intente nuevamente.');
+      toast.error('Hubo un problema al crear el estado. Intente nuevamente.');
     }
   };
 

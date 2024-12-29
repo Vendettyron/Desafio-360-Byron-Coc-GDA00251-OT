@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 // react-hook-form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -84,10 +84,12 @@ const CrearProducto = () => {
       // Resetear el formulario después de una creación exitosa
       reset();
       // Redirecciona al listado de productos
+      toast.success('¡Producto creado exitosamente!');
       navigate('/admin/productos');
     } catch (err) {
       console.error('Error al crear producto:', err);
       setError('Hubo un problema al crear el producto. Intenta nuevamente.');
+      toast.error('Hubo un problema al crear el producto. Intenta nuevamente.');
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 // react-hook-form
 import { useForm } from 'react-hook-form';
@@ -70,9 +71,11 @@ const ActualizarEstado = () => {
       await actualizarEstado(id, estadoActualizado);
       // Redirecciona al listado
       navigate('/admin/estados');
+      toast.success('¡Estado actualizado exitosamente!');
     } catch (error) {
       console.error('Error al actualizar estado:', error);
       setError('Hubo un problema al actualizar el estado. Intente nuevamente.');
+      toast.error('Hubo un problema al actualizar el estado. Intente nuevamente.');
     }
   };
 
