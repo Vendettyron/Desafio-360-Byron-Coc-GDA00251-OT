@@ -78,7 +78,7 @@ const data = {
       items: [
         {
           title: "Ver Pedidos",
-          url: "/admin/pedidos", 
+          url: "/admin/pedido", 
         }, 
       ],
     },

@@ -1,4 +1,5 @@
 import pedidoService from '../services/pedidoService.js';
+import { poolPromise} from '../database/DbConection.js';
 
 export const obtenerPedidosCliente = async (req, res) => {
     const fk_cliente = req.user.id; // Obtener el ID del usuario desde req.user JWT
@@ -12,7 +13,49 @@ export const obtenerPedidosCliente = async (req, res) => {
     }
 };
 
+export const obtenerPedidoPorId = async (req, res) => {
+    const pk_id_pedido = req.params.id; // Obtener el ID del usuario desde req.params
 
+    try {
+        const pedidos = await pedidoService.obtenerPedidoPorId(pk_id_pedido);
+        res.status(200).json(pedidos);
+    } catch (error) {
+        console.error('Error al obtener pedidos del cliente:', error);
+        return res.status(500).json({ error: 'Error interno del servidor.' });
+    }   
+};
+
+//Obtiene los pedidos de un cliente por un administrador
+export const obtenerPedidosClientePorAdmin = async (req, res) => {
+    const fk_cliente = req.params.id; // Obtener el ID del cliente desde req.params
+
+    try {
+        const pedidos = await pedidoService.obtenerPedidosCliente(fk_cliente);
+        res.status(200).json(pedidos);
+    } catch (error) {
+        console.error('Error al obtener pedidos del cliente por admin:', error);
+        return res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+//obtiene todos los pedidos
+
+export const obtenerPedidos = async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+        .query('SELECT * FROM Pedidos'); //  consulta
+        res.json(result.recordset);
+    } catch (error) {
+        console.error('Error al obtener pedidos:', error);
+        return res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+
+/**
+ *  Obtiene los detalles de los pedidos realizado por un cliente 
+  */
 export const obtenerDetallesPedidoCliente = async (req, res) => {
     const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
     const { id } = req.params; // Obtener el ID del pedido desde req.params
@@ -34,6 +77,30 @@ export const obtenerDetallesPedidoCliente = async (req, res) => {
         }
     }
 }
+
+/**
+ * Obtener detalles del pedido de un cliente por un administrador sin importar el estado del pedido
+ */
+export const obtenerDetallesClientePorAdmin = async (req, res) => {
+    const fk_id_usuario = req.params.idcliente; // Obtener el ID del usuario desde req.params
+    const pk_id_pedido = req.params.idpedido; // Obtener el ID del pedido desde req.params
+
+    try {
+        const detallesPedido = await pedidoService.obtenerDetallesClientePorAdmin({
+            fk_id_usuario,
+            pk_id_pedido
+        });
+        res.status(200).json(detallesPedido);
+    } catch (error) {
+        console.error('Error al obtener detalles del pedido del cliente por admin:', error);
+        // Manejo de errores personalizados basado en el número de error lanzado
+        if (error.number === 50000) {
+            return res.status(404).json({ error: 'No existe un pedido en estado "En proceso" para este usuario.' });
+        } else {
+            return res.status(500).json({ error: 'Error interno del servidor.' });
+        }
+    }
+};
 
 /**
  * Actualizar un detalle en el pedido del usuario o eliminarlo si la nueva cantidad es 0
@@ -124,7 +191,7 @@ export const eliminarDetallePedido = async (req, res) => {
 };
 
 /**
- * Cancelar el pedido en estado "En proceso" del cliente
+ * Cancelar el pedido en estado "En proceso" por parte del ciente
  */
 export const cancelarPedidoCliente = async (req, res) => {
     const fk_id_cliente = req.user.id; // Obtener el ID del cliente desde req.user

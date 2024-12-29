@@ -39,6 +39,12 @@ import Productos from '@/components/Admin/Productos/Productos';
 import CrearProducto from '@/components/Admin/Productos/CrearProducto';
 import ActualizarProducto from '@/components/Admin/Productos/ActualizarProducto';
 
+// componeente de pedidos
+import Pedidos from '@/components/Admin/Pedidos/Pedidos';
+import PedidoDetallesPorUsuario from '@/components/Admin/Pedidos/PedidoDetallesPorUsuario';
+import ConfirmarCancelarPedido from '@/components/Admin/Pedidos/ConfirmarCancelarPedido';
+import { Toaster } from 'react-hot-toast';
+
 
 const AdminLayout  = () => {
   return (
@@ -84,12 +90,20 @@ const AdminLayout  = () => {
               <Route path="productos" element={<Productos/>} />
               <Route path="productos/crear" element={<CrearProducto />} />
               <Route path="productos/actualizar/:id" element={<ActualizarProducto />} />
-              
+
+              {/* Rutas de pedidos */}
+              <Route path="pedido" element={<Pedidos/>} />
+              <Route path="pedido/obtenerDetallesClientePorAdmin/:idcliente/:idpedido" element={<PedidoDetallesPorUsuario />} />
+              <Route path="pedido/confirmar-cancelar/:idpedido" element={<ConfirmarCancelarPedido />} />
               
             </Routes>
           </div>
         </SidebarInset>
       </SidebarProvider>
+      <Toaster
+          position="bottom-center"
+          reverseOrder={false}
+      />
     </>
   );
 }

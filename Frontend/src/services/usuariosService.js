@@ -21,6 +21,7 @@ export const obtenerUsuarios = async () => {
  */
 export const obtenerUsuarioPorId = async (id) => {
   try {
+    console.log(id);
     const response = await api.get(`/usuarios/ObtenerUsuarioPorId/${id}`);
     return response.data;
   } catch (error) {

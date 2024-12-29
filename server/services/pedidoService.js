@@ -12,6 +12,19 @@ const obtenerPedidosCliente = async (fk_cliente) => {
     }   
 };
 
+// Obtener los pedidos de un cliente por el id del pedido
+const obtenerPedidoPorId = async (pk_id_pedido) => {
+    try{
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('pk_id_pedido', sql.Int, pk_id_pedido)
+            .execute('ObtenerPedidoPorId');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
 
 const obtenerDetallesPedidoCliente = async (data) => {
     const {fk_id_usuario, pk_id_pedido} = data;
@@ -21,6 +34,24 @@ const obtenerDetallesPedidoCliente = async (data) => {
             .input('fk_id_usuario', sql.Int, fk_id_usuario)
             .input('pk_id_pedido', sql.Int, pk_id_pedido)
             .execute('ObtenerDetallesPedido');
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
+/**
+ * Obtener los detalles de un pedido de un cliente por parte del administrador sin importar el estado del pedido
+ */
+
+const obtenerDetallesClientePorAdmin = async (data) => {
+    const {fk_id_usuario, pk_id_pedido} = data;
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .input('fk_id_usuario', sql.Int, fk_id_usuario)
+            .input('pk_id_pedido', sql.Int, pk_id_pedido)
+            .execute('ObtenerDetallesPedidoAdmin');
         return result.recordset;
     } catch (error) {
         throw error;
@@ -136,5 +167,7 @@ export default {
     eliminarDetallePedido,
     insertarDetallePedido,
     obtenerDetallesPedidoCliente,
-    obtenerPedidosCliente
+    obtenerPedidosCliente,
+    obtenerDetallesClientePorAdmin,
+    obtenerPedidoPorId
 };

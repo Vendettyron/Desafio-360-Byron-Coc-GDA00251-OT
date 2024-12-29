@@ -4,12 +4,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { proveedorSchema } from '@/utils/validationSchemas';
 import { crearProveedor } from '@/services/proveedoresService';
 import Estados from '@/config/estados';
+import { toast } from 'react-hot-toast';
 
 // Componentes reutilizables
 import { Button } from '@/components/ui/button';
 import FormLayout from '@/components/Forms/FormLayout';
 import FormInput from '@/components/Forms/FormInput';
 import FormSelect from '@/components/Forms/FormSelect';
+
 
 const CrearProveedor = () => {
   const [error, setError] = useState('');
@@ -45,7 +47,7 @@ const CrearProveedor = () => {
       // Limpia el formulario
       reset();
       setError('');
-      alert('¡Proveedor creado exitosamente!');
+      toast.success('¡Proveedor creado exitosamente!');
     } catch (err) {
       console.error('Error al crear proveedor:', err);
       setError('Hubo un problema al crear el proveedor. Intente nuevamente.');

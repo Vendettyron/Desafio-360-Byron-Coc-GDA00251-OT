@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 import {AdminLayout } from './layouts/admin/AdminLayout'; // Layout de Admin
 import Roles from '@/config/roles';
+
 const Register = lazy(() => import('./components/Auth/Register/Register'));
 const Login = lazy(() => import('./components/Auth/Login/Login'));
 function App() {
@@ -20,7 +21,6 @@ function App() {
             <Route element={<ProtectedRoute roles={[Roles.ADMIN]} />}>
               <Route path="/admin/*" element={<AdminLayout/>} />
             </Route>
-
 
           </Routes>
         </Suspense>

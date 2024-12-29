@@ -10,15 +10,67 @@ import {
     cancelarPedidoCliente,
     aprobarPedido,
     cancelarPedidoAdministrador,
-    eliminarDetallePedido
+    eliminarDetallePedido,
+    obtenerPedidos,
+    obtenerDetallesClientePorAdmin,
+    obtenerPedidosClientePorAdmin,
+    obtenerPedidoPorId 
 } from "../controllers/pedido.Controller.js";
 
 import Roles from "../config/roles.js";
 
 const router = express.Router();
 
-// Role 1: Administrador
-// Role 2: Cliente
+
+/**
+ * @route GET /api/pedido/ObtenerPedidos 
+ * @desc Obtiene todos los pedidos de la tabla pedidos
+ * @access Privado (Administradores)
+ */
+router.get(
+        "/ObtenerPedidos",
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN]),
+        obtenerPedidos
+);
+
+/**
+ * @route GET /api/pedido/ObtenerPedidos 
+ * @desc Obtiene todos los pedidos de la tabla pedidos
+ * @access Privado (Administradores)
+ */
+router.get(
+        "/ObtenerPedidoPorId/:id",
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN]),
+        obtenerPedidoPorId
+);
+
+
+    /**
+ * @route GET /api/pedido/obtenerPedidosClientePorAdmin/:id
+ * @desc Obtiene los Pedidos Realizados por un Cliente en especifico,  en espera "4"
+ * @access Privado (Administradores)
+ */
+router.get(
+        "/obtenerPedidosClientePorAdmin/:id",
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN]),
+        obtenerPedidosClientePorAdmin 
+);
+
+/**
+ * @route GET /api/pedido/obtenerDetallesClientePorAdmin/:id
+ * @desc Obtiene los detalles de un pedido de un cliente
+ * @access Privado (Administradores)
+ */
+router.get(
+        "/obtenerDetallesClientePorAdmin/:idcliente/:idpedido",
+        authMiddleware,
+        roleMiddleware([Roles.ADMIN]),
+        obtenerDetallesClientePorAdmin
+    );
+
 
 /**
  * @route GET /api/cliente/pedido/ObtenerPedidosCliente
@@ -93,11 +145,11 @@ router.put(
 );
 
 /**
- * @route POST /api/pedido/AprobarPedido/:id
+ * @route PUT /api/pedido/AprobarPedido/:id
  * @desc Aprobar un pedido (Acción admin)
  * @access Privado (Administradores)
  */
-router.post(
+router.put(
         "/AprobarPedido/:id", 
         authMiddleware,
         roleMiddleware([Roles.ADMIN]),  
@@ -105,15 +157,17 @@ router.post(
 );
 
 /**
- * @route POST /api/pedido/CancelarPedidoAdmin/:id
+ * @route PUT /api/pedido/CancelarPedidoAdmin/:id
  * @desc Cancelar un pedido como administrador
  * @access Privado (Administradores)
  */
-router.post(
+router.put(
     "/CancelarPedidoAdmin/:id",
     authMiddleware,
     roleMiddleware([Roles.ADMIN]),
     cancelarPedidoAdministrador
 );
+
+
 
 export default router;

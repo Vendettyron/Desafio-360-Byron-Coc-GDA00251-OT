@@ -6,6 +6,7 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import Estados from '@/config/estados';
 import Roles from '@/config/roles';
+import configureDataTableTheme from '@/config/dataTableTheme';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -142,42 +143,16 @@ const Usuarios = () => {
   }
 
   // =============== 5. Personalizar Tabla =============== //
-  createTheme(
-    'custom',
-    {
-      text: {
-        primary: '#268bd2',
-        secondary: '#2aa198',
-      },
-      background: {
-        default: '#002b36',
-      },
-      context: {
-        background: '#cb4b16',
-        text: '#FFFFFF',
-      },
-      divider: {
-        default: '#073642',
-      },
-      button: {
-        default: '#2aa198',
-        hover: 'rgba(0,0,0,.08)',
-        focus: 'rgba(255,255,255,.12)',
-        disabled: 'rgba(255, 255, 255, .34)',
-      },
-      sortFocus: {
-        default: '#2aa198',
-      },
-    },
-    'dark',
-  );
+  
+  configureDataTableTheme();
 
-  const tableData = {
+  // =============== 6. Mostrar los datos en Data Tables =============== //
+
+    const tableData = {
     columns,
     data: usuarios,
   };
 
-  // =============== 6. Mostrar los datos en Data Tables =============== //
   return (
     <>
       <h2 className='text-3xl'>Gestión de Usuarios</h2>
