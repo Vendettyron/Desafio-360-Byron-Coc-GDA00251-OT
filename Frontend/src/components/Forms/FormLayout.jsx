@@ -11,10 +11,8 @@ const FormLayout = ({ children,title  }) => {
         padding: "2rem",
         backgroundColor: "#e4e4e7",
         justifyContent: "center", 
-        borderRadius: "1rem",
-        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
       }}
-      className='space-y-12'
+      className='shadow-lg bg-slate-200 rounded-lg'
     >
       <h2 className="text-center text-2xl">{title}</h2>
       {children}

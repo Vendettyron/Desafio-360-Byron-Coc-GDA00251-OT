@@ -11,27 +11,27 @@ const configureCustomTheme = () => {
         themeName,
         {
             text: {
-                primary: '#268bd2',
-                secondary: '#2aa198',
+                primary: 'rgb(63,72,204)',
+                secondary: 'rgb(63,72,204)',
             },
             background: {
-                default: '#f5f5f5',
+                default: 'rgb(228,228,231)',
             },
             context: {
-                background: '#cb4b16',
-                text: '#FFFFFF',
+                background: 'rgb(228,228,231)',
+                text: 'rgb(228,228,231)',
             },
             divider: {
                 default: '#073642',
             },
             button: {
-                default: '#2aa198',
-                hover: 'rgba(0,0,0,.08)',
-                focus: 'rgba(255,255,255,.12)',
-                disabled: 'rgba(255, 255, 255, .34)',
+                default: 'rgb(63,72,204)',
+                hover: 'rgb(155,155,155)',
+                focus: 'rgb(255,255,255)',
+                disabled: 'rgb(150,155,155)',
             },
             sortFocus: {
-                default: '#2aa198',
+                default: 'rgb(228,228,231)',
             },
         },
         'light' // Modo del tema

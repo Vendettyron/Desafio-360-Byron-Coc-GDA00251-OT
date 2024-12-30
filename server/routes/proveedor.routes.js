@@ -25,7 +25,7 @@ const router = express.Router();
 router.get( 
     "/ObtenerProveedor",
     authMiddleware,
-    roleMiddleware([Roles.ADMIN]),
+    roleMiddleware([Roles.ADMIN,Roles.CLIENTE]),
     obtenerProveedor
 );
 

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { register as registerService } from '../../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import FormLayout from '@/components/Forms/FormLayout';
+import FormSelect from '@/components/Forms/FormSelect';
+import { registerUser } from '@/services/authService';
+import Roles from '@/config/roles';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -55,11 +58,10 @@ const Register = () => {
       // Agregar los campos fk_rol y fk_estado
       const userData = {
         ...data,
-        fk_rol: 2, // Asignar rol de 'Cliente'
         fk_estado: 1, // Estado 'Activo'
       };
 
-      const response = await registerService(userData);
+      const response = await registerUser(userData);
       console.log('Mi Token:', response.token); // Registrar el token en la consola
 
       setSuccessMessage('Registro exitoso. Puedes iniciar sesión ahora.');
@@ -80,9 +82,9 @@ const Register = () => {
   };
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-md-6">
-        <h2>Registrarse</h2>
+    <> 
+      <FormLayout>
+        <h2 className='text-3xl text-center'>Registrarse</h2>
         {errorMessage && (
           <div className="alert alert-danger" role="alert">
             {errorMessage}
@@ -178,12 +180,23 @@ const Register = () => {
             <div className="invalid-feedback">{errors.telefono?.message}</div>
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
+          <FormSelect
+            label="Rol:"
+            id="fk_rol"
+            register={register('fk_rol')}
+            error={errors.fk_rol?.message}
+            options={[
+              { label: 'Administrador', value: Roles.ADMIN },
+              { label: 'Cliente', value: Roles.CLIENTE },
+            ]}
+          />
+
+          <button type="submit" className="btn btn-primary w-100 mt-3">
             Registrarse
           </button>
         </form>
-      </div>
-    </div>
+        </FormLayout>
+    </>
   );
 };
 

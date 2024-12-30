@@ -1,55 +1,66 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart } from "lucide-react";
+import "./Navbar.scss"; 
 
-const Navbar = () => {
-  const { auth, logoutUser } = useContext(AuthContext);
+function Navbar() {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [size, setSize] = useState({
+    width: 0,
+    height: 0,
+  });
+  useEffect(() => {
+    const handleResize = () => {
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    window.addEventListener("resize", handleResize);
 
-  const handleLogout = () => {
-    logoutUser();
-    navigate('/login');
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (size.width > 768 && menuOpen) {
+      setMenuOpen(false);
+    }
+  }, [size.width, menuOpen]);
+
+  const menuToggleHandler = () => {
+    setMenuOpen((p) => !p);
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">MiTienditaOnline</Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
-            {auth.usuario ? (
-              <>
-                {auth.usuario.fk_rol === 1 && (
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/admin">Admin Panel</Link>
-                  </li>
-                )}
-                <li className="nav-item">
-                  <span className="nav-link">Hola, {auth.usuario.nombre}</span>
-                </li>
-                <li className="nav-item">
-                  <button className="btn btn-outline-danger" onClick={handleLogout}>Cerrar Sesión</button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">Iniciar Sesión</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/register">Registrarse</Link>
-                </li>
-              </>
-            )}
+    <header className="header">
+      <div className="header__content">
+        <Link to="/cliente" className="header__content__logo">
+          Mi Tiendita Online
+        </Link>
+        <nav
+          className={`${"header__content__nav"} 
+          ${menuOpen && size.width < 768 ? `${"isMenu"}` : ""} 
+          }`}
+        >
+          <ul>
+            <li>
+              <Link to="/cliete">Productos</Link>
+            </li>
+            <li>
+              <Link to="/profile">Ver pedidos pendientes</Link>
+            </li>
+              <Link to="/cart">
+                <ShoppingCart className="shopping-cart-icon" />
+              </Link>
+              <Link to="/login">
+                <button className="btn btn__login">Log Out</button>
+              </Link>
           </ul>
-        </div>
+        </nav>
       </div>
-    </nav>
+    </header>
   );
-};
+}
 
 export default Navbar;
