@@ -4,6 +4,12 @@ import { ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/*
+  ============================Diccionario de componentes============================
+  // Texto al lado del icono para contrar y expander la navbar
+
+*/
+
 const Breadcrumb = React.forwardRef(
   ({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />
 )
@@ -40,13 +46,14 @@ const BreadcrumbLink = React.forwardRef(({ asChild, className, ...props }, ref) 
 })
 BreadcrumbLink.displayName = "BreadcrumbLink"
 
+// Texto al lado del icono para contrar y expander la navbar
 const BreadcrumbPage = React.forwardRef(({ className, ...props }, ref) => (
   <span
     ref={ref}
     role="link"
     aria-disabled="true"
     aria-current="page"
-    className={cn("font-normal text-foreground", className)}
+    className={cn("font-normal text-foreground text-white", className)}
     {...props} />
 ))
 BreadcrumbPage.displayName = "BreadcrumbPage"

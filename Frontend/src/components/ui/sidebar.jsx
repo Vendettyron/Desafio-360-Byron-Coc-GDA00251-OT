@@ -33,6 +33,7 @@ const SidebarContext = React.createContext(null)
 //Cambiar color Etiueta Grupo
 //Cambiar Color Texto submenu-grupo
 //Cambiar color de fondo Hero
+// Icono para expandir y contraer el sidebar
 */
 
 function useSidebar() {
@@ -225,6 +226,8 @@ const Sidebar = React.forwardRef((
 })
 Sidebar.displayName = "Sidebar"
 
+
+// Icono para expandir y contraer el sidebar
 const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
 
@@ -234,7 +237,7 @@ const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) 
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7 bg-slate-50 hover:bg-slate-500 duration-300 hover:scale-110 ", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
@@ -421,7 +424,7 @@ const SidebarMenuItem = React.forwardRef(({ className, ...props }, ref) => (
   <li
     ref={ref}
     data-sidebar="menu-item"
-    className={cn("group/menu-item relative text-slate-50", className)}
+    className={cn("group/menu-item relative text-slate-50 hover:text-slate-400", className)}
     {...props} />
 ))
 SidebarMenuItem.displayName = "SidebarMenuItem"

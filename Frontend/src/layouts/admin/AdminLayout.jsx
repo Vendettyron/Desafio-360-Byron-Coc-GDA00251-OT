@@ -59,6 +59,9 @@ const AdminLayout  = () => {
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb>
+              <BreadcrumbItem>
+                  <BreadcrumbPage>Contraer</BreadcrumbPage>
+                </BreadcrumbItem>
               </Breadcrumb>
             </div>
           </header>

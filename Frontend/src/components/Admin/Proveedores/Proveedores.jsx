@@ -6,24 +6,29 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css'
 import configureDataTableTheme from '@/config/dataTableTheme';
 import toast from 'react-hot-toast';
+import { Progress } from '@/components/ui/progress';
 
 const Proveedores = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(30);
   const [error, setError] = useState('');
 
   // =============== 1. Fetch de proveedores al montar el componente =============== //
   useEffect(() => {
     const fetchProveedores = async () => {
       try {
+        setCargando(80);
         console.log('Iniciando solicitud para obtener proveedores...');
         const proveedoresData = await getProveedores();
         console.log('Proveedores obtenidos:', proveedoresData);
+       
         setProveedores(proveedoresData);
       } catch (err) {
         console.error('Error al obtener proveedores:', err);
         setError('No se pudieron obtener los proveedores. Intenta nuevamente más tarde.');
       } finally {
+        setCargando(100);
         setLoading(false);
       }
     };
@@ -58,8 +63,8 @@ const Proveedores = () => {
   // =============== 3. Renderizado condicional =============== //
   if (loading) {
     return (
-      <div className="text-center mt-5">
-        <p>Cargando proveedores...</p>
+      <div className='flex justify-center items-center h-auto w-full'>
+        <Progress value={cargando}></Progress>
       </div>
     );
   }

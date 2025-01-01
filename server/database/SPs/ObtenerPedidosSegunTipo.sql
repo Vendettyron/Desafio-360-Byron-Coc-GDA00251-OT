@@ -1,6 +1,5 @@
 Use MiTienditaOnlineDB
 GO
-Exec ObtenerPedidosSegunTipo @fk_estado=7
 
 CREATE PROCEDURE ObtenerPedidosSegunTipo
     @fk_estado INT
