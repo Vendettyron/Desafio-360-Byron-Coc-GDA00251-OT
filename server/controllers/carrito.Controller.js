@@ -1,5 +1,7 @@
 import carritoService from '../services/carritoService.js';
 
+// Obtener detalles del carrito de un usuario específico
+
 export const obtenerDetallesCarritoPorUsuario = async (req, res) => {
     const fk_id_usuario = Number(req.user.id); // Obtener el ID del usuario desde req.user JWT
 
@@ -11,6 +13,8 @@ export const obtenerDetallesCarritoPorUsuario = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 }
+
+// Agregar un producto al carrito, en dado caso no exista el carrito se crea uno nuevo
 
 export const AgregarProductoAlCarrito = async (req, res) => {
     const { cantidad } = req.body;
@@ -36,6 +40,8 @@ export const AgregarProductoAlCarrito = async (req, res) => {
     }
 }
 
+// Eliminar un detalle especifico del carrito
+
 export const EliminarDetalleCarrito = async (req, res) => {
     const { id } = req.params; // Obtener el ID del producto desde req.params
     const fk_id_producto  = Number(id); 
@@ -59,6 +65,22 @@ export const EliminarDetalleCarrito = async (req, res) => {
     }
 }
 
+// Eliminar todos los detalles del carrito
+
+export const EliminarDetallesCarrito = async (req, res) => {
+    const fk_id_usuario = Number(req.user.id); // Obtener el ID del usuario desde req.user JWT
+
+    try {
+        await carritoService.EliminarDetallesCarrito(fk_id_usuario);
+        res.json({ message: 'Todos los detalles del carrito eliminados.' });
+    } catch (error) {
+        console.error('Error eliminando todos los detalles del carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+}
+
+// Actualizar un detalle del carrito (cantidad)
+
 export const ActualizarDetalleCarrito = async (req, res) => {
     const { nueva_cantidad } = req.body;
     const { id } = req.params; // Obtener el ID del producto desde req.params
@@ -66,7 +88,7 @@ export const ActualizarDetalleCarrito = async (req, res) => {
     const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user JWT
 
     // Validar que se proporcionaron todos los campos necesarios
-    if (!fk_id_usuario || !fk_id_producto || !nueva_cantidad) {
+    if (!fk_id_usuario || !fk_id_producto || isNaN(nueva_cantidad)) {
         return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
 
@@ -82,6 +104,8 @@ export const ActualizarDetalleCarrito = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 }
+
+// Confirmar un carrito para que se vuelva un Pedido
 
 export const ConfirmarCarrito = async (req, res) => {
     const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user JWT

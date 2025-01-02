@@ -53,7 +53,7 @@ router.get(
 router.get( 
     "/ObtenerProveedorPorId/:id",
     authMiddleware,
-    roleMiddleware([Roles.ADMIN]),
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     obtenerProveedorPorId
 );
 /**

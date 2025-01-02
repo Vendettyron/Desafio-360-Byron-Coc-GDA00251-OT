@@ -32,6 +32,7 @@ function Navbar() {
     setMenuOpen((p) => !p);
   };
 
+
   return (
     <header className="header">
       <div className="header__content">
@@ -45,15 +46,15 @@ function Navbar() {
         >
           <ul>
             <li>
-              <Link to="/cliete">Productos</Link>
+              <Link to ="/cliente">Productos</Link>
             </li>
             <li>
               <Link to="/profile">Ver pedidos pendientes</Link>
             </li>
-              <Link to="/cart">
+              <Link to="/cliente/carrito">
                 <ShoppingCart className="shopping-cart-icon" />
               </Link>
-              <Link to="/login">
+              <Link to="/">
                 <button className="btn btn__login">Log Out</button>
               </Link>
           </ul>

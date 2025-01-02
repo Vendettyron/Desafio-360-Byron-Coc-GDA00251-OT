@@ -1,5 +1,7 @@
 import { poolPromise,sql} from '../database/DbConection.js';
 
+// Obtener detalles del carrito de un usuario específico
+
 const obtenerDetallesCarritoPorUsuario = async (fk_id_usuario) => {
     try {
         const pool = await poolPromise;
@@ -12,6 +14,8 @@ const obtenerDetallesCarritoPorUsuario = async (fk_id_usuario) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 }
+
+// Agregar un producto al carrito, en dado caso no exista el carrito se crea uno nuevo
 
 const AgregarProductoAlCarrito = async (data) => {
     const { fk_id_usuario, pk_id_producto, cantidad } = data;
@@ -28,6 +32,7 @@ const AgregarProductoAlCarrito = async (data) => {
     }
 };
 
+// Eliminar un detalle especifico del carrito
 const EliminarDetalleCarrito = async (data) => {
     const { fk_id_producto, fk_id_usuario } = data;
     try {
@@ -39,6 +44,19 @@ const EliminarDetalleCarrito = async (data) => {
     } catch (error) {
         console.error('Error eliminando Detalle', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+}
+
+// Eliminar todos los detalles del carrito
+
+const EliminarDetallesCarrito = async (fk_id_usuario) => {
+    try {
+        const pool = await poolPromise;
+        await pool.request()
+            .input('fk_id_usuario',sql.Int, fk_id_usuario)
+            .execute('EliminarDetallesCarrito'); // Llamar al SP EliminarDetallesCarrito
+    } catch (error) {
+        throw error;
     }
 }
 
@@ -73,5 +91,6 @@ export default {
     AgregarProductoAlCarrito,
     EliminarDetalleCarrito,
     ActualizarDetalleCarrito,
-    ConfirmarCarrito
+    ConfirmarCarrito,
+    EliminarDetallesCarrito
 };

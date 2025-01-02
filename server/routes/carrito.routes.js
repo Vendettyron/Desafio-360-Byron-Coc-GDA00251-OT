@@ -7,17 +7,17 @@ import { obtenerDetallesCarritoPorUsuario,
     AgregarProductoAlCarrito,
     EliminarDetalleCarrito,
     ActualizarDetalleCarrito,
-    ConfirmarCarrito
+    ConfirmarCarrito,
+    EliminarDetallesCarrito
 } from "../controllers/carrito.Controller.js";
-// Role 1: Administrador
-// Role 2: Cliente
+
 
 const router = express.Router();
 
 /**
  * @route GET /api/carrito/ObtenerDetallesCarritoPorUsuario
  * @desc Ver detalles del carrito de un usuario
- * @access cliente y admin
+ * @access cliuente y admin
  */
 
 router.get( 
@@ -43,7 +43,7 @@ router.post(
 
 /**
  * @route DELETE /api/carrito/EliminarDetalleCarrito/:id
- * @desc Eliminar un detalle del carrito
+ * @desc Eliminar un detalle especifico del carrito
  * @access cliuente y admin
  */
 
@@ -52,6 +52,19 @@ router.delete(
     authMiddleware,
     roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     EliminarDetalleCarrito
+);
+
+/**
+ * @route DELETE /api/carrito/EliminarDetallesCarrito/:id
+ * @desc Eliminar todos los detalles del carrito de un usuario
+ * @access cliuente y admin
+ */
+
+router.delete( 
+    "/EliminarDetallesCarrito",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+    EliminarDetallesCarrito
 );
 
 /**
