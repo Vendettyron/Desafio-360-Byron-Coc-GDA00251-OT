@@ -1,9 +1,15 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom'; // Usa Route para rutas internas si es necesario
+import { Route, Routes } from 'react-router-dom'; 
+import { Toaster } from 'react-hot-toast';
+
+//Componenetes Productos
 import Productos from '@/components/Cliente/Productos/Productos';
 import ProductoPorId from '@/components/Cliente/Productos/ProductoPorID';
-import Carrito from '@/components/Cliente/CarritoPedido/Carrito';
-import { Toaster } from 'react-hot-toast';
+// componentes Pedidos
+import Pedidos from '@/components/Cliente/Pedido/Pedidos';
+
+//componentes de carrito
+import Carrito from '@/components/Cliente/Carrito/Carrito';
 
 // componentes reutilizables
 import Navbar from '@/components/Common/Navbar';
@@ -21,6 +27,7 @@ const ClinteLayout = () => {
                     <Route path="carrito" element={<Carrito/>}/>
 
                      {/* Rutas de Pedidos*/}
+                    <Route path="pedidos" element={<Pedidos/>}/> 
                 </Routes>
                 <Toaster
                     position="top-right"

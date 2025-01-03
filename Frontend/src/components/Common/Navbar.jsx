@@ -49,7 +49,7 @@ function Navbar() {
               <Link to ="/cliente">Productos</Link>
             </li>
             <li>
-              <Link to="/profile">Ver pedidos pendientes</Link>
+              <Link to="/cliente/pedidos">Ver pedidos pendientes</Link>
             </li>
               <Link to="/cliente/carrito">
                 <ShoppingCart className="shopping-cart-icon" />

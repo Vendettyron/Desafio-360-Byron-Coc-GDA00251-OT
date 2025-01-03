@@ -36,7 +36,7 @@ router.get(
 
 /**
  * @route GET /api/pedido/ObtenerPedidos 
- * @desc Obtiene todos los pedidos de la tabla pedidos
+ * @desc Obtiene todos los pedidos de la tabla pedidos por ID
  * @access Privado (Administradores)
  */
 router.get(
@@ -74,7 +74,7 @@ router.get(
 
 /**
  * @route GET /api/cliente/pedido/ObtenerPedidosCliente
- * @desc Obtener todos los pedidos en Espera "4" del cliente 
+ * @desc Obtener todos los pedidos del cliente
  * @access Clientes y admin
  */
 router.get(

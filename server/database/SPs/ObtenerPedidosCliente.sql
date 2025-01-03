@@ -20,22 +20,7 @@ BEGIN
             THROW 50000, 'El cliente especificado no existe.', 1;
         END
 
-        -- 2. Verificar si el cliente tiene pedidos en estado "4" (pendiente)
-        SELECT 
-            @total_pedidos = COUNT(*)
-        FROM 
-            Pedidos
-        WHERE 
-            fk_cliente = @fk_cliente
-            AND fk_estado = 4; -- Estado "4" es "Pendiente"
-
-        IF @total_pedidos = 0
-        BEGIN
-            ROLLBACK TRANSACTION;
-            THROW 50001, 'No existen pedidos en estado "Pendiente" para este cliente.', 1;
-        END
-
-        -- 3. Obtener los detalles de los pedidos en estado "4"
+        -- 2. Obtener los detalles de los pedidos del cliente
         SELECT 
             p.fk_estado AS estado,
             p.total,
@@ -45,7 +30,6 @@ BEGIN
             Pedidos p
         WHERE 
             p.fk_cliente = @fk_cliente
-            AND p.fk_estado = 4; -- Estado "4" es "Pendiente"
 
         -- 4. Registrar la operación en la tabla Log
         INSERT INTO Log (

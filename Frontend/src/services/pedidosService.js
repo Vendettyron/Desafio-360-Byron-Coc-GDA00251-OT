@@ -20,12 +20,12 @@ export const obtenerPedidos = async () => {
  * @param {number|string} idpedido - ID del pedido
  * @returns {Promise<Array>} - Lista de pedidos del cliente.
  */
-export const obtenerPedidosClientePorAdmin = async (id) => {
+export const obtenerPedidosCliente = async () => {
     try {
-        const response = await api.get(`/pedido/obtenerDetallesClientePorAdmin/${id}`);
+        const response = await api.get(`/pedido/ObtenerPedidosCliente`);
         return response.data;
     } catch (error) {
-        console.error(`Error al obtener pedidos del cliente ${idcliente}:`, error);
+        console.error(`Error al obtener pedidos del cliente`, error);
         throw error;
     }
 };
@@ -77,6 +77,22 @@ export const cancelarPedido = async (id) => {
     }
 };
 
+/**
+ * Cancela un pedido como Cliente.
+ * @param {number|string} id - ID del pedido a cancelar.
+ * @returns {Promise<Object>} - Pedido cancelado.
+ */
+
+export const cancelarPedidoCliente = async (id) => {
+    try {
+        const response = await api.put(`/pedido/CancelarPedidoCliente/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al cancelar el pedido ${id}:`, error);
+        throw error;
+    }
+};
+
 
 /**
  * Obtiene un pedido específico por su ID.
@@ -94,3 +110,28 @@ export const obtenerPedidoPorId = async (id) => {
     }
 };
 
+/**
+ * Obtiene los detalles de un pedidio eespecifico, segun su ID.
+ * @param {number|string} id - ID del pedido a ver sus detalles.
+ * @returns {Promise<Object>} - Pedido actualizado.
+ */
+
+export const ObtenerDetallesPedidoCliente = async (id) => {
+    try {
+        const response = await api.get(`/pedido/ObtenerDetallesPedidoCliente/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener detalles del pedido ${id}:`, error);
+        throw error;
+    }
+}
+
+export const ActualizarDetallePedido = async (pedidoId,productoId, nueva_cantidad) => {
+    try {
+        const response = await api.put(`/pedido/${pedidoId}/ActualizarDetallePedido/${productoId}`, { nueva_cantidad });
+        return response.data;
+    } catch (error) {
+        console.error(`Error al actualizar el detalle del pedido ${pedidoId} del producto ${productoId}:`, error);
+        throw error;
+    }
+}

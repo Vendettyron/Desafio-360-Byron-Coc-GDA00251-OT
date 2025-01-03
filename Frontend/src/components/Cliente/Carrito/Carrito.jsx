@@ -1,7 +1,7 @@
 // src/components/Carrito/Carrito.jsx
 
 import React, { useEffect, useState, useContext } from 'react';
-import CarritoPedidoDetalle from '@/components/Cliente/CarritoPedido/CarritoPedidoDetalle';
+import CarritoPedidoDetalle from '@/components/Cliente/Carrito/CarritoPedidoDetalle';
 import { obtenerDetallesCarritoPorUsuario, eliminarDetallesCarrito, confirmarCarrito } from '@/services/carritoService';
 import toast from 'react-hot-toast';
 import { AuthContext } from '@/context/AuthContext';

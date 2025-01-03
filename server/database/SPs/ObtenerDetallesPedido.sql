@@ -1,6 +1,7 @@
 USE MiTienditaOnlineDB;
 GO
 
+
 CREATE PROCEDURE ObtenerDetallesPedido
     @fk_id_usuario INT,            -- ID del cliente
     @pk_id_pedido INT
@@ -33,7 +34,6 @@ BEGIN
         WHERE 
             pk_id_pedido = @pk_id_pedido
             AND fk_cliente = @fk_id_usuario
-            AND fk_estado = 4; -- Estado "4" es "Pendiente"
 
         IF @estadoPedido IS NULL
         BEGIN
@@ -61,7 +61,6 @@ BEGIN
         WHERE 
             p.pk_id_pedido = @pk_id_pedido
             AND p.fk_cliente = @fk_id_usuario
-            AND p.fk_estado = 4; -- Estado "4" es "Pendiente"
 
         -- 4. Registrar la operación en la tabla Log
         INSERT INTO Log (
