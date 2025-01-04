@@ -5,25 +5,31 @@ import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
+import { Progress } from '@/components/ui/progress';
+import "styled-components"
 
 
 const Estados = () => {
   const [estados, setEstados] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(20);
   const [error, setError] = useState('');
 
   // =============== 1. Fetch de estados al montar el componente =============== //
   useEffect(() => {
     const fetchEstados = async () => {
       try {
+        setCargando(50);
         console.log('Iniciando solicitud para obtener estados...');
         const estadosData = await obtenerEstados();
         console.log('Estados obtenidos:', estadosData);
         setEstados(estadosData);
+        setCargando(80);
       } catch (err) {
         console.error('Error al obtener estados:', err);
         setError('No se pudieron obtener los estados. Intenta nuevamente más tarde.');
       } finally {
+        setCargando(100);
         setLoading(false);
       }
     };
@@ -31,13 +37,11 @@ const Estados = () => {
   }, []);
 
     // =============== 3. Renderizado condicional =============== //
-    if (loading) {
-        return (
-          <div className="text-center mt-5">
-            <p>Cargando proveedores...</p>
-          </div>
-        );
-    }   
+  if (loading) {
+    return (
+        <Progress value={cargando} />
+    );
+  }
 
 
   // =============== 2. Configurar Columns de Data Tables =============== //
@@ -57,10 +61,9 @@ const Estados = () => {
     {
       name: 'Actualizar',
       cell: (row) => (
-        <Link to={`/admin/estados/actualizar/${row.pk_id_estado}`}>Editar</Link>
+        <Link to={`/admin/estados/actualizar/${row.pk_id_estado}`}  className="btn-editar">Editar</Link>
       ),
-      ignoreExport: true, // Ignorar en la exportación
-      cellExport: row => ({}), // No exportar este campo
+      export:false // No exportar este campo
     },
   ];
 
@@ -82,8 +85,8 @@ const Estados = () => {
   };
 
   return (
-    <>
-      <h2 className="text-3xl mb-4">Gestión de Estados</h2>
+    <div className="container-table-admin">
+      <h2 className="title-table-admin">Gestión de Estados</h2>
 
       <DataTableExtensions
         {...tableData}
@@ -98,9 +101,10 @@ const Estados = () => {
           noHeader
           pagination
           highlightOnHover
+          className="mt-3"
         />
       </DataTableExtensions>
-    </>
+    </div>
   );
 };
 

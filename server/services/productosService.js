@@ -5,7 +5,7 @@ export const crearProducto = async (data) => {
     
     try {
         const pool = await poolPromise; 
-        await pool.request()
+        const result = await pool.request()
             .input('fk_categoria', sql.Int, fk_categoria)
             .input('fk_estado', sql.Int, fk_estado)
             .input('fk_proveedor', sql.Int, fk_proveedor)
@@ -14,7 +14,11 @@ export const crearProducto = async (data) => {
             .input('precio', sql.Decimal(10, 2), precio)
             .input('stock', sql.Int, stock)
             .input('fk_id_usuario', sql.Int, fk_id_usuario)
+            .output('id_producto', sql.Int) // Definir el parámetro de salida
             .execute('InsertarProducto'); // Llamar al SP InsertarProducto
+
+            const idProducto = result.output.id_producto;
+            return idProducto; // Retornar el ID al controlador
     } catch (error) {
         throw error;
     }

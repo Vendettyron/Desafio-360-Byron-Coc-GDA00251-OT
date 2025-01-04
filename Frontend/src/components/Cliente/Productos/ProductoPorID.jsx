@@ -85,7 +85,7 @@ const ProductoPorId = () => {
         {/* Imagen del Producto */}
         <div className="md:w-1/2">
           <img
-            src={`/productos/${id}.jpg`}
+            src={`/assets/productos/${id}.jpg`}
             alt={id}
             className="card-img-top"
           />

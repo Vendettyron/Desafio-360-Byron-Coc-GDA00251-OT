@@ -144,5 +144,20 @@ export const productosSchema = Yup.object().shape({
     .integer('El stock debe ser un número entero')
     .min(0, 'El stock no puede ser negativo')
     .typeError('El stock debe ser un número'),
+    
+    imagen: Yup
+    .mixed()
+    .nullable() // Permite que sea null
+    .test('fileSize', 'El tamaño de la imagen es demasiado grande (máximo 5MB)', value => {
+      if (!value) return true; // Si no se seleccionó una imagen, es válido
+      if (!value.length) return true; // No se seleccionó una imagen, así que es válido
+      return value[0].size <= 5 * 1024 * 1024;
+    })
+    .test('fileType', 'Solo se permiten imágenes JPEG, JPG y PNG', value => {
+      if (!value) return true; // Si no se seleccionó una imagen, es válido
+      if (!value.length) return true; // No se seleccionó una imagen, así que es válido
+      return ['image/jpeg', 'image/jpg', 'image/png'].includes(value[0].type);
+    })
+    .notRequired(), // Hace que el campo sea opcional
 });
 

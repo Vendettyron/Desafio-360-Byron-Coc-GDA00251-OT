@@ -90,3 +90,26 @@ export const inactivarProducto = async (id) => {
   }
 };
 
+/**
+ * Sube la imagen de un producto.
+ * @param {number|string} id - ID del producto
+ * @param {Object} data - Imagen del producto
+ * @returns {Promise<Object>} - Producto con imagen
+ */
+
+export const subirImagenProducto = async (id, data) => {
+  try {
+    const response = await api.post(`/productos/subirImagen/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Error al subir la imagen del producto con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+
+

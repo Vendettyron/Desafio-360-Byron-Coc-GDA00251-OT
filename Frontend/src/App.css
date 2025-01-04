@@ -8,9 +8,51 @@
   justify-content: center;
   min-height: 100vh;
   background-color: rgb(10,58 ,79 );
+  font-family: "Poppins", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.rdt_TableCol{
+  background-color:  rgb(134, 186, 255);
+}
+
+.btn-activar {
+  @apply bg-green-600 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded w-full;
+}
+
+.btn-inactivar {
+  @apply bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded w-full;
+}
+
+.btn-editar {
+  @apply bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded w-full text-center;
+}
+
+.btn-ver-detalles {
+  @apply bg-violet-900 hover:bg-purple-400 text-white font-bold py-2 px-4 border-b-4 border-purple-700 hover:border-purple-500 rounded w-full text-center;
+}
+
+.badge-activo {
+  @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 p-1;
+}
+
+.badge-inactivo {
+  @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800;
+}
+
+.badge-en-proceso {
+  @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800;
 }
 
 
+.title-table-admin{
+  @apply text-3xl mb-4 text-center text-white font-bold underline underline-offset-8
+}
+
+.container-table-admin {
+  @apply container w-full h-full;
+}
 
 @layer base {
   :root {

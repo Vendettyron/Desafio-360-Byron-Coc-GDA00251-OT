@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { getProveedores, activarProveedor,inactivarProveedor } from '@/services/proveedoresService';
+import { getProveedores, activarProveedor, inactivarProveedor } from '@/services/proveedoresService';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
-import 'react-data-table-component-extensions/dist/index.css'
+import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
 import toast from 'react-hot-toast';
 import { Progress } from '@/components/ui/progress';
+import "styled-components"
 
 const Proveedores = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cargando, setCargando] = useState(30);
+  const [cargando, setCargando] = useState(20);
   const [error, setError] = useState('');
 
   // =============== 1. Fetch de proveedores al montar el componente =============== //
   useEffect(() => {
     const fetchProveedores = async () => {
       try {
-        setCargando(80);
+        setCargando(50);
         console.log('Iniciando solicitud para obtener proveedores...');
         const proveedoresData = await getProveedores();
         console.log('Proveedores obtenidos:', proveedoresData);
-       
         setProveedores(proveedoresData);
+
+        setCargando(80);
       } catch (err) {
         console.error('Error al obtener proveedores:', err);
         setError('No se pudieron obtener los proveedores. Intenta nuevamente más tarde.');
@@ -60,16 +62,7 @@ const Proveedores = () => {
     }
   };
 
-  // =============== 3. Renderizado condicional =============== //
-  if (loading) {
-    return (
-      <div className='flex justify-center items-center h-auto w-full'>
-        <Progress value={cargando}></Progress>
-      </div>
-    );
-  }
-
-  // =============== 4. Cofigurar Colums de Data Tables =============== //
+  // =============== 3. Configurar Columns de Data Tables =============== //
   const columns = [
     {
       name: 'ID',
@@ -98,7 +91,17 @@ const Proveedores = () => {
     {
       name: 'Estado',
       selector: row => (row.fk_estado === 1 ? 'Activo' : 'Inactivo'),
-      cell: row => (row.fk_estado === 1 ? 'Activo' : 'Inactivo'),
+      cell: row => (
+        <span
+          className={` ${
+            row.fk_estado === 1
+              ? 'badge-activo'
+              : 'badge-inactivo'
+          }`}
+        >
+          {row.fk_estado === 1 ? 'Activo' : 'Inactivo'}
+        </span>
+      ),
       sortable: true,
       ignoreExport: true,
     },
@@ -106,43 +109,67 @@ const Proveedores = () => {
       name: 'Acción',
       cell: (row) =>
         row.fk_estado === 1 ? (
-          <button onClick={() => handleInactivate(row.pk_id_proveedor)}>Inactivar</button>
+          <button 
+            onClick={() => handleInactivate(row.pk_id_proveedor)} 
+            className="btn-inactivar"
+          >
+            Inactivar
+          </button>
         ) : (
-          <button onClick={() => handleActivate(row.pk_id_proveedor)}>Activar</button>
+          <button 
+            onClick={() => handleActivate(row.pk_id_proveedor)} 
+            className="btn-activar"
+          >
+            Activar
+          </button>
         ),
-        ignoreExport: true,
+      export:false // No exportar esta columna
     },
     {
       name: 'Actualizar',
       cell: (row) => (
-       <Link to={`/admin/proveedores/actualizar/${row.pk_id_proveedor}`}>Editar</Link>
+        <Link 
+          to={`/admin/proveedores/actualizar/${row.pk_id_proveedor}`} 
+          className="btn-editar"
+        >
+          Editar
+        </Link>
       ),
-      cellExport: row => ({}), // No exportar este campo
+      export:false
     },
-    
   ];
 
+  // =============== 4. Manejar Errores =============== //
   if (error) {
     return (
-      <div style={{ border: '1px solid red', padding: '10px', marginTop: '20px', color: 'red' }}>
-        {error}
+      <div className="flex justify-center items-center h-screen">
+        <div style={{ border: '1px solid red', padding: '10px', color: 'red' }}>
+          {error}
+        </div>
       </div>
     );
   }
 
-// =============== 5. Personalizar Tabla =============== //
-
+  // =============== 5. Personalizar Tema de la Tabla =============== //
   configureDataTableTheme();
-  
-// =============== 6. Mostrar los datos en Data Tables =============== //
-const tableData = {
-  columns,
-  data: proveedores,
-}
-  return (
-    <>
-      <h2 className='text-3xl'>Gestión de Proveedores</h2>
 
+  // =============== 6. Configurar Datos de la Tabla =============== //
+  const tableData = {
+    columns,
+    data: proveedores,
+  };
+
+  // =============== 7. Renderización Condicional =============== //
+  if (loading) {
+    return (
+        <Progress value={cargando} />
+    );
+  }
+
+  // =============== 8. Renderizar la Tabla =============== //
+  return (
+    <div className="container-table-admin">
+      <h2 className='title-table-admin'>Gestión de Proveedores</h2>
       <DataTableExtensions 
         {...tableData} 
         fileName="Proveedores Listado" 
@@ -156,10 +183,10 @@ const tableData = {
           noHeader
           pagination
           highlightOnHover
+          className="mt-3"
         />
       </DataTableExtensions>
-
-    </>
+    </div>
   );
 };
 

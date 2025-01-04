@@ -97,7 +97,7 @@ const CrearProveedor = () => {
           />
         
           <div style={{ display: 'flex', justifyContent: 'center', }}>
-            <Button type="submit" disabled={isSubmitting || !isDirty}>
+            <Button type="submit" disabled={isSubmitting || !isDirty} variant="default">
               {isSubmitting ? 'Creando...' : 'Crear Proveedor'}
             </Button>
           </div>

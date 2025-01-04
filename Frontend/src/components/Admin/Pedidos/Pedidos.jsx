@@ -7,13 +7,15 @@ import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
-import { Button } from '@/components/ui/button'; 
+import { Progress } from '@/components/ui/progress'; 
+import "styled-components"
 
 const Pedidos = () => {
     const [pedidos, setPedidos] = useState([]); 
     const [usuarios, setUsuarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [cargando, setCargando] = useState(20);
     const navigate = useNavigate(); 
 
 
@@ -23,6 +25,7 @@ const Pedidos = () => {
     useEffect(() => {
         const fetchDatos = async () => {
             try {
+                setCargando(50);
                 console.log('Iniciando solicitud para obtener pedidos y usuarios...');
                 const [pedidosData, usuariosData] = await Promise.all([
                     obtenerPedidos(),
@@ -32,17 +35,19 @@ const Pedidos = () => {
                 console.log('Usuarios obtenidos:', usuariosData);
                 setPedidos(pedidosData);
                 setUsuarios(usuariosData);
-
+                setCargando(80);
                 // Crear el mapa de usuarios
                 const map = {};
                 usuariosData.forEach(user => {
                     map[user.pk_id_usuario] = user;
                 });
                 setUsuariosMap(map);
+                
             } catch (err) {
                 console.error('Error al obtener datos:', err);
                 setError('No se pudieron obtener los datos.');
             } finally {
+                setCargando(100);
                 setLoading(false);
             }
         };
@@ -60,11 +65,9 @@ const Pedidos = () => {
 
     // =============== 3. Renderizado condicional =============== //
     if (loading) {
-        return (
-            <div className="text-center mt-5">
-                <p>Cargando pedidos...</p>
-            </div>
-        );
+    return (
+        <Progress value={cargando} />
+    );
     }
 
     // =============== 4. Configurar Columns de Data Tables =============== //
@@ -117,26 +120,29 @@ const Pedidos = () => {
             cell: row => {
                 const estado = row.fk_estado;
                 let estadoTexto = 'Desconocido';
+                let className = '';
                 switch (estado) {
                     case Estados.CONFIRMADO_POR_ADMIN:
                         estadoTexto = 'Confirmado por Admin';
+                        className = 'badge-activo';
                         break;
                     case Estados.CANCELADO_POR_ADMIN:
                         estadoTexto = 'Cancelado por Admin';
+                        className = 'badge-inactivo';
                         break;
                     case Estados.CANCELADO_POR_CLIENTE:
                         estadoTexto = 'Cancelado por Cliente';
-                        break;
-                    case Estados.DESCONTINUADO:
-                        estadoTexto = 'Descontinuado';
+                        className = 'badge-inactivo';
                         break;
                     case Estados.EN_PROCESO:
                         estadoTexto = 'En Proceso';
+                        className = 'badge-en-proceso';
                         break;
                     default:
                         estadoTexto = Object.keys(Estados).find(key => Estados[key] === estado) || 'Desconocido';
+                        className = 'badge-desconocido';
                 }
-                return <p>{estadoTexto}</p>;
+                return <span className={className}>{estadoTexto}</span>;
             },
             sortable: true,
             ignoreExport: true,
@@ -145,26 +151,25 @@ const Pedidos = () => {
             name: 'Acciones',
             cell: (row) => (
                 <div>
-                    <Button
+                    <button
                         onClick={() => handleVerDetalles(row.fk_cliente, row.pk_id_pedido)}
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        className="btn-editar"
                         style={{ width: '10rem', marginBottom: '5px', marginTop: '5px' }}
                     >
                         Ver detalles
-                    </Button>
+                    </button>
                     {row.fk_estado === Estados.EN_PROCESO && (
-                        <Button
+                        <button
                             onClick={() => handleConfirmarCancelar(row.pk_id_pedido)}
-                            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                            className="btn-ver-detalles"
                             style={{ width: '10rem' }}
                         >
                             Confirmar / Cancelar
-                        </Button>
+                        </button>
                     )}
                 </div>
             ),
-            ignoreExport: true,
-            cellExport: row => ({}), // No exportar este campo
+            export:false // No exportar esta columna
         },
     ];
 
@@ -187,8 +192,8 @@ const Pedidos = () => {
     };
 
     return (
-        <>
-            <h2 className='text-3xl'>Gestión de Pedidos</h2>
+        <div className="container-table-admin">
+            <h2 className='title-table-admin'>Gestión de Pedidos</h2>
 
             <DataTableExtensions 
                 {...tableData} 
@@ -203,9 +208,10 @@ const Pedidos = () => {
                     noHeader
                     pagination
                     highlightOnHover
+                    className="mt-3"
                 />
             </DataTableExtensions>
-        </>
+        </div>
     );
 };
 

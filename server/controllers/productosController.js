@@ -50,16 +50,16 @@ export const obtenerProductoPorId = async (req, res) => {
  *  * Accesible solo para Admin
  */
 export const crearProducto = async (req, res) => {
-    const {fk_categoria,fk_estado, fk_proveedor, nombre, descripcion, precio,stock} = req.body;
+    const { fk_categoria, fk_estado, fk_proveedor, nombre, descripcion, precio, stock } = req.body;
     const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
     
     // Validar que se proporcionaron todos los campos necesarios
-    if (!fk_categoria || !fk_estado || !fk_proveedor || !nombre ||!descripcion || !stock || !fk_id_usuario) {
+    if (!fk_categoria || !fk_estado || !fk_proveedor || !nombre || !descripcion || !stock || !fk_id_usuario) {
         return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
 
     try {
-        await productosService.crearProducto({
+        const idProducto = await productosService.crearProducto({
             fk_categoria,
             fk_estado,
             fk_proveedor,
@@ -70,7 +70,10 @@ export const crearProducto = async (req, res) => {
             fk_id_usuario
         });
 
-        res.status(201).json({ message: 'Producto creado exitosamente.' });
+        res.status(201).json({ 
+            message: 'Producto creado exitosamente.',
+            id_producto: idProducto // Incluir el ID en la respuesta
+        });
     } catch (error) {
         console.error('Error creando producto:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
@@ -167,3 +170,16 @@ export const activarProducto = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 };
+
+/**
+ * Subir una imagen de un producto
+ * accedido solo por Admin
+ * 
+ */
+
+export const subirImagenProducto = (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No se subió ninguna imagen.' });
+    }
+    res.status(200).json({ mensaje: 'Imagen subida exitosamente.' });
+  };

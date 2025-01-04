@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 // Context y servicios
 import { AuthContext } from '@/context/AuthContext';
-import { obtenerProductoPorId, actualizarProducto } from '@/services/productosService';
+import { obtenerProductoPorId, actualizarProducto, subirImagenProducto } from '@/services/productosService';
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
 import Estados from '@/config/estados';
@@ -20,6 +20,7 @@ import FormInput from '@/components/Forms/FormInput';
 import FormSelect from '@/components/Forms/FormSelect';
 import FormLayout from '@/components/Forms/FormLayout';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 const ActualizarProducto = () => {
   const { id } = useParams();
@@ -28,12 +29,15 @@ const ActualizarProducto = () => {
   const [error, setError] = useState('');
   const [categorias, setCategorias] = useState([]);
   const [proveedores, setProveedores] = useState([]);
+  const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch, // Para observar cambios en el formulario
     formState: { errors, isSubmitting, isDirty },
+    reset,
   } = useForm({
     resolver: yupResolver(productosSchema),
     defaultValues: {
@@ -44,8 +48,10 @@ const ActualizarProducto = () => {
       descripcion: '',
       precio: '',
       stock: '',
+      imagen: null, // Campo para la nueva imagen
     },
   });
+
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -88,7 +94,10 @@ const ActualizarProducto = () => {
       }
     };
     fetchDatos();
-  }, [id, setValue]);
+  }, []);
+
+  // Observar el campo de imagen para detectar cambios
+  const selectedImage = watch('imagen');
 
   // Manejo del submit
   const onSubmit = async (formData) => {
@@ -104,12 +113,25 @@ const ActualizarProducto = () => {
     };
 
     try {
+      // Actualizar la información del producto
       await actualizarProducto(id, productoActualizado);
+
+      // Si se ha seleccionado una nueva imagen, subirla
+      if (formData.imagen && formData.imagen.length > 0) {
+        const imagenData = new FormData();
+        imagenData.append('imagen', formData.imagen[0]);
+
+        await subirImagenProducto(id, imagenData);
+        setImageTimestamp(Date.now()); // Actualizar el timestamp
+        toast.success('¡Producto e imagen actualizados exitosamente!');
+      } else {
+        toast.success('¡Producto actualizado exitosamente!');
+      }
+
       // Redirecciona al listado de productos
       navigate('/admin/productos');
-      toast.success('¡Producto actualizado exitosamente!');
     } catch (error) {
-      console.error('Error al actualizar producto:', error);
+      console.error('Error al actualizar producto:', error.response?.data || error.message);
       setError('Hubo un problema al actualizar el producto. Intenta nuevamente.');
       toast.error('Hubo un problema al actualizar el producto. Intenta nuevamente.');
     }
@@ -127,6 +149,7 @@ const ActualizarProducto = () => {
             error={errors.nombre?.message}
           />
 
+          
           {/* DESCRIPCIÓN */}
           <FormInput
             label="Descripción:"
@@ -178,21 +201,44 @@ const ActualizarProducto = () => {
             ]}
           />
 
-          {/* ESTADO */}
+            {/* Estado*/}
           <FormSelect
-            label="Estado:"
-            id="fk_estado"
-            register={register('fk_estado')}
-            error={errors.fk_estado?.message}
-            options={[
-              { label: 'Activo', value: Estados.ACTIVO },
-              { label: 'Inactivo', value: Estados.INACTIVO },
-              { label: 'Descontinuado', value: Estados.DESCONTINUADO },
-            ]}
+          label="Estado:"
+          id="fk_estado"
+          register={register('fk_estado')}
+          error={errors.fk_estado?.message}
+          options={[
+            { label: 'Activo', value: Estados.ACTIVO },
+            { label: 'Inactivo', value: Estados.INACTIVO },
+            { label: 'Descontinuado', value: Estados.DESCONTINUADO },
+          ]}
+          />
+
+          {/* IMAGEN ACTUAL */}
+          <div style={{ marginBottom: '20px', textAlign: 'center', display: 'flex', justifyContent: 'center' }} className='mb-2'>
+          <div >
+            <p>Imagen Actual</p>
+            <img
+            src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
+            alt="Imagen actual del producto"
+            style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px' }}
+            className='mt-4 p-3 shadow-lg bg-white rounded-lg'
+            />
+          </div>
+          </div>
+          
+                {/* NUEVA IMAGEN */}
+          <FormInput
+            label="Nueva Imagen:"
+            id="imagen"
+            type="file"
+            accept="image/jpeg, image/png"
+            register={register('imagen')}
+            error={errors.imagen?.message}
           />
 
           {/* BOTÓN DE ACTUALIZAR */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
             <Button type="submit" disabled={isSubmitting || !isDirty}>
               {isSubmitting ? 'Guardando...' : 'Actualizar'}
             </Button>

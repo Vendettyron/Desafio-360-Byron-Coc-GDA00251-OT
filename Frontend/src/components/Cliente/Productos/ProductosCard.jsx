@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'bootstrap';
-import { Link } from 'react-router-dom';
 
 const ProductoCard = ({ nombre, precio, proveedor,pk_id_producto, onClick }) => {
     
-    const rutaImagen = `/productos/${pk_id_producto}.jpg`;
+    const rutaImagen = `/assets/productos/${pk_id_producto}.jpg`;
     console.log('Ruta de la imagen:', rutaImagen);
 
     return (

@@ -16,6 +16,7 @@ const FormSelect = ({
         {...register}
         {...props}
         style={{ display: 'block', width: '100%', marginTop: '0.5rem', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #ccc' }}
+        className='form-select bg-gray-300'
       >
         {options.map(({ label, value }) => (
           <option key={value} value={value}>

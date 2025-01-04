@@ -10,6 +10,7 @@ import { AuthContext } from '@/context/AuthContext';
 import { crearProducto } from '@/services/productosService';
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
+import { subirImagenProducto } from '@/services/productosService';
 import Estados from '@/config/estados';
 // Schema de validación
 import { productosSchema } from '@/utils/validationSchemas';
@@ -80,8 +81,15 @@ const CrearProducto = () => {
     };
 
     try {
-      await crearProducto(nuevoProducto);
-      // Resetear el formulario después de una creación exitosa
+      // Crear el producto y obtener el ID
+      const respuesta = await crearProducto(nuevoProducto); 
+      const { id_producto } = respuesta; // Obtener el ID del producto creado
+
+      // Subir la imagen
+      const imagenData = new FormData();
+      imagenData.append('imagen', formData.imagen[0]);
+      await subirImagenProducto(id_producto, imagenData);
+      
       reset();
       // Redirecciona al listado de productos
       toast.success('¡Producto creado exitosamente!');
@@ -163,6 +171,15 @@ const CrearProducto = () => {
               { label: 'Seleccione un proveedor', value: '' },
               ...proveedores.map(prov => ({ label: prov.nombre, value: prov.pk_id_proveedor })),
             ]}
+          />
+          {/* Imagen */}
+          <FormInput
+            label="Imagen:"
+            id="imagen"
+            type="file"
+            accept="image/jpeg, image/png"
+            register={register('imagen')}
+            error={errors.imagen?.message}
           />
 
           {/* ESTADO */}

@@ -12,24 +12,29 @@ import {
 } from '@/services/categoriasService';
 
 import Estados from '@/config/estados';
+import { Progress } from '@/components/ui/progress';
+import "styled-components"
 
 const Categorias = () => {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  const [cargando, setCargando] = useState(20);
   // =============== 1. Fetch de categorías al montar el componente =============== //
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
+        setCargando(50);
         console.log('Iniciando solicitud para obtener categorías...');
         const categoriasData = await obtenerCategorias();
         console.log('Categorías obtenidas:', categoriasData);
         setCategorias(categoriasData);
+        setCargando(80);
       } catch (err) {
         console.error('Error al obtener categorías:', err);
         setError('No se pudieron obtener las categorías. Intenta nuevamente más tarde.');
       } finally {
+        setCargando(100);
         setLoading(false);
       }
     };
@@ -60,13 +65,11 @@ const Categorias = () => {
   };
 
     // =============== 3. Renderizado condicional =============== //
-    if (loading) {
-        return (
-          <div className="text-center mt-5">
-            <p>Cargando proveedores...</p>
-          </div>
-        );
-      }
+  if (loading) {
+    return (
+        <Progress value={cargando} />
+    );
+  }
 
   // =============== 4. Configurar Columns de Data Tables =============== //
   const columns = [
@@ -91,28 +94,43 @@ const Categorias = () => {
     {
       name: 'Estado',
       selector: row => row.fk_estado,
-      cell: (row) => (row.fk_estado === Estados.ACTIVO ? 'Activo' : 'Inactivo'), // Para mostrar en la tabla
+      cell: row => {
+        const estado = row.fk_estado;
+        let estadoTexto = 'Desconocido';
+        let className = '';
+        switch (estado) {
+          case Estados.ACTIVO:
+            estadoTexto = 'Activo';
+            className = 'badge-activo';
+            break;
+          case Estados.INACTIVO:
+            estadoTexto = 'Inactivo';
+            className = 'badge-inactivo';
+            break;
+          default:
+            estadoTexto = Object.keys(Estados).find(key => Estados[key] === estado) || 'Desconocido';
+            className = 'badge-desconocido';
+        }
+        return <span className={className}>{estadoTexto}</span>;
+      },
       sortable: true,
-      ignoreExport: true, 
     },
     {
       name: 'Acción',
       cell: (row) =>
         row.fk_estado === Estados.ACTIVO ? (
-          <button onClick={() => handleInactivate(row.pk_id_categoria)}>Inactivar</button>
+          <button onClick={() => handleInactivate(row.pk_id_categoria)} className="btn-inactivar">Inactivar</button>
         ) : (
-          <button onClick={() => handleActivate(row.pk_id_categoria)}>Activar</button>
+          <button onClick={() => handleActivate(row.pk_id_categoria)} className="btn-activar">Activar</button>
         ),
-      ignoreExport: true, // Ignorar en la exportación
-      cellExport: row => ({}), // No exportar este campo
+        export:false // No exportar esta columna
     },
     {
       name: 'Actualizar',
       cell: (row) => (
-        <Link to={`/admin/categorias/actualizar/${row.pk_id_categoria}`}>Editar</Link>
+        <Link to={`/admin/categorias/actualizar/${row.pk_id_categoria}`} className="btn-editar">Editar</Link>
       ),
-      ignoreExport: true, // Ignorar en la exportación
-      cellExport: row => ({}), // No exportar este campo
+      export:false // No exportar esta columna
     },
   ];
 
@@ -136,8 +154,8 @@ const Categorias = () => {
   };
 
   return (
-    <>
-      <h2 className="text-3xl">Gestión de Categorías</h2>
+    <div className="container-table-admin">
+      <h2 className="title-table-admin">Gestión de Categorías</h2>
 
       <DataTableExtensions 
       {...tableData}
@@ -152,9 +170,10 @@ const Categorias = () => {
           noHeader
           pagination
           highlightOnHover
+          className="mt-3"
         />
       </DataTableExtensions>
-    </>
+    </div>
   );
 };
 

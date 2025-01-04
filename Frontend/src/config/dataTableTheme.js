@@ -11,8 +11,8 @@ const configureCustomTheme = () => {
         themeName,
         {
             text: {
-                primary: 'rgb(63,72,204)',
-                secondary: 'rgb(63,72,204)',
+                primary: 'rgb(0,0,0)',
+                secondary: 'rgb(0,0,0)',
             },
             background: {
                 default: 'rgb(228,228,231)',

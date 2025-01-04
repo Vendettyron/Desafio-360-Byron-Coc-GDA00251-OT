@@ -44,7 +44,7 @@ const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
       {/* Imagen del Producto */}
       <td className="px-4 py-2">
         <img
-          src={`/productos/${item.fk_id_producto}.jpg`}
+          src={`/assets/productos/${item.fk_id_producto}.jpg`}
           alt={item.nombre_producto}
           className="w-16 h-16 object-cover"
         />

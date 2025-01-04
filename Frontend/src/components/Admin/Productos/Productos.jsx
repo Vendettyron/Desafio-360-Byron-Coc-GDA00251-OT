@@ -9,6 +9,8 @@ import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
 import Estados from '@/config/estados';
 import toast from 'react-hot-toast';
+import { Progress } from '@/components/ui/progress';
+import "styled-components"
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
@@ -16,11 +18,13 @@ const Productos = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(20);
 
   // =============== 1. Fetch de productos, categorías y proveedores al montar el componente =============== //
   useEffect(() => {
     const fetchDatos = async () => {
       try {
+       
         console.log('Iniciando solicitud para obtener productos...');
         const [productosData, categoriasData, proveedoresData] = await Promise.all([
           obtenerProductos(),
@@ -33,10 +37,12 @@ const Productos = () => {
         setProductos(productosData);
         setCategorias(categoriasData);
         setProveedores(proveedoresData);
+        setCargando(60);
       } catch (err) {
         console.error('Error al obtener datos:', err);
         setError('No se pudieron obtener los datos. Intenta nuevamente más tarde.');
       } finally {
+        setCargando(100);
         setLoading(false);
       }
     };
@@ -72,10 +78,10 @@ const Productos = () => {
 
   // =============== 3. Renderizado condicional =============== //
   if (loading) {
-    return (
-      <div className="text-center mt-5">
-        <p>Cargando productos...</p>
-      </div>
+    return ( 
+        <Progress
+          value={cargando}
+        />
     );
   }
 
@@ -86,6 +92,12 @@ const Productos = () => {
       selector: row => row.pk_id_producto,
       cell: row => <p>{row.pk_id_producto}</p>,
       sortable: true,
+    },
+    {
+      name: 'Imagen',
+      selector: row => row.pk_id_producto,
+      cell: row => <img src={`/assets/productos/${row.pk_id_producto}.jpg`} alt={row.nombre} />,
+      export:false // No exportar esta columna
     },
     {
       name: 'Nombre',
@@ -112,8 +124,8 @@ const Productos = () => {
       cell: (row) => {
         const proveedor = proveedores.find(prov => prov.pk_id_proveedor === row.fk_proveedor);
         return proveedor ? proveedor.nombre : 'N/A';
-          },
-          sortable: true,
+      },
+      sortable: true,
     },
     {
       name: 'Precio',
@@ -128,38 +140,47 @@ const Productos = () => {
     },
     {
       name: 'Estado',
-      cell: (row) => {
-    switch (row.fk_estado) {
-      case Estados.ACTIVO:
-        return 'Activo';
-      case Estados.DESACTIVADO:
-        return 'Descontinuado';
-      case Estados.INACTIVO:
-        return 'Inactivo';
-      default:
-        return 'Desconocido';
-    }
-      },
-      sortable: true,
-      ignoreExport: true,
+      selector: row => row.fk_estado,
+      cell: row => {
+      const estado = row.fk_estado;
+      let estadoTexto = 'Desconocido';
+      let className = '';
+      switch (estado) {
+        case Estados.ACTIVO:
+          estadoTexto = 'Activo';
+          className = 'badge-activo';
+          break;
+        case Estados.DESCONTINUADO:
+          estadoTexto = 'Descontinuado';
+          className = 'badge-en-proceso';
+          break;
+        case Estados.INACTIVO:
+          estadoTexto = 'Inactivo';
+          className = 'badge-inactivo';
+          break;
+        default:
+          estadoTexto = Object.keys(Estados).find(key => Estados[key] === estado) || 'Desconocido';
+          className = 'badge-desconocido';
+      }
+      return <span className={className}>{estadoTexto}</span>;
+          },
+          sortable: true,
     },
-    {
-      name: 'Acción',
+    {name: 'Acción',
       cell: (row) =>
-    row.fk_estado === Estados.ACTIVO ? (
-      <button onClick={() => handleInactivate(row.pk_id_producto)}>Inactivar</button>
-    ) : (
-      <button onClick={() => handleActivate(row.pk_id_producto)}>Activar</button>
-    ),
-      ignoreExport: true,
-      cellExport: row => ({}), // No exportar este campo
+      row.fk_estado === Estados.ACTIVO ? (
+        <button onClick={() => handleInactivate(row.pk_id_producto)} className="btn-inactivar">Inactivar</button>
+      ) : (
+        <button onClick={() => handleActivate(row.pk_id_producto)} className="btn-activar">Activar</button>
+      ),
+      export:false // No exportar esta columna
     },
     {
       name: 'Actualizar',
       cell: (row) => (
-        <Link to={`/admin/productos/actualizar/${row.pk_id_producto}`}>Editar</Link>
+        <Link to={`/admin/productos/actualizar/${row.pk_id_producto}`} className="btn-editar">Editar</Link>
       ),
-      cellExport: row => ({}), // No exportar este campo
+      export:false // No exportar esta columna
     },
   ];
 
@@ -181,8 +202,8 @@ const Productos = () => {
     data: productos,
   };
   return (
-    <>
-      <h2 className='text-3xl'>Gestión de Productos</h2>
+    <div className="container-table-admin">
+      <h2 className='title-table-admin'>Gestión de Productos</h2>
 
       <DataTableExtensions 
         {...tableData} 
@@ -197,10 +218,11 @@ const Productos = () => {
           noHeader
           pagination
           highlightOnHover
+          className="mt-3"
         />
       </DataTableExtensions>
       
-    </>
+    </div>
   );
 };
 
