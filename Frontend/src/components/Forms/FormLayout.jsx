@@ -7,9 +7,7 @@ const FormLayout = ({ children,title  }) => {
         display: "flex",
         flexDirection: "column",
         width: "50vh",
-        marginTop: "100px",
         padding: "2rem",
-        backgroundColor: "#e4e4e7",
         justifyContent: "center", 
       }}
       className='shadow-lg bg-slate-200 rounded-lg'

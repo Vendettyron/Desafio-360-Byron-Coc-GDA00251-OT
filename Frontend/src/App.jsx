@@ -1,10 +1,11 @@
 import { useState,lazy,Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom';
-import ProtectedRoute from './hooks/ProtectedRoute';
+import ProtectedRoute from '@/hooks/ProtectedRoute';
 
-import {AdminLayout } from './layouts/admin/AdminLayout'; // Layout de Admin
+import {AdminLayout } from '@/layouts/admin/AdminLayout'; // Layout de Admin
 import ClienteLayout from '@/layouts/client/ClienteLayout'; // Layout de Cliente
 import Roles from '@/config/roles';
+import { LoginForm } from './components/ui/login-form';
 
 const Register = lazy(() => import('./components/Auth/Register/Register'));
 const Login = lazy(() => import('./components/Auth/Login/Login'));
@@ -15,10 +16,11 @@ function App() {
     <>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-
+            {/* Rutas de Login Y Register */}
+          <Route path="/" element={<Login />}>
+            <Route index element={<LoginForm />} /> {/* Ruta para "/login" */}
+            <Route path="register" element={<Register />} /> {/* Ruta para "/register" */}
+          </Route>
             {/* Rutas protegidas para usuarios con rol "Operador" */}
             <Route element={<ProtectedRoute roles={[Roles.ADMIN]} />}>
               <Route path="/admin/*" element={<AdminLayout/>} />

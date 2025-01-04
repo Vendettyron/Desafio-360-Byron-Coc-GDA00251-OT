@@ -18,7 +18,6 @@ import React from 'react';
 import Proveedores from '../../components/Admin/Proveedores/Proveedores'; // Componente de Proveedores
 import ActualizarProveedor from '../../components/Admin/Proveedores/ActualizarProveedor'; // Componente de Actualizar Proveedor
 import CrearProveedor from '../../components/Admin/Proveedores/CrearProveedor'; // Componente de Crear Proveedor
-import AdminHome from '../../components/Admin/AdminHome'; // Componente principal del Admin
 //Componentes categorias
 import Categorias from '@/components/Admin/Categorias/Categorias';
 import CrearCategoria from '@/components/Admin/Categorias/CrearCategoria';
@@ -67,7 +66,7 @@ const AdminLayout  = () => {
           </header>
           <div className="flex flex-col  justify-center gap-4 p-4 pt-0 items-center">
             <Routes>
-              <Route path='/' element={<AdminHome/>}/>
+              <Route path='/' element={<Pedidos/>}/>
 
               {/* Rutas de proveedores */}
               <Route path="proveedores" element={<Proveedores/>} />

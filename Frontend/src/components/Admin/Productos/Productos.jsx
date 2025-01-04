@@ -19,12 +19,13 @@ const Productos = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(20);
+  const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
   // =============== 1. Fetch de productos, categorías y proveedores al montar el componente =============== //
   useEffect(() => {
     const fetchDatos = async () => {
-      try {
-       
+      try { 
+        // Actualizar el timestamp
         console.log('Iniciando solicitud para obtener productos...');
         const [productosData, categoriasData, proveedoresData] = await Promise.all([
           obtenerProductos(),
@@ -43,6 +44,7 @@ const Productos = () => {
         setError('No se pudieron obtener los datos. Intenta nuevamente más tarde.');
       } finally {
         setCargando(100);
+        setImageTimestamp(Date.now()); // Actualizar el timestam
         setLoading(false);
       }
     };
@@ -96,7 +98,7 @@ const Productos = () => {
     {
       name: 'Imagen',
       selector: row => row.pk_id_producto,
-      cell: row => <img src={`/assets/productos/${row.pk_id_producto}.jpg`} alt={row.nombre} />,
+      cell: row => <img src={`/assets/productos/${row.pk_id_producto}.jpg?t=${imageTimestamp}`} alt={row.nombre} />,
       export:false // No exportar esta columna
     },
     {

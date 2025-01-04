@@ -20,7 +20,6 @@ import FormInput from '@/components/Forms/FormInput';
 import FormSelect from '@/components/Forms/FormSelect';
 import FormLayout from '@/components/Forms/FormLayout';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 
 const ActualizarProducto = () => {
   const { id } = useParams();

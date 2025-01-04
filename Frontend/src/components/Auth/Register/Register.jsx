@@ -5,9 +5,9 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import FormLayout from '@/components/Forms/FormLayout';
-import FormSelect from '@/components/Forms/FormSelect';
 import { registerUser } from '@/services/authService';
-import Roles from '@/config/roles';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -84,6 +84,7 @@ const Register = () => {
   return (
     <> 
       <FormLayout>
+        <Link to="/" className='w-fit flex flex-row underline underline-offset-8'><ArrowLeft/>Regresar</Link>
         <h2 className='text-3xl text-center'>Registrarse</h2>
         {errorMessage && (
           <div className="alert alert-danger" role="alert">
@@ -179,17 +180,6 @@ const Register = () => {
             />
             <div className="invalid-feedback">{errors.telefono?.message}</div>
           </div>
-
-          <FormSelect
-            label="Rol:"
-            id="fk_rol"
-            register={register('fk_rol')}
-            error={errors.fk_rol?.message}
-            options={[
-              { label: 'Administrador', value: Roles.ADMIN },
-              { label: 'Cliente', value: Roles.CLIENTE },
-            ]}
-          />
 
           <button type="submit" className="btn btn-primary w-100 mt-3">
             Registrarse
