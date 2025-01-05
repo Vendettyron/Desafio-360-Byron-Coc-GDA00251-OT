@@ -56,6 +56,7 @@ const CrearEstado = () => {
             id="nombre"
             register={register('nombre')}
             error={errors.nombre?.message}
+            placeholder="Ingrese el nombre del estado"
           />
 
           {/* Mensaje de Error */}

@@ -89,44 +89,47 @@ const EditarProveedor = () => {
     <>
       <FormLayout title="Actualizar proveedor">
       <form onSubmit={handleSubmit(onSubmit)} style={{ minWidth: 'auto' }}>
-        <FormInput
-        label="Nombre:"
-        id="nombre"
-        register={register('nombre')}
-        error={errors.nombre?.message}
-        />
+      <FormInput
+      label="Nombre:"
+      id="nombre"
+      register={register('nombre')}
+      error={errors.nombre?.message}
+      placeholder="Ingrese el nombre del proveedor"
+      />
 
-        <FormInput
-        label="Teléfono:"
-        id="telefono"
-        register={register('telefono')}
-        error={errors.telefono?.message}
-        />
+      <FormInput
+      label="Teléfono:"
+      id="telefono"
+      register={register('telefono')}
+      error={errors.telefono?.message}
+      placeholder="Ingrese el teléfono del proveedor"
+      />
 
-        <FormInput
-        label="Correo:"
-        id="correo"
-        type="email"
-        register={register('correo')}
-        error={errors.correo?.message}
-        />
+      <FormInput
+      label="Correo:"
+      id="correo"
+      type="email"
+      register={register('correo')}
+      error={errors.correo?.message}
+      placeholder="Ingrese el correo del proveedor"
+      />
 
-        <FormSelect
-        label="Estado:"
-        id="fk_estado"
-        register={register('fk_estado')}
-        error={errors.fk_estado?.message}
-        options={[
-          { label: 'Activo', value: Estados.ACTIVO },
-          { label: 'Inactivo', value: Estados.INACTIVO },
-        ]}
-        />
+      <FormSelect
+      label="Estado:"
+      id="fk_estado"
+      register={register('fk_estado')}
+      error={errors.fk_estado?.message}
+      options={[
+        { label: 'Activo', value: Estados.ACTIVO },
+        { label: 'Inactivo', value: Estados.INACTIVO },
+      ]}
+      />
 
-        <div style={{ display: 'flex', justifyContent: 'center', }}>
-          <Button className="" type="submit" disabled={isSubmitting || !isDirty}>
-          {isSubmitting ? 'Guardando...' : 'Actualizar'}
-          </Button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', }}>
+        <Button className="" type="submit" disabled={isSubmitting || !isDirty}>
+        {isSubmitting ? 'Guardando...' : 'Actualizar'}
+        </Button>
+      </div>
       </form>
       </FormLayout >
     </>

@@ -89,9 +89,10 @@ const ActualizarEstado = () => {
             id="nombre"
             register={register('nombre')}
             error={errors.nombre?.message}
+            placeholder="Ingrese el nombre del estado"
           />
 
-           {/* BOTÓN DE ACTUALIZAR */}
+          {/* BOTÓN DE ACTUALIZAR */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Button type="submit" disabled={isSubmitting || !isDirty}>
               {isSubmitting ? 'Guardando...' : 'Actualizar'}

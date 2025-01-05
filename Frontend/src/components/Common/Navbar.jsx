@@ -50,10 +50,10 @@ function Navbar() {
   const handleEliminarCuenta = () => {  
     navigate("/cliente/eliminarCuenta");
   };
-
+   // Redirigir a la página de inicio de sesión 
   const handleCerrarSesion = () => {
     logoutUser();
-    navigate('/login'); // Reemplaza '/login' con la ruta que desees
+    navigate('/login'); 
   };
 
 

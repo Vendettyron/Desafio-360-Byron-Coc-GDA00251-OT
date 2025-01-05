@@ -90,6 +90,7 @@ const ActualizarCategoria = () => {
             id="nombre"
             register={register('nombre')}
             error={errors.nombre?.message}
+            placeholder="Ingrese el nombre de la categoría"
           />
 
           {/* DESCRIPCIÓN */}
@@ -98,6 +99,7 @@ const ActualizarCategoria = () => {
             id="descripcion"
             register={register('descripcion')}
             error={errors.descripcion?.message}
+            placeholder="Ingrese la descripción de la categoría"
           />
 
           {/* ESTADO */}

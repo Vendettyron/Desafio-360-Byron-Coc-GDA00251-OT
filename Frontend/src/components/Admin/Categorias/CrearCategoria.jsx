@@ -62,6 +62,7 @@ const CrearCategoria = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre de la categoría"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
@@ -70,6 +71,7 @@ const CrearCategoria = () => {
           <FormInput
             label="Descripción:"
             id="descripcion"
+            placeholder="Ingrese la descripción de la categoría"
             register={register('descripcion')}
             error={errors.descripcion?.message}
           />
@@ -78,6 +80,7 @@ const CrearCategoria = () => {
           <FormSelect
             label="Estado:"
             id="fk_estado"
+            placeholder="Seleccione el estado de la categoría"
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[

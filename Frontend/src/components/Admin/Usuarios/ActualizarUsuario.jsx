@@ -117,6 +117,7 @@ const ActualizarUsuario = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
@@ -125,6 +126,7 @@ const ActualizarUsuario = () => {
           <FormInput
             label="Apellido:"
             id="apellido"
+            placeholder="Ingrese el apellido"
             register={register('apellido')}
             error={errors.apellido?.message}
           />
@@ -133,6 +135,7 @@ const ActualizarUsuario = () => {
           <FormInput
             label="Dirección:"
             id="direccion"
+            placeholder="Ingrese la dirección"
             register={register('direccion')}
             error={errors.direccion?.message}
           />
@@ -142,6 +145,7 @@ const ActualizarUsuario = () => {
             label="Correo:"
             id="correo"
             type="email"
+            placeholder="Ingrese el correo"
             register={register('correo')}
             error={errors.correo?.message}
           />
@@ -150,23 +154,26 @@ const ActualizarUsuario = () => {
           <FormInput
             label="Teléfono:"
             id="telefono"
+            placeholder="Ingrese el teléfono"
             register={register('telefono')}
             error={errors.telefono?.message}
           />
 
-            {/* CONTRASEÑA */}
-            <FormInput
+          {/* CONTRASEÑA */}
+          <FormInput
             label="Contraseña:"
             id="password"
             type="password"
+            placeholder="Ingrese la contraseña"
             register={register('password')}
             error={errors.password?.message}
-            />
+          />
 
           {/* ROL */}
           <FormSelect
             label="Rol:"
             id="fk_rol"
+            placeholder="Seleccione el rol"
             register={register('fk_rol')}
             error={errors.fk_rol?.message}
             options={[
@@ -179,6 +186,7 @@ const ActualizarUsuario = () => {
           <FormSelect
             label="Estado:"
             id="fk_estado"
+            placeholder="Seleccione el estado"
             register={register('fk_estado')}
             error={errors.fk_estado?.message}
             options={[

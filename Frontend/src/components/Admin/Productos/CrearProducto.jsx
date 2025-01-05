@@ -118,6 +118,7 @@ const CrearProducto = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre del producto"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
@@ -126,6 +127,7 @@ const CrearProducto = () => {
           <FormInput
             label="Descripción:"
             id="descripcion"
+            placeholder="Ingrese la descripción del producto"
             register={register('descripcion')}
             error={errors.descripcion?.message}
           />
@@ -136,6 +138,7 @@ const CrearProducto = () => {
             id="precio"
             type="number"
             step="0.01"
+            placeholder="Ingrese el precio del producto"
             register={register('precio')}
             error={errors.precio?.message}
           />
@@ -145,6 +148,7 @@ const CrearProducto = () => {
             label="Stock:"
             id="stock"
             type="number"
+            placeholder="Ingrese la cantidad en stock"
             register={register('stock')}
             error={errors.stock?.message}
           />

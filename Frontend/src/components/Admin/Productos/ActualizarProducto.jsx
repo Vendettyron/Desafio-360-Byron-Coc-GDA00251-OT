@@ -144,15 +144,16 @@ const ActualizarProducto = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre del producto"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
 
-          
           {/* DESCRIPCIÓN */}
           <FormInput
             label="Descripción:"
             id="descripcion"
+            placeholder="Ingrese la descripción del producto"
             register={register('descripcion')}
             error={errors.descripcion?.message}
           />
@@ -163,6 +164,7 @@ const ActualizarProducto = () => {
             id="precio"
             type="number"
             step="0.01"
+            placeholder="Ingrese el precio del producto"
             register={register('precio')}
             error={errors.precio?.message}
           />
@@ -172,6 +174,7 @@ const ActualizarProducto = () => {
             label="Stock:"
             id="stock"
             type="number"
+            placeholder="Ingrese la cantidad en stock"
             register={register('stock')}
             error={errors.stock?.message}
           />
@@ -180,6 +183,7 @@ const ActualizarProducto = () => {
           <FormSelect
             label="Categoría:"
             id="fk_categoria"
+            placeholder="Seleccione una categoría"
             register={register('fk_categoria')}
             error={errors.fk_categoria?.message}
             options={[
@@ -192,6 +196,7 @@ const ActualizarProducto = () => {
           <FormSelect
             label="Proveedor:"
             id="fk_proveedor"
+            placeholder="Seleccione un proveedor"
             register={register('fk_proveedor')}
             error={errors.fk_proveedor?.message}
             options={[
@@ -200,38 +205,40 @@ const ActualizarProducto = () => {
             ]}
           />
 
-            {/* Estado*/}
+          {/* Estado */}
           <FormSelect
-          label="Estado:"
-          id="fk_estado"
-          register={register('fk_estado')}
-          error={errors.fk_estado?.message}
-          options={[
-            { label: 'Activo', value: Estados.ACTIVO },
-            { label: 'Inactivo', value: Estados.INACTIVO },
-            { label: 'Descontinuado', value: Estados.DESCONTINUADO },
-          ]}
+            label="Estado:"
+            id="fk_estado"
+            placeholder="Seleccione un estado"
+            register={register('fk_estado')}
+            error={errors.fk_estado?.message}
+            options={[
+              { label: 'Activo', value: Estados.ACTIVO },
+              { label: 'Inactivo', value: Estados.INACTIVO },
+              { label: 'Descontinuado', value: Estados.DESCONTINUADO },
+            ]}
           />
 
           {/* IMAGEN ACTUAL */}
           <div style={{ marginBottom: '20px', textAlign: 'center', display: 'flex', justifyContent: 'center' }} className='mb-2'>
-          <div >
-            <p>Imagen Actual</p>
-            <img
-            src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
-            alt="Imagen actual del producto"
-            style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px' }}
-            className='mt-4 p-3 shadow-lg bg-white rounded-lg'
-            />
+            <div>
+              <p>Imagen Actual</p>
+              <img
+                src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
+                alt="Imagen actual del producto"
+                style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px' }}
+                className='mt-4 p-3 shadow-lg bg-white rounded-lg'
+              />
+            </div>
           </div>
-          </div>
-          
-                {/* NUEVA IMAGEN */}
+
+          {/* NUEVA IMAGEN */}
           <FormInput
             label="Nueva Imagen:"
             id="imagen"
             type="file"
             accept="image/jpeg, image/png"
+            placeholder="Seleccione una nueva imagen"
             register={register('imagen')}
             error={errors.imagen?.message}
           />

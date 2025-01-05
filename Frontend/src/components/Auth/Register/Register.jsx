@@ -105,6 +105,7 @@ const Register = () => {
             <input
               type="text"
               id="nombre"
+              placeholder="Ingresa tu nombre"
               {...register('nombre')}
               className={`form-control ${errors.nombre ? 'is-invalid' : ''}`}
             />
@@ -119,6 +120,7 @@ const Register = () => {
             <input
               type="text"
               id="apellido"
+              placeholder="Ingresa tu apellido"
               {...register('apellido')}
               className={`form-control ${errors.apellido ? 'is-invalid' : ''}`}
             />
@@ -133,6 +135,7 @@ const Register = () => {
             <input
               type="email"
               id="correo"
+              placeholder="Ingresa tu correo electrónico"
               {...register('correo')}
               className={`form-control ${errors.correo ? 'is-invalid' : ''}`}
             />
@@ -147,6 +150,7 @@ const Register = () => {
             <input
               type="password"
               id="password"
+              placeholder="Ingresa tu contraseña"
               {...register('password')}
               className={`form-control ${errors.password ? 'is-invalid' : ''}`}
             />
@@ -161,6 +165,7 @@ const Register = () => {
             <input
               type="text"
               id="direccion"
+              placeholder="Ingresa tu dirección"
               {...register('direccion')}
               className={`form-control ${errors.direccion ? 'is-invalid' : ''}`}
             />
@@ -175,6 +180,7 @@ const Register = () => {
             <input
               type="text"
               id="telefono"
+              placeholder="Ingresa tu teléfono"
               {...register('telefono')}
               className={`form-control ${errors.telefono ? 'is-invalid' : ''}`}
             />

@@ -76,6 +76,7 @@ const CrearUsuario = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
@@ -84,6 +85,7 @@ const CrearUsuario = () => {
           <FormInput
             label="Apellido:"
             id="apellido"
+            placeholder="Ingrese el apellido"
             register={register('apellido')}
             error={errors.apellido?.message}
           />
@@ -92,6 +94,7 @@ const CrearUsuario = () => {
           <FormInput
             label="Dirección:"
             id="direccion"
+            placeholder="Ingrese la dirección"
             register={register('direccion')}
             error={errors.direccion?.message}
           />
@@ -101,6 +104,7 @@ const CrearUsuario = () => {
             label="Correo:"
             id="correo"
             type="email"
+            placeholder="Ingrese el correo"
             register={register('correo')}
             error={errors.correo?.message}
           />
@@ -109,6 +113,7 @@ const CrearUsuario = () => {
           <FormInput
             label="Teléfono:"
             id="telefono"
+            placeholder="Ingrese el teléfono"
             register={register('telefono')}
             error={errors.telefono?.message}
           />
@@ -118,6 +123,7 @@ const CrearUsuario = () => {
             label="Contraseña:"
             id="password"
             type="password"
+            placeholder="Ingrese la contraseña"
             register={register('password')}
             error={errors.password?.message}
           />

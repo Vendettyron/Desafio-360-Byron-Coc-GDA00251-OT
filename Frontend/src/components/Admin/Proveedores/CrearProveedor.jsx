@@ -63,6 +63,7 @@ const CrearProveedor = () => {
           <FormInput
             label="Nombre:"
             id="nombre"
+            placeholder="Ingrese el nombre del proveedor"
             register={register('nombre')}
             error={errors.nombre?.message}
           />
@@ -71,6 +72,7 @@ const CrearProveedor = () => {
           <FormInput
             label="Teléfono:"
             id="telefono"
+            placeholder="Ingrese el teléfono del proveedor"
             register={register('telefono')}
             error={errors.telefono?.message}
           />
@@ -80,6 +82,7 @@ const CrearProveedor = () => {
             label="Correo:"
             id="correo"
             type="email"
+            placeholder="Ingrese el correo del proveedor"
             register={register('correo')}
             error={errors.correo?.message}
           />
@@ -104,7 +107,7 @@ const CrearProveedor = () => {
 
           </form>
       
-      </FormLayout  >
+      </FormLayout>
     </>
   );
 };
