@@ -161,3 +161,22 @@ export const productosSchema = Yup.object().shape({
     .notRequired(), // Hace que el campo sea opcional
 });
 
+// Schema para que el usuario elimine su cuenta
+export const EliminarUsuarioElMismoSchema = Yup.object().shape({
+  correo: Yup.string()
+    .email('Debe ser un correo válido')
+    .required('El correo es requerido'),
+
+  password: Yup.string()
+    .required('La contraseña es obligatoria')
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .typeError('La contraseña debe tener al menos 6 caracteres'),
+
+  confirmarPassword: Yup.string()
+    .required('La confirmación de la contraseña es obligatoria')
+    .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden')
+    .typeError('La contraseña no coincide'),
+});
+
+
+

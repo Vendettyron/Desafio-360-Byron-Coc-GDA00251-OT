@@ -29,7 +29,7 @@
                 align-items: center;
                 justify-content: space-between;
                 position: relative;
-                z-index: 100;
+                z-index: 0;
         
                 &__logo {
                     font-size: 2rem;
@@ -50,7 +50,7 @@
                     justify-content: center;
                     align-items: center;
                     text-align: center;
-                    background: rgba(rgb(32, 32, 32), 0.9);
+                    background: rgb(32, 32, 32);
                     backdrop-filter: blur(2px);
                     transform: translate(0);
                     transition: 0.3s ease transform;
@@ -77,19 +77,13 @@
                             margin-right: calc(0.5rem + #{16px});
                         }
                         li {
-                            &:not(:last-child) {
-                                margin-bottom:32px;
-                                @include breakpoint(md) {
-                                    margin-bottom: 0;
-                                    margin-right: 16px;
-                                }
-                            }
-                            a {
+                           
                                 text-decoration: none;
                                 color: inherit;
-                                padding: 0.75rem 1.25rem;
+                                padding: 0.75rem 1.5rem;
                                 border-radius: 12px;
                                 transition: 0.3s ease all;
+                               
         
                                 &:hover {
                                     background: rgba(#fff, 0.1);
@@ -98,7 +92,7 @@
                                     border-radius: calc(#{12px} + 6px);
                                     background: linear-gradient(rgba(#fff, 0.1), rgba(#fff, 0.2));
                                 }
-                            }
+                            
                         }
                     }
                     .btn {

@@ -8,7 +8,8 @@ import {
     inactivarUsuario,
     activarUsuario,
     obtenerUsuarios,
-    ObtenerUsuarioPorId
+    ObtenerUsuarioPorId,
+    inactivarUsuarioElMismo
 } from "../controllers/usuariosController.js";
 
 const router = express.Router();
@@ -60,6 +61,18 @@ router.put(
     authMiddleware,
     roleMiddleware([Roles.ADMIN]),
     inactivarUsuario
+);
+
+/**
+ * @route PUT /api/usuarios/InactivarUsuarioElMismo
+ * @desc El usuario inactiva su cuenta
+ * @access Privado (Cliente)
+ */
+router.put(
+    "/InactivarUsuarioElMismo",
+    authMiddleware,
+    roleMiddleware([Roles.CLIENTE]),
+    inactivarUsuarioElMismo
 );
 
 /**

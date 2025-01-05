@@ -145,11 +145,13 @@ export function AppSidebar({
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
+     
       <SidebarContent>
+          {/* Dropdowns*/}
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
+        {/* Cerrrar sesion e info del admin */}
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />

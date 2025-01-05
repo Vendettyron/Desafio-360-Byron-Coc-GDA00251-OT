@@ -41,7 +41,7 @@ const ActualizarEstado = () => {
     const fetchEstado = async () => {
       try {
         const data = await obtenerEstadoPorId(id);
-        console.log('Datos del estado:', data); // Log para depuración
+       
 
         if (Array.isArray(data) && data.length > 0) {
           // Si data es un arreglo con al menos un elemento

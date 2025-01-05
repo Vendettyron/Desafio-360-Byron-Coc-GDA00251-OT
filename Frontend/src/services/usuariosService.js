@@ -75,3 +75,18 @@ export const activarUsuario = async (id) => {
     throw error;
   }
 };
+
+/**
+ * Inactiva el usuario que realiza la petición.
+ * @returns {Promise<Object>} - Usuario inactivado
+ */
+
+export const eliminarUsuarioElMismo = async (data) => {
+  try {
+    const response = await api.put(`/usuarios/InactivarUsuarioElMismo`,data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al inactivar el usuario con ID ${id}:`, error);
+    throw error;
+  }
+}

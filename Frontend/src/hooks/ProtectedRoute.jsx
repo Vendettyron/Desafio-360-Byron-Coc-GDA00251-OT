@@ -6,7 +6,6 @@ const ProtectedRoute = ({ roles }) => {
   const { auth,loading } = useContext(AuthContext);
 
   if (loading) {
-    // Puedes mostrar un spinner o un mensaje de carga mientras se verifica la autenticación
     return <div>Cargando...</div>;
   }
 

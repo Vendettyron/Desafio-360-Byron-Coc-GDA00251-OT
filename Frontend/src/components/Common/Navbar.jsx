@@ -2,9 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "./Navbar.scss"; 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { AuthContext } from "@/context/AuthContext";
+import { useContext } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
+  const { auth, logoutUser } = useContext(AuthContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [size, setSize] = useState({
     width: 0,
@@ -32,6 +43,20 @@ function Navbar() {
     setMenuOpen((p) => !p);
   };
 
+  const handlePerfiles = () => {
+    navigate("/cliente/perfil");
+  };
+
+  const handleEliminarCuenta = () => {  
+    navigate("/cliente/eliminarCuenta");
+  };
+
+  const handleCerrarSesion = () => {
+    logoutUser();
+    navigate('/login'); // Reemplaza '/login' con la ruta que desees
+  };
+
+
 
   return (
     <header className="header">
@@ -49,14 +74,25 @@ function Navbar() {
               <Link to ="/cliente">Productos</Link>
             </li>
             <li>
-              <Link to="/cliente/pedidos">Ver pedidos pendientes</Link>
+              <Link to="/cliente/pedidos">Historial Pedidos</Link>
             </li>
+            <li >
+              <DropdownMenu style={"z-index: 1000;"} >
+              <DropdownMenuTrigger>Perfil</DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Juan Perez</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handlePerfiles} >Perfil</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleEliminarCuenta}>Eliminar Cuenta</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleCerrarSesion}>Cerrar Sesion</DropdownMenuItem>
+              </DropdownMenuContent>
+              </DropdownMenu>
+            </li>
+            <button className="btn">
               <Link to="/cliente/carrito">
-                <ShoppingCart className="shopping-cart-icon" />
+                <ShoppingCart className="shopping-cart-icon"/>
               </Link>
-              <Link to="/">
-                <button className="btn btn__login">Log Out</button>
-              </Link>
+            </button>
           </ul>
         </nav>
       </div>

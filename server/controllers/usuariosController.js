@@ -1,5 +1,7 @@
 import { poolPromise} from '../database/DbConection.js';
 import usuariosService from '../services/usuariosService.js';
+import bcrypt from 'bcrypt';
+import { sql } from '../database/DbConection.js';
 
 export const ObtenerUsuarioPorId = async (req, res) => {
     const {id} = req.params; // Obtener el ID del usuario desde req.params
@@ -98,6 +100,59 @@ export const inactivarUsuario = async (req, res) => {
     } catch (error) {
         console.error('Error inactivando usuario:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+/**
+ * El usuario Elimina su cuenta (inactiva)
+ * Accesible par clientes
+ */
+export const inactivarUsuarioElMismo = async (req, res) => {
+    const { correo, password } = req.body; // Obtener correo y contraseña desde el cuerpo de la solicitud
+    const id_usuario = req.user.id; // Obtener el ID del usuario desde el token JWT
+
+    // Validar que se proporcionaron ambos campos
+    if (!correo || !password) {
+        return res.status(400).json({ message: 'Se requieren el correo y la contraseña.' });
+    }
+
+    try {
+        const pool = await poolPromise;
+
+        // Obtener el usuario desde la base de datos
+        const usuarioResult = await pool.request()
+            .input('correo', sql.VarChar, correo)
+            .query('SELECT pk_id_usuario, password, fk_estado FROM Usuarios WHERE correo = @correo');
+
+        if (usuarioResult.recordset.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+
+        const usuario = usuarioResult.recordset[0];
+
+        // Verificar si el usuario ya está inactivo
+        if (usuario.fk_estado === 2) {
+            return res.status(400).json({ message: 'La cuenta ya está inactiva.' });
+        }
+
+        // Verificar la contraseña utilizando bcrypt
+        const passwordValida = await bcrypt.compare(password, usuario.password);
+
+        if (!passwordValida) {
+            return res.status(401).json({ message: 'Contraseña incorrecta.' });
+        }
+
+        // Llamar al Stored Procedure para inactivar la cuenta
+        await pool.request()
+            .input('id_usuario', sql.Int, id_usuario)
+            .input('fk_id_usuario', sql.Int, id_usuario) // Mismo usuario
+            .execute('InactivarUsuarioElMismo');
+
+
+        res.status(200).json({ message: 'Cuenta inactivada exitosamente.' });
+    } catch (error) {
+        console.error('Error en eliminarUsuarioElMismo:', error);
+        res.status(500).json({ message: 'Error interno del servidor.' });
     }
 };
 

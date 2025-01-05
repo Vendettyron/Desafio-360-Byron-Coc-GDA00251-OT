@@ -79,6 +79,8 @@ export const activarUsuario = async (data) => {
     }
 };
 
+
+
 export default {
     actualizarUsuario,
     inactivarUsuario,
