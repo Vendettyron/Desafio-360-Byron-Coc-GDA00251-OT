@@ -18,6 +18,22 @@ export const obtenerProductos = async (req, res) => {
     }
 };
 
+/**
+ * Obtener la lista de productos activos
+ * Accesible para Admin y clientes
+*/
+
+export const obtenerProductosActivos = async (req, res) => {
+    try {
+        const productos = await productosService.obtenerProductosActivos();
+        res.json(productos);
+    } catch (error) {
+        console.error('Error obteniendo productos activos:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+};
+
+
 
 /**
  * Obtener un producto por su IDe

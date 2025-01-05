@@ -90,6 +90,16 @@ export const inactivarProducto = async (id) => {
   }
 };
 
+export const obtenerProductosActivos = async () => {
+  try {
+    const response = await api.get('/productos/ObtenerProductosActivos');
+    return response.data; 
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+    throw error;
+  }
+};
+
 /**
  * Sube la imagen de un producto.
  * @param {number|string} id - ID del producto

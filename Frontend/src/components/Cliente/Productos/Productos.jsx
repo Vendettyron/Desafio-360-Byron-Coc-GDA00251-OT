@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { obtenerProductos } from '@/services/productosService';
+import { obtenerProductosActivos } from '@/services/productosService';
 import { getProveedores } from '@/services/proveedoresService';
 import ProductosCard from '@/components/Cliente/Productos/ProductosCard';
 import { useNavigate} from 'react-router-dom';
@@ -19,7 +19,7 @@ const Productos = () => {
             try {
                 console.log('Iniciando solicitud para obtener productos y proveedores...');
                 const [productosData, proveedoresData] = await Promise.all([
-                    obtenerProductos(),
+                    obtenerProductosActivos(),
                     getProveedores(),
                 ]);
                 console.log('Productos obtenidos:', productosData);
@@ -66,15 +66,16 @@ const Productos = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-4">Bienvenido a Mi Tiedita Online </h2>
-            <div className="row">
+            <h2 className="text-center mb-10 text-black font-bold text-3xl">Catalogo de productos</h2>
+            <div className=""  id="catalogo">
                 {productos.map(producto => (
-                    <div key={producto.pk_id_producto} className="col-md-4">
+                    <div key={producto.pk_id_producto} >
                         <ProductosCard
                             nombre={producto.nombre}
                             precio={producto.precio}
                             proveedor={proveedoresMap[producto.fk_proveedor] || 'Desconocido'}
                             pk_id_producto={producto.pk_id_producto}
+                            stock={producto.stock}
                             onClick={() => handleVerProductoPorId(producto.pk_id_producto)}
                         />
                     </div>

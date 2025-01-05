@@ -8,7 +8,8 @@ import {
   activarProducto,
   inactivarProducto,
   obtenerProductoPorId,
-  subirImagenProducto
+  subirImagenProducto,
+  obtenerProductosActivos
 } from "../controllers/productosController.js";
 import  Roles  from "../config/roles.js"; 
 import multer from 'multer';
@@ -53,6 +54,13 @@ router.get(
   authMiddleware,
   roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
   obtenerProductoPorId
+);
+
+router.get(
+  "/ObtenerProductosActivos",
+  authMiddleware,
+  roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+  obtenerProductosActivos
 );
 
 /**

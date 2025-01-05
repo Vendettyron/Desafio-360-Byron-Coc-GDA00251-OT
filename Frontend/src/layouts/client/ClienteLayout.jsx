@@ -20,7 +20,7 @@ import Navbar from '@/components/Common/Navbar';
 
 const ClinteLayout = () => {
     return (
-        <>  
+        <div id='clienteLayout'>      
                 <Navbar/>
                 <Routes>
 
@@ -42,7 +42,7 @@ const ClinteLayout = () => {
                     position="top-right"
                     reverseOrder={false}
                 />
-        </>
+        </div>
         
     );
 };

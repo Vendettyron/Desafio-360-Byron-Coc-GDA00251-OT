@@ -39,6 +39,8 @@ export const obtenerProductoPorId = async (pk_id_producto) => {
     }
 };
 
+// Actualizar un producto existente
+
 export const actualizarProducto = async (data) => {
     const { id_producto, fk_categoria, fk_estado, fk_proveedor, nombre, descripcion, precio, stock, fk_id_usuario } = data;
 
@@ -60,6 +62,8 @@ export const actualizarProducto = async (data) => {
     }
 };
 
+// Inactivar un producto existente
+
 export const inactivarProducto = async (data) => {
     const { id_producto, fk_id_usuario } = data;
 
@@ -73,6 +77,8 @@ export const inactivarProducto = async (data) => {
         throw error;
     }
 };
+
+// Activar un producto existente
 
 export const activarProducto = async (data) => {
     const { pk_id_producto, id_usuario_accion } = data;
@@ -88,11 +94,24 @@ export const activarProducto = async (data) => {
     }
 };
 
+// Obtener todos los productos
+
 export const obtenerProductos = async () => {
     try {
         const pool = await poolPromise; 
         const result = await pool.request()
             .execute('ObtenerProductos'); // Asegúrate de tener este SP creado
+        return result.recordset;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const obtenerProductosActivos = async () => {
+    try {
+        const pool = await poolPromise;
+        const result = await pool.request()
+            .execute('ObtenerProductosActivos'); // Asegúrate de tener este SP creado
         return result.recordset;
     } catch (error) {
         throw error;
@@ -105,5 +124,6 @@ export default {
     inactivarProducto,
     activarProducto,
     obtenerProductos,
-    obtenerProductoPorId
+    obtenerProductoPorId,
+    obtenerProductosActivos
 };

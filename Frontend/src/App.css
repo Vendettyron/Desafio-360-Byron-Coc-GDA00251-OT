@@ -13,6 +13,40 @@
   font-style: normal;
 }
 
+#clienteLayout {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: rgb(227,230 ,230 );
+  font-family: "Poppins", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+#catalogo{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1rem));
+  gap: 2rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+#productoCard {
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+  border-radius: 10px;
+  
+}
+
+#productoCard:hover {
+  transform: scale(1.05);
+}
+
+#productoCard:active {
+  transform: scale(0.95);
+}
+
 .rdt_TableCol{
   background-color:  rgb(134, 186, 255);
 }
