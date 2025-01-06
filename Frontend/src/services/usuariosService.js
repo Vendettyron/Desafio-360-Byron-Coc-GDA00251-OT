@@ -90,3 +90,97 @@ export const eliminarUsuarioElMismo = async (data) => {
     throw error;
   }
 }
+
+/**
+ * Obtiene la lista de los detalles de un carrito de un usuario especifico.
+ * @param {number|string} id - ID del usuario
+ * @returns {Promise<Array>} - Lista de detalles del carrito
+ */
+
+export const obtenerDetallesCarritoPorUsuarioAdmin = async (id) => {
+  try {
+    const response = await api.get(`/carrito/ObtenerDetallesCarritoPorUsuarioAdmin/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener los detalles del carrito del usuario con ID ${id}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Actualiza el Detalle del carrito de un usuario especifico.
+ *  
+ * @param {number|string} idUsuario - ID del usuario
+ * @param {number|string} idProducto - ID del producto
+ * @param {Object} data - Datos actualizados { nueva_cantidad }
+ * @returns {Promise<Object>} - Detalle del carrito actualizado
+ */
+
+export const actualizarDetalleCarritoAdmin = async (idUsuario,idProducto,data) => {
+  try {
+    const response = await api.put(`/carrito/ActualizarDetalleCarritoAdmin/${idUsuario}/${idProducto}`,data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar el detalle del carrito del usuario con ID ${idUsuario}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Agregar un producto al carrito de un usuario especifico realziado por un admin.
+ * 
+ * @param {number|string} idUsuario - ID del usuario
+ * @param {number|string} idProducto - ID del producto
+ * 
+ * @returns {Promise<Object>} - Detalle del carrito actualizado
+ */
+
+export const agregarProductoAlCarritoAdmin = async (idUsuario,idProducto,data) => {
+  try {
+    const response = await api.post(`/carrito/AgregarProductoAlCarritoAdmin/${idUsuario}/${idProducto}`,data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al agregar el producto al carrito del usuario con ID ${idUsuario}:`, error);
+    throw error;
+  }
+}
+
+
+/**
+ * Eliminar un detalle especifico del carrito de un usuario especifico.
+ * 
+ * @param {number|string} idUsuario - ID del usuario
+ * @param {number|string} idProducto - ID del producto
+ * 
+ * @returns {Promise<Object>} - Detalle del carrito eliminado
+ */
+
+export const eliminarDetalleCarritoAdmin = async (idUsuario,idProducto) => {
+  try {
+    const response = await api.delete(`/carrito/EliminarDetalleCarritoAdmin/${idUsuario}/${idProducto}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al eliminar el detalle del carrito del usuario con ID ${idUsuario}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Eliminar todos los detalles del carrito de un usuario especifico.
+ * 
+ * @param {number|string} id - ID del usuario
+ * 
+ * @returns {Promise<Object>} - Detalles del carrito eliminados
+ */
+
+export const eliminarDetallesCarritoAdmin = async (id) => {
+  try {
+    const response = await api.delete(`/carrito/EliminarDetallesCarritoAdmin/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al eliminar los detalles del carrito del usuario con ID ${id}:`, error);
+    throw error;
+  }
+}
+
+

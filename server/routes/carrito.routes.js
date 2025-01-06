@@ -8,7 +8,12 @@ import { obtenerDetallesCarritoPorUsuario,
     EliminarDetalleCarrito,
     ActualizarDetalleCarrito,
     ConfirmarCarrito,
-    EliminarDetallesCarrito
+    EliminarDetallesCarrito,
+    obtenerDetallesCarritoPorUsuarioAdmin,
+    ActualizarDetalleCarritoAdmin,
+    EliminarDetalleCarritoAdmin,
+    AgregarProductoAlCarritoAdmin,
+    EliminarDetallesCarritoAdmin
 } from "../controllers/carrito.Controller.js";
 
 
@@ -25,6 +30,49 @@ router.get(
     authMiddleware,
     roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     obtenerDetallesCarritoPorUsuario
+);
+
+
+/**
+ * @route GET /api/carrito/ObtenerDetallesCarritoPorUsuarioAdmin
+ * @desc Ver detalles del carrito de un usuario desde el admin
+ * @access cliuente y admin
+ */
+
+router.get( 
+    "/ObtenerDetallesCarritoPorUsuarioAdmin/:id",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    obtenerDetallesCarritoPorUsuarioAdmin
+);
+
+
+/**
+ * @route POST /api/carrito/AgregarProductoAlCarrito/:id
+ * @desc Agregar un producto al carrito
+ * @access cliuente y admin
+ * @param {number} id - ID del producto
+ */
+
+router.post( 
+    "/AgregarProductoAlCarrito/:id",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+    AgregarProductoAlCarrito
+);
+
+/**
+ * @route POST /api/carrito/AgregarProductoAlCarrito/:id
+ * @desc Agregar un producto al carrito
+ * @access cliuente y admin
+ * @param {number} id - ID del producto
+ */
+
+router.post( 
+    "/AgregarProductoAlCarritoAdmin/:idUsuario/:idProducto",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    AgregarProductoAlCarritoAdmin
 );
 
 /**
@@ -55,9 +103,22 @@ router.delete(
 );
 
 /**
+ * @route DELETE /api/carrito/EliminarDetalleCarritoAdmin/:idUsuario/:idProducto
+ * @desc Eliminar un detalle especifico del carrito de un usuario par el admin
+ * @access  admin
+ */
+
+router.delete( 
+    "/EliminarDetalleCarritoAdmin/:idUsuario/:idProducto",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    EliminarDetalleCarritoAdmin
+);
+
+/**
  * @route DELETE /api/carrito/EliminarDetallesCarrito/:id
  * @desc Eliminar todos los detalles del carrito de un usuario
- * @access cliuente y admin
+ * @access admin y cliente
  */
 
 router.delete( 
@@ -66,6 +127,20 @@ router.delete(
     roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     EliminarDetallesCarrito
 );
+
+/**
+ * @route DELETE /api/carrito/EliminarDetallesCarritoAdmin/:id
+ * @desc Eliminar todos los detalles del carrito de un usuario por el admin
+ * @access admin
+ */
+
+router.delete( 
+    "/EliminarDetallesCarritoAdmin/:id",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    EliminarDetallesCarritoAdmin
+);
+
 
 /**
  * @route PUT /api/carrito/ConfirmarCarrito
@@ -92,5 +167,20 @@ router.put(
     roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
     ActualizarDetalleCarrito
 );
+
+/**
+ * @route PUT /api/carrito/ActualizarDetalleCarritoAdmin/:idUsuario/:idProducto
+ * @desc Actualizar un detalle del carrito (cantidad)
+ * @access cliuente y admin
+ */
+
+router.put( 
+    "/ActualizarDetalleCarritoAdmin/:idUsuario/:idProducto", 
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN]),
+    ActualizarDetalleCarritoAdmin
+);
+
+
 
 export default router;

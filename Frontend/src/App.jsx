@@ -16,11 +16,12 @@ function App() {
     <>
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
-            {/* Rutas de Login Y Register */}
-          <Route path="/" element={<Login />}>
-            <Route index element={<LoginForm />} /> {/* Ruta para "/login" */}
-            <Route path="register" element={<Register />} /> {/* Ruta para "/register" */}
-          </Route>
+              {/* Rutas de Login Y Register */}
+            <Route path="/" element={<Login />}>
+              <Route index element={<LoginForm />} /> {/* Ruta para "/login" */}
+              <Route path="register" element={<Register />} /> {/* Ruta para "/register" */}
+            </Route>
+
             {/* Rutas protegidas para usuarios con rol "Operador" */}
             <Route element={<ProtectedRoute roles={[Roles.ADMIN]} />}>
               <Route path="/admin/*" element={<AdminLayout/>} />
@@ -30,7 +31,6 @@ function App() {
             <Route element={<ProtectedRoute roles={[Roles.CLIENTE]} />}>
               <Route path="/cliente/*" element={<ClienteLayout/>} />
             </Route>
-
 
           </Routes>
         </Suspense>

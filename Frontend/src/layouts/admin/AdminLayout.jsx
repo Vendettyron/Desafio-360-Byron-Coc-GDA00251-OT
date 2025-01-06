@@ -32,11 +32,13 @@ import ActualizarEstado from '@/components/Admin/Estados/ActualizarEstado';
 import Usuarios from '@/components/Admin/Usuarios/Usuarios';
 import CrearUsuario from '@/components/Admin/Usuarios/CrearUsuario';
 import ActualizarUsuario from '@/components/Admin/Usuarios/ActualizarUsuario';
+import AgregarProductosCarritoAdmin from '@/components/Admin/Usuarios/AgregarProductosCarritoAdmin';
 
 //componentes de productos
 import Productos from '@/components/Admin/Productos/Productos';
 import CrearProducto from '@/components/Admin/Productos/CrearProducto';
 import ActualizarProducto from '@/components/Admin/Productos/ActualizarProducto';
+import EditarCarritoAdmin from '@/components/Admin/Usuarios/EditarCarritoAdmin';
 
 // componeente de pedidos
 import Pedidos from '@/components/Admin/Pedidos/Pedidos';
@@ -58,7 +60,7 @@ const AdminLayout  = () => {
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb>
-              <BreadcrumbItem>
+                <BreadcrumbItem>
                   <BreadcrumbPage>Contraer</BreadcrumbPage>
                 </BreadcrumbItem>
               </Breadcrumb>
@@ -87,6 +89,8 @@ const AdminLayout  = () => {
               <Route path="usuarios" element={<Usuarios/>} />
               <Route path="usuarios/crear" element={<CrearUsuario />} />
               <Route path="usuarios/actualizar/:id" element={<ActualizarUsuario />} />
+              <Route path="usuarios/carrito/:id" element={<EditarCarritoAdmin/>}/>
+              <Route path="usuarios/agregar-productos-carrito/:id" element={<AgregarProductosCarritoAdmin/>}/>
 
               {/* Rutas de productos */}
               <Route path="productos" element={<Productos/>} />

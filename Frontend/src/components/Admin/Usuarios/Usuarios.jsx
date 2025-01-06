@@ -157,6 +157,14 @@ const Usuarios = () => {
       ),
       export:false
     },
+
+    {
+      name: 'Carrito',
+      cell: (row) => (
+        <Link to={`/admin/usuarios/carrito/${row.pk_id_usuario}`} className="btn-editar">Ver Carrito</Link>
+      ),
+      export:false
+    }
   ];
 
   if (error) {
