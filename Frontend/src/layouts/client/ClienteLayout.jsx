@@ -10,9 +10,12 @@ import Pedidos from '@/components/Cliente/Pedido/Pedidos';
 
 //componentes de carrito
 import Carrito from '@/components/Cliente/Carrito/Carrito';
+
 // compoenentes de perfil
 import ProfileInfo from '@/components/Cliente/Perfil/ProfileInfo';
 import EliminarCuenta from '@/components/Cliente/Perfil/EliminarCuenta';
+import ModificarPerfil from '@/components/Cliente/Perfil/ModificarPerfil';
+import CambiarPassword from '@/components/Cliente/Perfil/CambiarPassword';
 
 // componentes reutilizables
 import Navbar from '@/components/Common/Navbar';
@@ -36,6 +39,8 @@ const ClinteLayout = () => {
                     {/* Rutas de perfil*/}
                     <Route path="perfil" element={<ProfileInfo/>}/>
                     <Route path="eliminarCuenta" element={<EliminarCuenta/>}/>
+                    <Route path="modificarPerfil" element={<ModificarPerfil/>}/>
+                    <Route path="cambiarPassword" element={<CambiarPassword/>}/>
 
                 </Routes>
                 <Toaster

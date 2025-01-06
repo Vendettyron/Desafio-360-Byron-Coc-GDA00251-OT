@@ -14,8 +14,8 @@ export const loginSchema = Yup.object().shape({
 });
 
 /**
- * Schema para regsitrar un usuario nuevo.
- * Schema para actualizar un usuario existente.
+ * Schema para regsitrar un usuario nuevo 
+ * Schema para actualizar un usuario existente por parte de un admin.
  */
 export const usuariosSchema = Yup.object().shape({
   nombre: Yup
@@ -57,6 +57,75 @@ export const usuariosSchema = Yup.object().shape({
     .number()
     .required('El estado es obligatorio')
     .oneOf([Estados.ACTIVO, Estados.INACTIVO], 'Estado inválido'), // 1: Activo, 2: Inactivo
+});
+
+/**
+ * Schema para que un usuario actualice su propia información.
+ */
+export const usuariosElMismoSchema = Yup.object().shape({
+  nombre: Yup
+    .string()
+    .required('El nombre es obligatorio')
+    .max(100, 'El nombre no puede exceder los 100 caracteres'),
+  
+  apellido: Yup
+    .string()
+    .required('El apellido es obligatorio')
+    .max(100, 'El apellido no puede exceder los 100 caracteres'),
+  
+  direccion: Yup
+    .string()
+    .required('La dirección es obligatoria')
+    .max(200, 'La dirección no puede exceder los 200 caracteres'),
+  
+  correo: Yup
+    .string()
+    .required('El correo es obligatorio')
+    .email('Debe ser un correo electrónico válido'),
+  
+  telefono: Yup
+    .string()
+    .required('El teléfono es obligatorio')
+    .matches(/^\d{8}$/, 'El teléfono debe tener 8 dígitos'),
+});
+
+// Schema para que el usuario elimine su cuenta
+export const EliminarUsuarioElMismoSchema = Yup.object().shape({
+  correo: Yup.string()
+    .email('Debe ser un correo válido')
+    .required('El correo es requerido'),
+
+  password: Yup.string()
+    .required('La contraseña es obligatoria')
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .typeError('La contraseña debe tener al menos 6 caracteres'),
+
+  confirmarPassword: Yup.string()
+    .required('La confirmación de la contraseña es obligatoria')
+    .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden')
+    .typeError('La contraseña no coincide'),
+});
+
+
+
+// Schema para que el usuario actualice su contraseña
+export const ActualizarPasswordSchema = Yup.object().shape({
+
+  actualPassword: Yup.string()
+    .required('La contraseña es obligatoria')
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .typeError('La contraseña debe tener al menos 6 caracteres'),
+
+  newPassword: Yup
+  .string()
+  .required('La nueva contraseña es obligatoria.')
+  .min(6, 'La nueva contraseña debe tener al menos 6 caracteres.')
+  .notOneOf([Yup.ref('actualPassword')], 'La nueva contraseña debe ser diferente de la actual.'),
+  
+  confirmNewPassword: Yup
+    .string()
+    .required('La confirmación de la nueva contraseña es obligatoria.')
+    .oneOf([Yup.ref('newPassword')], 'Las contraseñas no coinciden.'),
 });
 
 
@@ -160,23 +229,4 @@ export const productosSchema = Yup.object().shape({
     })
     .notRequired(), // Hace que el campo sea opcional
 });
-
-// Schema para que el usuario elimine su cuenta
-export const EliminarUsuarioElMismoSchema = Yup.object().shape({
-  correo: Yup.string()
-    .email('Debe ser un correo válido')
-    .required('El correo es requerido'),
-
-  password: Yup.string()
-    .required('La contraseña es obligatoria')
-    .min(6, 'La contraseña debe tener al menos 6 caracteres')
-    .typeError('La contraseña debe tener al menos 6 caracteres'),
-
-  confirmarPassword: Yup.string()
-    .required('La confirmación de la contraseña es obligatoria')
-    .oneOf([Yup.ref('password'), null], 'Las contraseñas no coinciden')
-    .typeError('La contraseña no coincide'),
-});
-
-
 

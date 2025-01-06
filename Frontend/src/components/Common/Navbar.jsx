@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart } from "lucide-react";
 import "./Navbar.scss"; 
@@ -9,9 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/context/AuthContext";
-import { useContext } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ function Navbar() {
     width: 0,
     height: 0,
   });
+
   useEffect(() => {
     const handleResize = () => {
       setSize({
@@ -47,17 +47,19 @@ function Navbar() {
     navigate("/cliente/perfil");
   };
 
-  const handleEliminarCuenta = () => {  
-    navigate("/cliente/eliminarCuenta");
+  const handleCambiarPassword = () => {  
+    navigate("/cliente/cambiarPassword");
   };
+
    // Redirigir a la página de inicio de sesión 
   const handleCerrarSesion = () => {
     logoutUser();
     navigate('/login'); 
   };
 
-
-
+  // Extraer el nombre del usuario desde el contexto de autenticación
+  const nombreUsuario = auth?.usuario?.nombre || "Usuario"; // "Usuario" es un valor por defecto
+  
   return (
     <header className="header">
       <div className="header__content">
@@ -71,21 +73,21 @@ function Navbar() {
         >
           <ul>
             <li>
-              <Link to ="/cliente">Productos</Link>
+              <Link to="/cliente">Productos</Link>
             </li>
             <li>
               <Link to="/cliente/pedidos">Historial Pedidos</Link>
             </li>
-            <li >
-              <DropdownMenu style={"z-index: 1000;"} >
-              <DropdownMenuTrigger>Perfil</DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Juan Perez</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handlePerfiles} >Perfil</DropdownMenuItem>
-                <DropdownMenuItem onClick={handleEliminarCuenta}>Eliminar Cuenta</DropdownMenuItem>
-                <DropdownMenuItem onClick={handleCerrarSesion}>Cerrar Sesion</DropdownMenuItem>
-              </DropdownMenuContent>
+            <li>
+              <DropdownMenu style={{ zIndex: 1000 }}>
+                <DropdownMenuTrigger>Perfil</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>{nombreUsuario}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handlePerfiles}>Perfil</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleCambiarPassword}>Cambiar contraseña</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleCerrarSesion}>Cerrar Sesión</DropdownMenuItem>
+                </DropdownMenuContent>
               </DropdownMenu>
             </li>
             <button className="btn">

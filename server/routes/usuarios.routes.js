@@ -9,7 +9,9 @@ import {
     activarUsuario,
     obtenerUsuarios,
     ObtenerUsuarioPorId,
-    inactivarUsuarioElMismo
+    inactivarUsuarioElMismo,
+    actualizarUsuarioElMismo,
+    actualizarPasswordUsuario
 } from "../controllers/usuariosController.js";
 
 const router = express.Router();
@@ -50,6 +52,34 @@ router.put(
     roleMiddleware([Roles.ADMIN]),
     actualizarUsuario
 );
+
+
+/**
+ * @route PUT /api/usuarios/ActualizarUsuarioElMismo
+ * @desc El clieten actualiza su información
+ * @access Privado (Cliente)
+ */
+router.put(
+    "/ActualizarUsuarioElMismo",
+    authMiddleware,
+    roleMiddleware([Roles.CLIENTE]),
+    actualizarUsuarioElMismo
+);
+
+/**
+ * @route PUT /api/usuarios/ActualizarPasswordUsuario
+ * @desc El cliente actualiza su contraseña
+ * @access Privado (Cliente)
+ */
+
+router.put(
+    "/ActualizarPasswordUsuario",
+    authMiddleware,
+    roleMiddleware([Roles.CLIENTE]),
+    actualizarPasswordUsuario
+);
+
+
 
 /**
  * @route PUT /api/usuarios/InactivarUsuario/:id

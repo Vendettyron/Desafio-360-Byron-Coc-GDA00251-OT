@@ -46,6 +46,46 @@ export const actualizarUsuario = async (data) => {
 };
 
 /**
+ * El usuario actualiza su información
+ */
+
+export const actualizarUsuarioElMismo = async (data) => {
+    const { pk_id_usuario, nombre, apellido, direccion, correo, telefono} = data;
+
+    try {
+        const pool = await poolPromise; // Esperar a que la promesa se resuelva
+        await pool.request()
+            .input('pk_id_usuario', sql.Int, pk_id_usuario)
+            .input('nombre', sql.NVarChar(100), nombre)
+            .input('apellido', sql.NVarChar(100), apellido)
+            .input('direccion', sql.NVarChar(100), direccion)
+            .input('correo', sql.NVarChar(100), correo)
+            .input('telefono', sql.NVarChar(8), telefono)
+            .execute('ActualizarUsuarioElMismo'); // Llamar al SP ActualizarUsuario
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const actualizarPasswordUsuario = async (data) => {
+    const { pk_id_usuario, newPassword } = data;
+
+    // Encriptar la contraseña
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    try {
+        const pool = await poolPromise; // Esperar a que la promesa se resuelva
+        await pool.request()
+            .input('pk_id_usuario', sql.Int, pk_id_usuario)
+            .input('password', sql.NVarChar(255), hashedPassword)
+            .execute('ActualizarPassword'); // Llamar al SP ActualizarUsuario
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
  * Inactivar un usuario existente
  */
 export const inactivarUsuario = async (data) => {
@@ -85,5 +125,7 @@ export default {
     actualizarUsuario,
     inactivarUsuario,
     activarUsuario,
-    obtnerUsuarioPorId
+    obtnerUsuarioPorId,
+    actualizarUsuarioElMismo,
+    actualizarPasswordUsuario
 };

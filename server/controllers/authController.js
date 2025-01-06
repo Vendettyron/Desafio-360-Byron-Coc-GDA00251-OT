@@ -56,12 +56,14 @@ export const login = async (req, res) => {
         return res.json({ 
             token,
             usuario: {
-                id: usuario.id,
+                id: usuario.pk_id_usuario,
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,
+                direccion: usuario.direccion,
+                telefono: usuario.telefono,
                 correo: usuario.correo,
                 fk_rol: usuario.fk_rol,
-                fk_estado: usuario.fk_estado,
+                fk_estado: usuario.fk_estado
             }
         });
         

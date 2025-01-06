@@ -183,4 +183,43 @@ export const eliminarDetallesCarritoAdmin = async (id) => {
   }
 }
 
+/**
+ * El usuario actualiza su información\
+ * 
+ * @param {Object} data - Datos actualizados { nombre, apellido, direccion, correo, telefono}
+ * 
+ * @returns {Promise<Object>} - Usuario actualizado
+ */ 
+
+export const actualizarUsuarioElMismo = async (data) => {
+  try {
+    const response = await api.put(`/usuarios/ActualizarUsuarioElMismo`,data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar el usuario con ID ${id}:`, error);
+    throw error;
+  }
+
+}
+
+/**
+ * El usuario actualiza su contraseña
+ * 
+ * @param {Object} data - Datos actualizados { actualPassword,newPassword }
+ * 
+ * 
+ * @returns {Promise<Object>} - Usuario actualizado
+ */
+
+export const actualizarPasswordUsuario = async (data) => {
+  try {
+    const response = await api.put(`/usuarios/ActualizarPasswordUsuario`,data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar el usuario con ID ${id}:`, error);
+    throw error;
+  }
+}
+
+
 
