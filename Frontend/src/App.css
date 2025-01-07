@@ -51,6 +51,20 @@
   background-color:  rgb(134, 186, 255);
 }
 
+#btnAgregarCarrito {
+  background-color: #f99507;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#btnAgregarCarrito:hover {
+  background-color: #e08506;
+  transform: scale(1.05);
+}
+
+#btnAgregarCarrito:active {
+  transform: scale(0.95);
+}
+
 .btn-activar {
   @apply bg-green-600 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded w-full;
 }
@@ -86,6 +100,10 @@
 
 .container-table-admin {
   @apply container w-full h-full;
+}
+
+.btn-plus-minus{
+  @apply  px-2 py-2 rounded-2xl bg-gray-200 text-gray-700  hover:bg-gray-300
 }
 
 @layer base {

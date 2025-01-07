@@ -8,12 +8,22 @@ import { agregarProductoAlCarrito } from '@/services/carritoService';
 import toast from 'react-hot-toast';
 import { AuthContext } from '@/context/AuthContext';
 
+
+//componentes reutilizables
+import {CirclePlus, CircleMinus } from 'lucide-react';
+import FormInput from '@/components/Forms/FormInput';
+import { set } from 'react-hook-form';
+import { Progress } from '@/components/ui/progress';
+
+
+
 const ProductoPorId = () => {
   const { id } = useParams(); // Obtener el ID del producto desde la ruta
   const [producto, setProducto] = useState({});
   const [proveedor, setProveedor] = useState({});
   const [cantidad, setCantidad] = useState(1); // Cantidad inicial
   const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(20);
   const [error, setError] = useState('');
   const { auth } = useContext(AuthContext); // Acceder al contexto de autenticación
 
@@ -21,6 +31,7 @@ const ProductoPorId = () => {
     const fetchData = async () => {
       try {
         // Obtener detalles del producto
+        setCargando(50);
         const productoData = await obtenerProductoPorId(id);
         setProducto(productoData);
         console.log("Datos del producto obtenidos:", productoData);
@@ -34,10 +45,12 @@ const ProductoPorId = () => {
           setProveedor({});
           console.log("No se encontró proveedor para este producto.");
         }
+        setCargando(80);
       } catch (err) {
         setError(err.message || 'Error al cargar los datos del producto.');
         toast.error(err.message || 'Error al cargar los datos del producto.');
       } finally {
+        setCargando(100);
         setLoading(false);
       }
     };
@@ -69,13 +82,13 @@ const ProductoPorId = () => {
     }
   };
 
+  // Renderizado condicional
+
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-xl">Cargando detalles del producto...</p>
-      </div>
-    );
-  }
+       return (
+           <Progress value={cargando} />
+       );
+     }
 
   if (error) {
     return (
@@ -92,65 +105,69 @@ const ProductoPorId = () => {
     <div className="container mx-auto p-6">
       <div className="flex flex-col md:flex-row bg-white shadow-md rounded-lg overflow-hidden">
         {/* Imagen del Producto */}
-        <div className="md:w-1/2">
+        <div className="md:w-1/2 flex flex-col items-center content-center justify-center">
           <img
             src={`/assets/productos/${id}.jpg`}
             alt={producto.nombre || 'Imagen del producto'}
-            className="w-full h-full object-cover"
+            className=" w-2/3 h-auto "
           />
         </div>
 
         {/* Información del Producto */}
         <div className="md:w-1/2 p-6 flex flex-col justify-between">
           <div>
-            <h2 className="text-2xl font-bold mb-2">{producto.nombre}</h2>
-            <p className="text-gray-700 mb-4">{producto.descripcion}</p>
+            <h2 className="text-4xl font-bold mb-2">{producto.nombre}</h2>
             {proveedor.nombre && (
-              <p className="text-gray-800 mb-2">
-                <strong>Proveedor:</strong> {proveedor.nombre}
+              <p className="text-gray-800 mb-4 ">
+                <strong className='font-semibold'>Proveedor:</strong> {proveedor.nombre}
               </p>
             )}
+            <p className="text-gray-700 mb-4 font-normal  ">{producto.descripcion}</p>
+
             <p className="text-gray-800 mb-4">
-              <strong>Precio:</strong> Q{producto.precio.toLocaleString()}
+              <strong className='font-semibold'>Stock:</strong> {producto.stock}
             </p>
-            <p className="text-gray-800 mb-4">
-              <strong>Stock:</strong> {producto.stock}
+
+            <p className="text-gray-800 mb-4 font-bold text-2xl ">
+              <p className='font-semibold'>Precio:</p> Q{producto.precio.toLocaleString()}
             </p>
+
+
           </div>
 
           {/* Renderizado Condicional basado en el Stock */}
           {estaDisponible ? (
             <>
               {/* Gestión de Cantidad */}
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 ml-4">
                 <button
                   onClick={decrementarCantidad}
-                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300"
+                  className="btn-plus-minus"
                   aria-label="Decrementar cantidad"
                 >
-                  -
+                  <CircleMinus></CircleMinus>
                 </button>
-                <input
+                <FormInput
                   type="text"
                   value={cantidad}
                   readOnly
-                  className="w-12 text-center border-t border-b border-gray-200"
+                  className="px-2 py-2 max-w-20 text-center border-t border-b border-gray-200 -mb-5 "
                   aria-label="Cantidad"
                 />
                 <button
                   onClick={incrementarCantidad}
-                  className={`px-3 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300 ${cantidad >= producto.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`btn-plus-minus ${cantidad >= producto.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   aria-label="Incrementar cantidad"
                   disabled={cantidad >= producto.stock}
                 >
-                  +
+                  <CirclePlus></CirclePlus>
                 </button>
               </div>
 
               {/* Botón de Añadir al Carrito */}
-              <button
+              <button id='btnAgregarCarrito'
                 onClick={handleAgregarAlCarrito}
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+                className="w-full text-white py-2 rounded transition-colors"
               >
                 Añadir al carrito
               </button>

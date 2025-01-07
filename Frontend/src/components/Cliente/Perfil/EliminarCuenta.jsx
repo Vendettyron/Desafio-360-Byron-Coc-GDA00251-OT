@@ -64,7 +64,7 @@ const EliminarCuenta = () => {
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center mt-10'>
       <FormLayout title="Eliminar Cuenta">
         <form onSubmit={handleSubmit(onSubmit)} className="eliminar-cuenta-form">
           {/* CORREO ELECTRÓNICO */}
@@ -120,7 +120,7 @@ const EliminarCuenta = () => {
           {error}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

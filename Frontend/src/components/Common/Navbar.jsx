@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/context/AuthContext";
+import { BiMenuAltRight } from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -97,6 +99,13 @@ function Navbar() {
             </button>
           </ul>
         </nav>
+        <div className="header__content__toggle">
+          {!menuOpen ? (
+            <BiMenuAltRight onClick={menuToggleHandler} />
+          ) : (
+            <AiOutlineClose onClick={menuToggleHandler} />
+          )}
+        </div>
       </div>
     </header>
   );

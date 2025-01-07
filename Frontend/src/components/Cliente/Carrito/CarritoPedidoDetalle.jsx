@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import { actualizarDetalleCarrito, eliminarDetalleCarrito } from '@/services/carritoService';
 
+//componentes reutilizables
+import {CirclePlus, CircleMinus,Trash2   } from 'lucide-react';
+import FormInput from '@/components/Forms/FormInput';
+import { Form } from 'react-router-dom';
+
 const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
   const [cantidad, setCantidad] = useState(item.cantidad);
   const [loading, setLoading] = useState(false);
@@ -58,23 +63,23 @@ const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
         <div className="flex items-center">
           <button
             onClick={() => handleActualizarCantidad(cantidad - 1)}
-            className="px-2 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300"
+            className="btn-plus-minus"
             disabled={loading || cantidad === 0}
           >
-            -
+            <CircleMinus></CircleMinus>
           </button>
-          <input
+          <FormInput
             type="text"
             value={cantidad}
             readOnly
-            className="w-12 text-center border-t border-b border-gray-200"
+            className="px-2 py-2 max-w-20 text-center border-t border-b border-gray-200 -mb-5"
           />
           <button
             onClick={() => handleActualizarCantidad(cantidad + 1)}
-            className="px-2 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300"
+            className="btn-plus-minus"
             disabled={loading}
           >
-            +
+             <CirclePlus></CirclePlus>
           </button>
         </div>
       </td>
@@ -91,7 +96,7 @@ const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
           className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
           disabled={loading}
         >
-          Eliminar Producto
+         <Trash2></Trash2>
         </button>
       </td>
     </tr>

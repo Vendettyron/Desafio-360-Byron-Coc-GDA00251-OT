@@ -3,11 +3,13 @@ import { obtenerProductosActivos } from '@/services/productosService';
 import { getProveedores } from '@/services/proveedoresService';
 import ProductosCard from '@/components/Cliente/Productos/ProductosCard';
 import { useNavigate} from 'react-router-dom';
+import { Progress } from '@/components/ui/progress';
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [proveedores, setProveedores] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cargando, setCargando] = useState(20);
     const [error, setError] = useState('');
     const navigate=useNavigate(); 
 
@@ -17,6 +19,7 @@ const Productos = () => {
     useEffect(() => {
         const fetchDatos = async () => {
             try {
+                setCargando(50);
                 console.log('Iniciando solicitud para obtener productos y proveedores...');
                 const [productosData, proveedoresData] = await Promise.all([
                     obtenerProductosActivos(),
@@ -33,11 +36,12 @@ const Productos = () => {
                     map[proveedor.pk_id_proveedor] = proveedor.nombre;
                 });
                 setProveedoresMap(map);
-
+                setCargando(80);
             } catch (err) {
                 console.error('Error al obtener datos:', err);
                 setError('No se pudieron obtener los datos.');
             } finally {
+                setCargando(100);
                 setLoading(false);
             }
         };
@@ -46,11 +50,10 @@ const Productos = () => {
 
     if (loading) {
         return (
-            <div className="text-center mt-5">
-                <p>Cargando productos...</p>
-            </div>
+            <Progress value={cargando} />
         );
     }
+
 
     if (error) {
         return (

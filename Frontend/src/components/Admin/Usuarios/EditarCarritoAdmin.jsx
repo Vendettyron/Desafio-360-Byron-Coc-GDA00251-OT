@@ -16,6 +16,7 @@ import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
 import { Progress } from '@/components/ui/progress';
 import toast from 'react-hot-toast'; 
+import {CirclePlus, CircleMinus,Trash2   } from 'lucide-react';
 // Estilos
 import "styled-components";
 
@@ -195,7 +196,7 @@ const EditarCarritoAdmin = () => {
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                         aria-label={`Decrementar cantidad de ${row.nombre_producto}`}
                     >
-                        -
+                        <CircleMinus></CircleMinus>
                     </button>
                     <span>{row.cantidad}</span>
                     <button
@@ -203,7 +204,7 @@ const EditarCarritoAdmin = () => {
                         className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                         aria-label={`Incrementar cantidad de ${row.nombre_producto}`}
                     >
-                        +
+                        <CirclePlus></CirclePlus>
                     </button>
                 </div>
             ),
@@ -215,14 +216,14 @@ const EditarCarritoAdmin = () => {
             sortable: true,
         },
         {
-            name: 'Acciones',
+            name: 'Eliminar Detalle',
             cell: row => (
                 <button
                     onClick={() => handleEliminarProducto(row.fk_id_producto)}
                     className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
                     aria-label={`Eliminar ${row.nombre_producto} del carrito`}
                 >
-                    Eliminar
+                    <Trash2></Trash2>
                 </button>
             ),
             ignoreRowClick: true,

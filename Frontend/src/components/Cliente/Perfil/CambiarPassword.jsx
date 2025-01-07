@@ -57,7 +57,7 @@ const CambiarPassword = () => {
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center mt-10'>
       <FormLayout title="Cambiar Contraseña">
         <form onSubmit={handleSubmit(onSubmit)} style={{ minWidth: 'auto' }}>
           {/* CONTRASEÑA ACTUAL */}
@@ -113,7 +113,7 @@ const CambiarPassword = () => {
           {error}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

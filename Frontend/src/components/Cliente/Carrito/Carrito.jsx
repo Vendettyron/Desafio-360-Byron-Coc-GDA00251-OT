@@ -5,10 +5,13 @@ import CarritoPedidoDetalle from '@/components/Cliente/Carrito/CarritoPedidoDeta
 import { obtenerDetallesCarritoPorUsuario, eliminarDetallesCarrito, confirmarCarrito } from '@/services/carritoService';
 import toast from 'react-hot-toast';
 import { AuthContext } from '@/context/AuthContext';
+import { Progress } from '@/components/ui/progress';
+import { set } from 'react-hook-form';
 
 const Carrito = () => {
   const [detallesCarrito, setDetallesCarrito] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(20);
   const [total, setTotal] = useState(0);
   const [error, setError] = useState('');
   const { auth } = useContext(AuthContext); // Acceder al contexto de autenticación
@@ -17,6 +20,7 @@ const Carrito = () => {
   const fetchDetallesCarrito = async () => {
     setLoading(true);
     try {
+      setCargando(50);
       const datos = await obtenerDetallesCarritoPorUsuario();
       // Asegurarse de que datos es un array
       const detalles = Array.isArray(datos) ? datos : [];
@@ -33,11 +37,13 @@ const Carrito = () => {
         setDetallesCarrito(detalles);
         calcularTotal(detalles);
       }
+      setCargando(80);
     } catch (err) {
       console.error('Error al obtener los detalles del carrito:', err);
       setError(err.response?.data?.error || 'Error al obtener los detalles del carrito.');
       toast.error(err.response?.data?.error || 'Error al obtener los detalles del carrito.');
     } finally {
+      setCargando(100);
       setLoading(false);
     }
   };
@@ -105,13 +111,12 @@ const Carrito = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-xl">Cargando detalles del carrito...</p>
-      </div>
-    );
-  }
+    // =============== Renderizado condicional =============== //
+    if (loading) {
+       return (
+           <Progress value={cargando} />
+       );
+     }
 
   if (error) {
     return (
@@ -128,18 +133,18 @@ const Carrito = () => {
         <p className="text-xl">Agrega productos al carrito.</p> // Mensaje personalizado
       ) : (
         <>
-          <table className="min-w-full bg-white">
-            <thead>
+          <table className="min-w-full bg-white shadow-xl">
+            <thead className="bg-gray-800 text-white">
               <tr>
                 <th className="py-2">Imagen</th>
                 <th className="py-2">Producto</th>
                 <th className="py-2">Cantidad</th>
                 <th className="py-2">Precio Unitario</th>
                 <th className="py-2">Subtotal</th>
-                <th className="py-2"></th>
+                <th className="py-2">Eliminar</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='divide-y divide-gray-200'>
               {detallesCarrito.map((item) => (
                 <CarritoPedidoDetalle
                   key={item.pk_id_detalle}
@@ -152,24 +157,26 @@ const Carrito = () => {
           </table>
 
           {/* Resumen del Total */}
-          <div className="flex justify-end mt-4">
-            <p className="text-2xl font-bold">Total: Q{total.toLocaleString()}</p>
-          </div>
+          <div className="flex flex-col justify-end mt-6 space-x-4 bg-white shadow-lg p-3 rounded-md" >
+            <div className='w-full flex justify-end'>
+              <p className="text-2xl font-bold">Total: Q{total.toLocaleString()}</p>
+            </div>
 
-          {/* Botones de Confirmar y Eliminar Carrito */}
-          <div className="flex justify-end mt-6 space-x-4">
-            <button
-              onClick={handleConfirmarCarrito}
-              className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              Confirmar Carrito
-            </button>
-            <button
-              onClick={handleEliminarCarrito}
-              className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-            >
-              Eliminar Carrito
-            </button>
+            {/* Botones de Confirmar y Eliminar Carrito */}
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={handleConfirmarCarrito}
+                  className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 mx-3"
+                >
+                  Confirmar Carrito
+                </button>
+                <button
+                  onClick={handleEliminarCarrito}
+                  className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Eliminar Carrito
+                </button>
+              </div>
           </div>
         </>
       )}

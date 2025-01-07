@@ -8,7 +8,6 @@ import {
 import { agregarProductoAlCarritoAdmin } from '@/services/usuariosService';
 import { obtenerCategorias } from '@/services/categoriasService';
 import { getProveedores } from '@/services/proveedoresService';
-import { eliminarDetallesCarritoAdmin } from '@/services/usuariosService';
 
 // Configuraciones y Utilidades
 import configureDataTableTheme from '@/config/dataTableTheme';
@@ -19,6 +18,7 @@ import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import { Progress } from '@/components/ui/progress';
 import toast from 'react-hot-toast';
+import {CirclePlus, CircleMinus, ShoppingCart } from 'lucide-react';
 
 
 const AgregarProductosCarritoAdmin = () => {
@@ -185,29 +185,29 @@ const AgregarProductosCarritoAdmin = () => {
             className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
             aria-label={`Decrementar cantidad de ${row.nombre}`}
           >
-            -
+            <CircleMinus></CircleMinus>
           </button>
-          <span>{cantidadPorProducto[row.pk_id_producto] || 1}</span>
+          <span className='bg-white py-1 px-3'>{cantidadPorProducto[row.pk_id_producto] || 1}</span>
           <button
             onClick={() => handleIncrementar(row.pk_id_producto)}
             className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
             aria-label={`Incrementar cantidad de ${row.nombre}`}
           >
-            +
+            <CirclePlus></CirclePlus>
           </button>
         </div>
       ),
       export: false // No exportar esta columna
     },
     {
-      name: 'Acción',
+      name: 'Agrgar al carrito',
       cell: row => (
         <button
           onClick={() => handleAgregarAlCarrito(row.pk_id_producto)}
-          className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-3 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           aria-label={`Agregar ${row.nombre} al carrito`}
         >
-          Agregar al carrito
+          <ShoppingCart/>
         </button>
       ),
       export: false // No exportar esta columna
@@ -225,7 +225,7 @@ const AgregarProductosCarritoAdmin = () => {
 
   return (
     <div className="container-table-admin">
-      <h2 className='title-table-admin'>Agregar Productos al Carrito del Cliente</h2>
+      <h2 className='title-table-admin'>Agregar Productos al Carrito del Cliente ID: {id}</h2>
 
       {/* Tabla de Productos */}
       <DataTableExtensions 

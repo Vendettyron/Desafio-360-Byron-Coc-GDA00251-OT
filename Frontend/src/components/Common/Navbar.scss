@@ -10,7 +10,7 @@
 }
         
         .header {
-            background: rgb(32, 32, 32);
+            background: rgb(10,58 ,79 );
             width: 100%;
             height: 100px;
             padding: 0 1.5rem;
@@ -102,7 +102,7 @@
                         border-radius: 12px;
                         font-size: 1rem;
                         font-family: inherit;
-                        background: rgb(162, 162, 246);
+                        background: #f99507;
                         color: rgb(32, 32, 32);
                         border: 1px solid transparent;
                         transition: 0.3s ease all;
@@ -110,14 +110,14 @@
                        
         
                         &:hover {
-                            border-color: rgb(162, 162, 246);
-                            background: rgba(rgb(162, 162, 246), 0.1);
-                            color: rgb(162, 162, 246);
+                            border-color: #f99507;
+                            background: rgba(#f99507, 0.1);
+                            color: #f99507;
                         }
                         &:active {
-                            border-color: rgb(162, 162, 246);
-                            background: linear-gradient(rgba(rgb(162, 162, 246), 0.2), rgba(rgb(162, 162, 246), 0.3));
-                            color: rgb(162, 162, 246);
+                            border-color: #f99507;
+                            background: linear-gradient(rgba(#f99507, 0.2), rgba(#f99507, 0.3));
+                            color: #f99507;
                         }
                         &__login{
                             
@@ -143,7 +143,7 @@
                     position: relative;
         
                     &:hover {
-                        color: rgb(162, 162, 246);
+                        color: #f99507;
                     }
         
                     @include breakpoint(md) {

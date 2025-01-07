@@ -100,7 +100,7 @@ const ModificarPerfil = () => {
   };
 
   return (
-    <>
+    <div className='flex flex-col items-center mt-10'>
       <FormLayout title="Modificar Perfil">
         <form onSubmit={handleSubmit(onSubmit)} style={{ minWidth: 'auto' }}>
           {/* NOMBRE */}
@@ -172,7 +172,7 @@ const ModificarPerfil = () => {
           {error}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

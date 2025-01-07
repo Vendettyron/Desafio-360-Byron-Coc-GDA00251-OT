@@ -13,10 +13,10 @@ const ProductoCard = ({ nombre, precio, proveedor, pk_id_producto, stock, onClic
             >
                 <img
                     src={rutaImagen}
-                    className="p-8 rounded-t-lg"
+                    className="p-8 rounded-t-lg "
                     alt={nombre}
                 />
-                <div className="flex flex-col items-center space-x-1 rtl:space-x-reverse">
+                <div className="flex flex-col items-center space-x-1 rtl:space-x-reverse ">
                     <p className="text-left text-neutral-500 font-light text-sm">{proveedor}</p>
                     <h5 className="">{nombre}</h5>
                     {stock > 0 ? (

@@ -36,10 +36,10 @@ const PedidosItem = ({ order, onUpdate }) => {
   };
 
   const estadosColor = {
-    4: 'text-yellow-600', // En Proceso - Amarillo
-    5: 'text-green-600',  // Confirmado - Verde
-    6: 'text-red-600',    // Cancelado por Admin - Rojo
-    7: 'text-red-600',    // Cancelado de manera voluntaria - Rojo
+    4: 'badge-en-proceso', // En Proceso - Amarillo
+    5: 'badge-activo',  // Confirmado - Verde
+    6: 'badge-inactivo',    // Cancelado por Admin - Rojo
+    7: 'badge-inactivo',    // Cancelado de manera voluntaria - Rojo
   };
 
   const getEstadoColor = (estadoNumero) => estadosColor[estadoNumero] || 'text-gray-600';
@@ -52,7 +52,12 @@ const PedidosItem = ({ order, onUpdate }) => {
         <td className="px-4 py-2">{order.id_pedido}</td>
         <td className="px-4 py-2">{new Date(order.fecha_pedido).toLocaleDateString()}</td>
         <td className="px-4 py-2">Q{order.total.toLocaleString()}</td>
-        <td className={`px-4 py-2 font-semibold ${getEstadoColor(order.estado)}`}> {getEstadoTexto(order.estado)} </td>
+        <td className={`w-full h-full mt-3 ${getEstadoColor(order.estado)}`}>
+          <div className='w-full h-full flex justify-center items-center font-bold '>
+            {getEstadoTexto(order.estado)}
+          </div>
+           
+        </td>
         <td className="px-4 py-2">
           <button
             onClick={toggleExpand}
@@ -73,7 +78,7 @@ const PedidosItem = ({ order, onUpdate }) => {
       </tr>
       {isExpanded && (
         <tr>
-          <td colSpan="5" className="bg-gray-100">
+          <td colSpan="5" className="bg-blue-100 px-4 py-2 ">
             <VerDetallesPedido orderId={order.id_pedido} estado={order.estado} onUpdate={onUpdate} />
           </td>
         </tr>
