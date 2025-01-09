@@ -25,6 +25,7 @@ const ProductoPorId = () => {
   const [loading, setLoading] = useState(true);
   const [cargando, setCargando] = useState(20);
   const [error, setError] = useState('');
+  const [imageTimestamp, setImageTimestamp] = useState(Date.now());
   const { auth } = useContext(AuthContext); // Acceder al contexto de autenticación
 
   useEffect(() => {
@@ -107,7 +108,7 @@ const ProductoPorId = () => {
         {/* Imagen del Producto */}
         <div className="md:w-1/2 flex flex-col items-center content-center justify-center">
           <img
-            src={`/assets/productos/${id}.jpg`}
+            src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
             alt={producto.nombre || 'Imagen del producto'}
             className=" w-2/3 h-auto "
           />

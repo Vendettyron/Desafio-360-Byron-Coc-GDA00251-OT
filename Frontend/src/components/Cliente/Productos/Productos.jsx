@@ -1,8 +1,10 @@
+// src/components/Cliente/Productos/Productos.jsx
+
 import React, { useEffect, useState } from 'react';
 import { obtenerProductosActivos } from '@/services/productosService';
 import { getProveedores } from '@/services/proveedoresService';
 import ProductosCard from '@/components/Cliente/Productos/ProductosCard';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 
 const Productos = () => {
@@ -11,7 +13,8 @@ const Productos = () => {
     const [loading, setLoading] = useState(true);
     const [cargando, setCargando] = useState(20);
     const [error, setError] = useState('');
-    const navigate=useNavigate(); 
+    const navigate = useNavigate(); 
+    const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
     // Crear un mapa para una búsqueda más eficiente de proveedores
     const [proveedoresMap, setProveedoresMap] = useState({});
@@ -42,18 +45,23 @@ const Productos = () => {
                 setError('No se pudieron obtener los datos.');
             } finally {
                 setCargando(100);
+                setImageTimestamp(Date.now()); // Actualizar el timestamp después de cargar los datos
                 setLoading(false);
             }
         };
         fetchDatos();
     }, []);
 
+    // Función para actualizar el timestamp manualmente si es necesario
+    const actualizarTimestamp = () => {
+        setImageTimestamp(Date.now());
+    };
+
     if (loading) {
         return (
             <Progress value={cargando} />
         );
     }
-
 
     if (error) {
         return (
@@ -69,10 +77,10 @@ const Productos = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-10 text-black font-bold text-3xl">Catalogo de productos</h2>
-            <div className=""  id="catalogo">
+            <h2 className="text-center mb-10 text-black font-bold text-3xl">Catálogo de Productos</h2>
+            <div className="" id="catalogo">
                 {productos.map(producto => (
-                    <div key={producto.pk_id_producto} >
+                    <div key={producto.pk_id_producto}>
                         <ProductosCard
                             nombre={producto.nombre}
                             precio={producto.precio}
@@ -80,6 +88,7 @@ const Productos = () => {
                             pk_id_producto={producto.pk_id_producto}
                             stock={producto.stock}
                             onClick={() => handleVerProductoPorId(producto.pk_id_producto)}
+                            imageTimestamp={imageTimestamp} // Pasar el timestamp como prop
                         />
                     </div>
                 ))}
