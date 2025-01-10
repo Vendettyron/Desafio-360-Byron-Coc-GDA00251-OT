@@ -34,7 +34,7 @@ router.post(
   crearProducto
 );
 /**
- * @route GET /api/productos/actualizarProducto
+ * @route GET /api/productos/ObtenerProductos
  * @desc obtener los productos
  * @access Admin y Cliente
  */
@@ -45,7 +45,7 @@ router.get(
   obtenerProductos
 );
 /**
- * @route GET /api/productos/:id
+ * @route GET /api/ObtenerProductosPorId/:id
  * @desc Obtener un producto por su ID
  * @access Admin y Cliente
  */
@@ -56,6 +56,11 @@ router.get(
   obtenerProductoPorId
 );
 
+/**
+ * @route GET /api/productos/ObtenerProductosActivos
+ * @desc Obtener los productos activos
+ * @access Admin y Cliente
+*/
 router.get(
   "/ObtenerProductosActivos",
   authMiddleware,
@@ -64,7 +69,7 @@ router.get(
 );
 
 /**
- * @route PUT /api/productos/ActualizarProducto
+ * @route PUT /api/productos/ActualizarProducto/:id
  * @desc Actualizar un producto existente
  * @access Privado (Admin)
  */
@@ -76,7 +81,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/productos/ActivarProducto
+ * @route PUT /api/productos/ActivarProducto/:id
  * @desc Activar un producto
  * @access Privado (Admin)
  */
@@ -88,7 +93,7 @@ router.put(
   );
 
   /**
- * @route PUT /api/productos/InactivarProducto
+ * @route PUT /api/productos/InactivarProducto/:id
  * @desc inactivr un producto existente
  * @access Privado (Admin)
  */

@@ -10,7 +10,7 @@ import './models/associations.js'; // Importar las asociaciones de los modelos
 
 // Importar rutas
 import authRoutes from './routes/auth.routes.js';
-//import productosRoutes from './routes/productos.routes.js';
+import productosRoutes from './routes/productos.routes.js';
 import categoriasRoutes from './routes/categorias.routes.js';
 //import proveedorRoutes from './routes/proveedor.routes.js';
 //import estadosRoutes from './routes/estados.routes.js';
@@ -36,7 +36,7 @@ app.use(cookieParser()); // Usar cookie-parser
 app.use(cors(corsOptions));
 // Montar las rutas
 app.use('/api/auth', authRoutes);
-//app.use('/api/productos', productosRoutes);
+app.use('/api/productos', productosRoutes);
 app.use('/api/categorias', categoriasRoutes);
 //app.use('/api/proveedor', proveedorRoutes);
 //app.use('/api/estados', estadosRoutes);
@@ -50,7 +50,7 @@ app.get('/api', (req, res) => {
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {
-    res.status(404).json({ message: 'Ruta no encontrada' });
+    res.status(404).json({ message: 'Ruta no encontrada o no importada desde server' });
 });
 
 // Middleware de manejo de errores globales
