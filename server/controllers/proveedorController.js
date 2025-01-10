@@ -1,152 +1,172 @@
-import { poolPromise} from '../database/DbConection.js';
-import proveedoresService from '../services/proveedorService.js';
-
-export const obtenerProveedor = async (req, res) => {
+import {
+    crearProveedorSequelize,
+    actualizarProveedorSequelize,
+    activarProveedorSequelize,
+    inactivarProveedorSequelize,
+    obtenerProveedorPorIdSequelize,
+    obtenerProveedoresSequelize,
+  } from '../services/proveedorService.js';
+  
+  /**
+   * @description Obtener todos los proveedores
+   * @route GET /api/proveedor/ObtenerProveedores
+   * @access Admin y Cliente
+   */
+  export const obtenerProveedor = async (req, res) => {
     try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-        .query('SELECT * FROM Proveedor'); //  consulta
-
-        res.json(result.recordset);
+      const proveedores = await obtenerProveedoresSequelize();
+      res.json(proveedores);
     } catch (error) {
-        console.error('Error obteniendo proveedores:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error obteniendo proveedores (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-}
-
-
-export const obtenerProveedorPorId = async (req, res) => {
-   const { id } = req.params; // Obtener el ID del proveedor desde req.params
-   const pk_id_proveedor = Number(id); // Convertir a número
-
-    // Validar que el ID sea válido
+  };
+  
+  /**
+   * @description Obtener un proveedor por ID
+   * @route GET /api/proveedor/ObtenerProveedorPorId/:id
+   * @access Admin, Cliente
+   */
+  export const obtenerProveedorPorId = async (req, res) => {
+    const { id } = req.params; // ID del proveedor
+    const pk_id_proveedor = Number(id);
+  
     if (!pk_id_proveedor || isNaN(pk_id_proveedor)) {
-        return res.status(400).json({ message: 'ID del proveedor invalido.' });
+      return res.status(400).json({ message: 'ID del proveedor inválido.' });
     }
-
-   try{
-         const proveedor = await proveedoresService.obtenerProveedorPorId(pk_id_proveedor);
-         if(!proveedor){
-              return res.status(404).json({ message: 'Proveedor no encontrado.' });
-         }
-         res.json(proveedor);
-   }catch (error) {
-        console.error('Error obteniendo proveeeedor por ID:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+  
+    try {
+      const proveedor = await obtenerProveedorPorIdSequelize(pk_id_proveedor);
+      if (!proveedor) {
+        return res.status(404).json({ message: 'Proveedor no encontrado.' });
+      }
+      res.json(proveedor);
+    } catch (error) {
+      console.error('Error obteniendo proveedor por ID (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-}
-
-/**
- * Crear un nuevo proveedor
- * Accesible solo para Admin
- */
-export const crearProveedor = async (req, res) => {
+  };
+  
+  /**
+   * @description Crear un nuevo proveedor
+   * @route POST /api/proveedor/CrearProveedor
+   * @access Admin
+   */
+  export const crearProveedor = async (req, res) => {
     const { nombre, telefono, correo, fk_estado } = req.body;
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
-
-    // Validar que se proporcionaron todos los campos necesarios
+    const fk_id_usuario = req.user.id; // ID del usuario (admin) que crea
+  
     if (!nombre || !telefono || !correo || !fk_estado || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
-
+  
     try {
-        await proveedoresService.crearProveedor({
-            nombre,
-            telefono,
-            correo,
-            fk_estado,
-            fk_id_usuario
-        });
-
-        res.status(201).json({ message: 'Proveedor creado exitosamente.' });
+      const idProveedor = await crearProveedorSequelize({
+        nombre,
+        telefono,
+        correo,
+        fk_estado,
+        fk_id_usuario
+      });
+      res.status(201).json({
+        message: 'Proveedor creado exitosamente.',
+        idProveedor
+      });
     } catch (error) {
-        console.error('Error creando proveedor:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error creando proveedor (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
-
-/**
- * Actualizar un proveedor existente
- * Accesible solo para Admin
- */
-export const actualizarProveedor = async (req, res) => {
+  };
+  
+  /**
+   * @description Actualizar un proveedor existente
+   * @route PUT /api/proveedor/ActualizarProveedor/:id
+   * @access Admin
+   */
+  export const actualizarProveedor = async (req, res) => {
     const { nombre, telefono, correo, fk_estado } = req.body;
-    const { id } = req.params; // Obtener el ID del proveedor desde req.params
-    const pk_id_proveedor = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
-
-    // Validar que se proporcionaron todos los campos necesarios
+    const { id } = req.params; // ID del proveedor
+    const pk_id_proveedor = Number(id);
+    const fk_id_usuario = req.user.id; // ID del usuario (admin) que actualiza
+  
     if (!pk_id_proveedor || isNaN(pk_id_proveedor) || !nombre || !telefono || !correo || !fk_estado || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
     }
-
+  
     try {
-        await proveedoresService.actualizarProveedor({
-            pk_id_proveedor,
-            nombre,
-            telefono,
-            correo,
-            fk_estado,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Proveedor actualizado exitosamente.' });
+      const proveedorActualizado = await actualizarProveedorSequelize({
+        pk_id_proveedor,
+        nombre,
+        telefono,
+        correo,
+        fk_estado,
+        fk_id_usuario
+      });
+      res.json({
+        message: 'Proveedor actualizado exitosamente.',
+        proveedor: proveedorActualizado
+      });
     } catch (error) {
-        console.error('Error actualizando proveedor:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error actualizando proveedor (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
-
-/**
- * Activar un proveedor existente
- * Accesible solo para Admin
- */
-export const activarProveedor = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del proveedor desde req.params
-    const pk_id_proveedor = Number(id); // Convertir a número
-    const id_usuario_accion = req.user.id; // Obtener el ID del usuario desde req.user
-
-    // Validar que se proporcionaron todos los campos necesarios
+  };
+  
+  /**
+   * @description Activar un proveedor
+   * @route PUT /api/proveedor/ActivarProveedor/:id
+   * @access Admin
+   */
+  export const activarProveedor = async (req, res) => {
+    const { id } = req.params; // ID del proveedor
+    const pk_id_proveedor = Number(id);
+    const id_usuario_accion = req.user.id; // ID del usuario (admin) que activa
+  
     if (!pk_id_proveedor || isNaN(pk_id_proveedor) || !id_usuario_accion) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
-
+  
     try {
-        await proveedoresService.activarProveedor({
-            pk_id_proveedor,
-            id_usuario_accion
-        });
-
-        res.json({ message: 'Proveedor activado exitosamente.' });
+      const proveedorActivado = await activarProveedorSequelize({
+        pk_id_proveedor,
+        id_usuario_accion
+      });
+      res.json({
+        message: 'Proveedor activado exitosamente.',
+        proveedor: proveedorActivado
+      });
     } catch (error) {
-        console.error('Error activando proveedor:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error activando proveedor (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
-
-/**
- * Inactivar un proveedor existente
- * Accesible solo para Admin
- */
-export const inactivarProveedor = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del proveedor desde req.params
-    const id_proveedor = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
-
-    // Validar que se proporcionaron todos los campos necesarios
+  };
+  
+  /**
+   * @description Inactivar un proveedor
+   * @route PUT /api/proveedor/InactivarProveedor/:id
+   * @access Admin
+   */
+  export const inactivarProveedor = async (req, res) => {
+    const { id } = req.params; // ID del proveedor
+    const id_proveedor = Number(id);
+    const fk_id_usuario = req.user.id; // ID del usuario (admin) que inactiva
+  
     if (!id_proveedor || isNaN(id_proveedor) || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
-
+  
     try {
-        await proveedoresService.inactivarProveedor({
-            id_proveedor,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Proveedor inactivado exitosamente.' });
+      const proveedorInactivado = await inactivarProveedorSequelize({
+        id_proveedor,
+        fk_id_usuario
+      });
+      res.json({
+        message: 'Proveedor inactivado exitosamente.',
+        proveedor: proveedorInactivado
+      });
     } catch (error) {
-        console.error('Error inactivando proveedor:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error inactivando proveedor (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
+  };
+  

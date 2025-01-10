@@ -12,7 +12,7 @@ import './models/associations.js'; // Importar las asociaciones de los modelos
 import authRoutes from './routes/auth.routes.js';
 import productosRoutes from './routes/productos.routes.js';
 import categoriasRoutes from './routes/categorias.routes.js';
-//import proveedorRoutes from './routes/proveedor.routes.js';
+import proveedorRoutes from './routes/proveedor.routes.js';
 //import estadosRoutes from './routes/estados.routes.js';
 //import usuariosRoutes from './routes/usuarios.routes.js';
 //import carritoRoutes from './routes/carrito.routes.js';
@@ -38,7 +38,7 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRoutes);
 app.use('/api/productos', productosRoutes);
 app.use('/api/categorias', categoriasRoutes);
-//app.use('/api/proveedor', proveedorRoutes);
+app.use('/api/proveedor', proveedorRoutes);
 //app.use('/api/estados', estadosRoutes);
 //app.use('/api/usuarios', usuariosRoutes);
 //app.use('/api/carrito', carritoRoutes);

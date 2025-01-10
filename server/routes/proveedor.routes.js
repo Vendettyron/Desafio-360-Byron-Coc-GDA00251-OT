@@ -13,9 +13,6 @@ import Roles from "../config/roles.js";
 
 const router = express.Router();
 
-// Role 1: Administrador
-// Role 2: Cliente
-
 /**
  * @route Get /api/proveedor/ObtenerProveedor
  * @desc Ver la lista de proveedores
