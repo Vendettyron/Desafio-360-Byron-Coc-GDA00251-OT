@@ -1,149 +1,165 @@
-import { poolPromise} from '../database/DbConection.js';
-import categoriasService from '../services/categoriasService.js'
-/**
- * Obtener la lista de Categorias
- * Accesible para Admin
- */
+import { 
+  obtenerCategoriasSequelize,
+  crearCategoriaSequelize,
+  actualizarCategoriaSequelize,
+  activarCategoriaSequelize,
+  inactivarCategoriaSequelize,
+  obtenerCategoriaPorIdSequelize,
+} from '../services/categoriasService.js';
 
+/**
+ * @description Obtener todas las categorias 
+ * @returns {Array} - Lista de categorias
+ * */
 export const obtenerCategorias = async (req, res) => {
-    try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-        .query('SELECT * FROM Categorias'); //  consulta
-
-        res.json(result.recordset);
-    } catch (error) {
-        console.error('Error obteniendo categorias:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
+  try {
+    const categorias = await obtenerCategoriasSequelize();
+    res.json(categorias);
+  } catch (error) {
+    console.error('Error obteniendo categorias (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 };
+
 /**
- * Obtener una categoria por ID
- * Accesible para Admin y cliente
- */
+ * @description Obtener una categoria por su ID
+ * @returns {Object} - Categoria encontrada
+ * */
 
 export const obtenerCategoriaPorId = async (req, res) => {
-    const { id } = req.params; // Obtener el ID de la categoria desde req.params
-    const pk_id_categoria = Number(id); // Convertir a número
-
-    // Validar que el ID sea válido
-    if (!pk_id_categoria || isNaN(pk_id_categoria)) {
-        return res.status(400).json({ message: 'ID de la categoria invalido.' });
+    const { id } = req.params;
+    const id_categoria = Number(id);
+    
+    if (!id_categoria) {
+        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
-
+    
     try {
-        const categoria = await categoriasService.obtenerCategoriaPorId(pk_id_categoria);
-        if (!categoria) {
-            return res.status(404).json({ message: 'Categoria no encontrada.' });
-        }
+        const categoria = await obtenerCategoriaPorIdSequelize(id_categoria);
         res.json(categoria);
     } catch (error) {
-        console.error('Error obteniendo categoria por ID:', error);
+        console.error('Error obteniendo categoria por ID (Sequelize):', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
-}
+};
+
+
 /**
- * Crear una nueva Categoria
- * Accesible para Admin
- */
+ * @description Crear una nueva categoria
+ * @returns {Object} - Mensaje de éxito
+ * */
+
 export const crearCategoria = async (req, res) => {
-    const { nombre,descripcion,fk_estado} = req.body;
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
+  const { nombre, descripcion, fk_estado } = req.body;
+  const fk_id_usuario = req.user.id; // ID del usuario autenticado en el token JWT
 
-    // Validar que se proporcionaron todos los campos necesarios
-    if (!nombre || !descripcion || !fk_estado || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
-    }
+  if (!nombre || !descripcion || !fk_estado || !fk_id_usuario) {
+    return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+  }
 
-    try {
-        await categoriasService.crearCategoria({
-            nombre,
-            descripcion,
-            fk_estado,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Categoria creada con exito' });
-    } catch (error) {
-        console.error('Error creando categoria:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
+  try {
+    console.log('Creando categoria (Sequelize)...');
+    // Usar Sequelize
+    const nuevaCategoria = await crearCategoriaSequelize({
+      nombre,
+      descripcion,
+      fk_estado,
+      fk_id_usuario,
+    });
+    res.json({
+      message: 'Categoría creada con éxito',
+      categoria: nuevaCategoria
+    });
+  } catch (error) {
+    console.error('Error creando categoria (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 };
 
 /**
- * Actualizar una categoria existente
- * Accesible para Admin
- */
-
+ * @description Actualizar una categoria existente
+ * @returns {Object} - Mensaje de éxito
+ * */
 export const actualizarCategoria = async (req, res) => {
-    const { nombre, descripcion, fk_estado } = req.body;
-    const { id } = req.params; // Obtener el ID de la categoria desde req.params
-    const id_categoria = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
+  const { nombre, descripcion, fk_estado } = req.body;
+  const { id } = req.params;
+  const id_categoria = Number(id);
+  const fk_id_usuario = req.user.id;
 
-    // Validar que se proporcionaron todos los campos necesarios
-    if (!id_categoria ||!nombre || !descripcion || !fk_estado||!fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
-    }
+  if (!id_categoria || !nombre || !descripcion || !fk_estado || !fk_id_usuario) {
+    return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+  }
 
-    try {
-        await categoriasService.actualizarCategoria({
-            id_categoria,
-            nombre,
-            descripcion,
-            fk_estado,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Categoria actualizada con exito' });
-    } catch (error) {
-        console.error('Error actualizando categoria:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
+  try {
+    const categoriaActualizada = await actualizarCategoriaSequelize({
+      id_categoria,
+      nombre,
+      descripcion,
+      fk_estado,
+      fk_id_usuario,
+    });
+    res.json({
+      message: 'Categoría actualizada con éxito',
+      categoria: categoriaActualizada
+    });
+  } catch (error) {
+    console.error('Error actualizando categoria (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
 };
 
+/**
+ * @description Activar una categoria Por ID
+ * @returns {Object} - Mensaje de éxito
+ * */
 export const activarCategoria = async (req, res) => {
-    const { id } = req.params; // Obtener el ID de la categoria desde req.params
-    const pk_id_categoria = Number(id); // Convertir a número
-    const id_usuario_accion = req.user.id; // Obtener el ID del usuario desde req.user
+  const { id } = req.params;
+  const pk_id_categoria = Number(id);
+  const id_usuario_accion = req.user.id;
 
-    // Validar que se proporcionaron todos los campos necesarios
-    if (!pk_id_categoria || !id_usuario_accion) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
-    }
+  if (!pk_id_categoria || !id_usuario_accion) {
+    return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+  }
 
-    try {
-        await categoriasService.activarCategoria({
-            pk_id_categoria,
-            id_usuario_accion
-        });
+  try {
+    const categoriaActivada = await activarCategoriaSequelize({
+      pk_id_categoria,
+      id_usuario_accion,
+    });
+    res.json({
+      message: 'Categoría activada con éxito',
+      categoria: categoriaActivada
+    });
+  } catch (error) {
+    console.error('Error activando categoria (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
 
-        res.json({ message: 'Categoria activada con exito' });
-    } catch (error) {
-        console.error('Error activando categoria:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-}
-
+/**
+ * @description Inactivar una categoria Por ID, ademas inactiva los productos asociados
+ * @returns {Object} - Mensaje de éxito
+ * */
 export const inactivarCategoria = async (req, res) => {
-    const { id } = req.params; // Obtener el ID de la categoria desde req.params
-    const id_categoria = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario desde req.user
-
-    // Validar que se proporcionaron todos los campos necesarios
+    const { id } = req.params;
+    const id_categoria = Number(id);
+    const fk_id_usuario = req.user.id;
+  
     if (!id_categoria || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios.' });
     }
-
+  
     try {
-        await categoriasService.inactivarCategoria({
-            id_categoria,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Categoria Inactivada con exito' });
+      const { categoria, numProductosAfectados } = await inactivarCategoriaSequelize({
+        id_categoria,
+        fk_id_usuario
+      });
+      res.json({
+        message: `Categoría inactivada con éxito. Se inactivaron ${numProductosAfectados} producto(s).`,
+        categoria,
+      });
     } catch (error) {
-        console.error('Error Inactivando categoria:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error inactivando categoria (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-}
+  };

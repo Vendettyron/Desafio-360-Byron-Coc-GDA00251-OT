@@ -1,4 +1,3 @@
-// backend/config/db.js
 import sql from 'mssql';
 import dotenv from 'dotenv';
 dotenv.config();

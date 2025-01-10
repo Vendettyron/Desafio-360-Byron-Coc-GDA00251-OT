@@ -3,12 +3,13 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
 import Roles from "../config/roles.js";
 
-import { obtenerCategorias, 
+import { 
     crearCategoria,
     actualizarCategoria,
     activarCategoria,
     inactivarCategoria,
-    obtenerCategoriaPorId
+    obtenerCategoriaPorId,
+    obtenerCategorias
 } from "../controllers/categoriasController.js";
 
 // Role 1: Administrador
