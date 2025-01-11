@@ -11,7 +11,6 @@ import Roles from "../config/roles.js";
 
 const router = express.Router();
 
-
 /**
  * @route GET /api/estados/ObtenerEstados
  * @desc Obtener la lista de estados
@@ -35,9 +34,6 @@ router.get(
     roleMiddleware([Roles.ADMIN]),
     obtenerEstadoPorId
 );
-
-
-
 
 /**
  * @route POST /api/estados/CrearEstado
