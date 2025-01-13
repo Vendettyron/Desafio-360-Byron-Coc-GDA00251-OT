@@ -16,7 +16,6 @@ import {
 
 const router = express.Router();
 
-
 /**
  * @route GET /api/usuarios/ObtenerUsuarios
  * @desc Ver la lista de usuarios
@@ -53,7 +52,6 @@ router.put(
     actualizarUsuario
 );
 
-
 /**
  * @route PUT /api/usuarios/ActualizarUsuarioElMismo
  * @desc El clieten actualiza su información
@@ -78,8 +76,6 @@ router.put(
     roleMiddleware([Roles.CLIENTE]),
     actualizarPasswordUsuario
 );
-
-
 
 /**
  * @route PUT /api/usuarios/InactivarUsuario/:id

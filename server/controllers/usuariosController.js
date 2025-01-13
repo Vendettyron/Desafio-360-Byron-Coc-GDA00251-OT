@@ -1,258 +1,247 @@
-import { poolPromise} from '../database/DbConection.js';
-import usuariosService from '../services/usuariosService.js';
-import bcrypt from 'bcrypt';
-import { sql } from '../database/DbConection.js';
-
-export const ObtenerUsuarioPorId = async (req, res) => {
-    const {id} = req.params; // Obtener el ID del usuario desde req.params
-    const pk_id_usuario = Number(id); // Convertir a número
-
-    // Validar que el ID sea válido
-
+import {
+    obtenerUsuarioPorIdSequelize,
+    obtenerUsuariosSequelize,
+    actualizarUsuarioSequelize,
+    actualizarUsuarioElMismoSequelize,
+    actualizarPasswordUsuarioSequelize,
+    inactivarUsuarioSequelize,
+    activarUsuarioSequelize,
+    inactivarUsuarioElMismoSequelize,
+  } from '../services/usuariosService.js';
+  
+  import bcrypt from 'bcrypt';
+  
+  /**
+   * @description Obtener un usuario por su ID
+   * @route GET /api/usuarios/ObtenerUsuarioPorId/:id
+   * @access Admin
+   */
+  export const ObtenerUsuarioPorId = async (req, res) => {
+    const { id } = req.params;
+    const pk_id_usuario = Number(id);
+  
     if (!pk_id_usuario) {
-        return res.status(400).json({ message: 'ID del usuario invalido.' });
+      return res.status(400).json({ message: 'ID del usuario inválido.' });
     }
-
+  
     try {
-        const usuario = await usuariosService.obtnerUsuarioPorId(pk_id_usuario);
-        if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
-        }
-        res.json(usuario);
-    } catch (error) {   
-        console.error('Error obteniendo usuario por ID:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-}
-
-
-// Obtener la lista de usuarios
-export const obtenerUsuarios = async (req, res) => {
-    try {
-        const pool = await poolPromise;
-        const result = await pool.request()
-        .query('SELECT * FROM Usuarios'); //  consulta
-
-        res.json(result.recordset);
+      const usuario = await obtenerUsuarioPorIdSequelize(pk_id_usuario);
+      if (!usuario) {
+        return res.status(404).json({ message: 'Usuario no encontrado.' });
+      }
+      res.json(usuario);
     } catch (error) {
-        console.error('Error obteniendo Usuarios:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error obteniendo usuario por ID (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-}
-
-/**
- * Actualizar un usuario existente
- * Accesible solo para Admin
- */
-export const actualizarUsuario = async (req, res) => {
-    const { nombre, apellido, direccion, correo, telefono, password, fk_rol, fk_estado } = req.body;
-    const { id } = req.params; // Obtener el ID del usuario desde req.params
-    const id_usuario = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario que realiza la operación 
-
-    // Validar que se proporcionaron todos los campos necesarios
+  };
+  
+  /**
+   * @description Obtener la lista de usuarios
+   * @route GET /api/usuarios/ObtenerUsuarios
+   * @access Admin
+   */
+  export const obtenerUsuarios = async (req, res) => {
+    try {
+      const usuarios = await obtenerUsuariosSequelize();
+      res.json(usuarios);
+    } catch (error) {
+      console.error('Error obteniendo Usuarios (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+  };
+  
+  /**
+   * @description Actualizar un usuario existente (Admin)
+   * @route PUT /api/usuarios/ActualizarUsuario/:id
+   * @access Admin
+   */
+  export const actualizarUsuario = async (req, res) => {
+    const { id } = req.params;
+    const id_usuario = Number(id); // ID del usuario a actualizar
+    const {
+      nombre,
+      apellido,
+      direccion,
+      correo,
+      telefono,
+      password,
+      fk_rol,
+      fk_estado
+    } = req.body;
+    const fk_id_usuario = req.user.id; // ID del admin que hace la operación
+  
     if (!id_usuario || !nombre || !apellido || !direccion || !correo || !telefono || !password || !fk_rol || !fk_estado || !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+      return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
     }
-
+  
     try {
-        await usuariosService.actualizarUsuario({
-            id_usuario,
-            nombre,
-            apellido,
-            direccion,
-            correo,
-            telefono,
-            password,
-            fk_rol,
-            fk_estado,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Usuario actualizado exitosamente.' });
+      await actualizarUsuarioSequelize({
+        id_usuario,
+        nombre,
+        apellido,
+        direccion,
+        correo,
+        telefono,
+        password,
+        fk_rol,
+        fk_estado,
+        fk_id_usuario,
+      });
+      res.json({ message: 'Usuario actualizado exitosamente.' });
     } catch (error) {
-        console.error('Error actualizando usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error actualizando usuario (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
-
-/**
- * El usuario actualiza su propia cuenta
- * Accesible solo para clientes
- */
-export const actualizarUsuarioElMismo = async (req, res) => {
-    const { nombre, apellido, direccion, correo, telefono} = req.body;
-    const pk_id_usuario = req.user.id; // Obtener el ID del usuario que realiza la operación
-
-    // Validar que se proporcionaron todos los campos necesarios
-    if ( !nombre || !apellido || !direccion || !correo || !telefono || !pk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+  };
+  
+  /**
+   * @description El usuario actualiza su propia cuenta (sin cambiar rol/estado/password)
+   * @route PUT /api/usuarios/ActualizarUsuarioElMismo
+   * @access Cliente
+   */
+  export const actualizarUsuarioElMismo = async (req, res) => {
+    const {
+      nombre,
+      apellido,
+      direccion,
+      correo,
+      telefono
+    } = req.body;
+    const pk_id_usuario = req.user.id; // ID del usuario obtenido del token
+  
+    if (!nombre || !apellido || !direccion || !correo || !telefono || !pk_id_usuario) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
     }
-
+  
     try {
-        await usuariosService.actualizarUsuarioElMismo({
-            pk_id_usuario,
-            nombre,
-            apellido,
-            direccion,
-            correo,
-            telefono,     
-        });
-
-        res.json({ message: 'Usuario actualizado exitosamente.' });
+      await actualizarUsuarioElMismoSequelize({
+        pk_id_usuario,
+        nombre,
+        apellido,
+        direccion,
+        correo,
+        telefono,
+      });
+      res.json({ message: 'Usuario actualizado exitosamente.' });
     } catch (error) {
-        console.error('Error actualizando usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+      console.error('Error actualizando usuario (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
     }
-};
-
-/**
- * El cliente actualiza su contraseña
- * Accesible solo para clientes
- */
-
-export const actualizarPasswordUsuario = async (req, res) => {
+  };
+  
+  /**
+   * @description El usuario actualiza su contraseña
+   * @route PUT /api/usuarios/ActualizarPassword
+   * @access Cliente
+   */
+  export const actualizarPasswordUsuario = async (req, res) => {
     const { actualPassword, newPassword } = req.body;
-    const pk_id_usuario = req.user.id; // Obtener el ID del usuario que realiza la operación
-
-    // Validar que se proporcionaron todos los campos necesarios
-
-    if (!newPassword || !pk_id_usuario || !actualPassword) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
+    const pk_id_usuario = req.user.id; // ID del usuario obtenido del token
+  
+    if (!actualPassword || !newPassword || !pk_id_usuario) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
     }
+  
+    try {
+      // 1. Verificar la contraseña actual
+      const usuario = await obtenerUsuarioPorIdSequelize(pk_id_usuario);
+      if (!usuario) {
+        return res.status(404).json({ message: 'Usuario no encontrado.' });
+      }
+  
+      const passwordValida = await bcrypt.compare(actualPassword, usuario.password);
+      if (!passwordValida) {
+        return res.status(401).json({ message: 'Contraseña es incorrecta.' });
+      }
+  
+      // 2. Actualizar la contraseña
+      await actualizarPasswordUsuarioSequelize({
+        pk_id_usuario,
+        newPassword
+      });
+      res.json({ message: 'Contraseña actualizada exitosamente.' });
+    } catch (error) {
+      console.error('Error actualizando contraseña (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+  };
 
-    try {   
+    /**
+     * @description Activar un usuario existente (ADMIN)
+     * @route PUT /api/usuarios/ActivarUsuario/:id
+     * @access Admin
+     */
+    export const activarUsuario = async (req, res) => {
+        const { id } = req.params;
+        const pk_id_usuario = Number(id);
+        const id_usuario_accion = req.user.id;
         
-        const usuario = await usuariosService.obtnerUsuarioPorId(pk_id_usuario);
-        if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        if (!pk_id_usuario || !id_usuario_accion) {
+            return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
         }
-
-        // Verificar la contraseña actual utilizando bcrypt
-
-        const passwordValida = await bcrypt.compare(actualPassword, usuario.password);
-
-        if (!passwordValida) {
-            return res.status(401).json({ message: 'Contraseña actual incorrecta.' });
-        }
-
-        //Actualizar la contraseña en la base de datos
-        await usuariosService.actualizarPasswordUsuario({
-            pk_id_usuario,
-            newPassword
-        });
-
-        res.json({ message: 'Contraseña actualizada exitosamente.' });
-    }
-    catch (error) {
-        console.error('Error actualizando contraseña:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-}
-
-/**
- * Inactivar un usuario existente
- * Accesible solo para Admin
- */
-export const inactivarUsuario = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del usuario desde req.params
-    const id_usuario = Number(id); // Convertir a número
-    const fk_id_usuario = req.user.id; // Obtener el ID del usuario que realiza la operación
-
-    // Validar que se proporcionaron todos los campos necesarios
-    if (!id_usuario ||  !fk_id_usuario) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
-    }
-
-    try {
-        await usuariosService.inactivarUsuario({
-            id_usuario,
-            fk_id_usuario
-        });
-
-        res.json({ message: 'Usuario inactivado exitosamente.' });
-    } catch (error) {
-        console.error('Error inactivando usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-};
-
-/**
- * El usuario Elimina su cuenta (inactiva)
- * Accesible par clientes
- */
-export const inactivarUsuarioElMismo = async (req, res) => {
-    const { correo, password } = req.body; // Obtener correo y contraseña desde el cuerpo de la solicitud
-    const id_usuario = req.user.id; // Obtener el ID del usuario desde el token JWT
-
-    // Validar que se proporcionaron ambos campos
-    if (!correo || !password) {
-        return res.status(400).json({ message: 'Se requieren el correo y la contraseña.' });
-    }
-
-    try {
-        const pool = await poolPromise;
-
-        // Obtener el usuario desde la base de datos
-        const usuarioResult = await pool.request()
-            .input('correo', sql.VarChar, correo)
-            .query('SELECT pk_id_usuario, password, fk_estado FROM Usuarios WHERE correo = @correo');
-
-        if (usuarioResult.recordset.length === 0) {
-            return res.status(404).json({ message: 'Usuario no encontrado.' });
-        }
-
-        const usuario = usuarioResult.recordset[0];
-
-        // Verificar si el usuario ya está inactivo
-        if (usuario.fk_estado === 2) {
-            return res.status(400).json({ message: 'La cuenta ya está inactiva.' });
-        }
-
-        // Verificar la contraseña utilizando bcrypt
-        const passwordValida = await bcrypt.compare(password, usuario.password);
-
-        if (!passwordValida) {
-            return res.status(401).json({ message: 'Contraseña incorrecta.' });
-        }
-
-        // Llamar al Stored Procedure para inactivar la cuenta
-        await pool.request()
-            .input('id_usuario', sql.Int, id_usuario)
-            .input('fk_id_usuario', sql.Int, id_usuario) // Mismo usuario
-            .execute('InactivarUsuarioElMismo');
-
-
-        res.status(200).json({ message: 'Cuenta inactivada exitosamente.' });
-    } catch (error) {
-        console.error('Error en eliminarUsuarioElMismo:', error);
-        res.status(500).json({ message: 'Error interno del servidor.' });
-    }
-};
-
-/**
- * Activar un usuario existente
- * Accesible solo para Admin
- */
-export const activarUsuario = async (req, res) => {
-    const { id } = req.params; // Obtener el ID del usuario desde req.params
-    const pk_id_usuario = Number(id); // Convertir a número
-    const id_usuario_accion = req.user.id; // Obtener el ID del usuario que realiza la acción
-
-    // Validar que se proporcionaron todos los campos necesarios
-    if (!pk_id_usuario || !id_usuario_accion) {
-        return res.status(400).json({ message: 'Faltan campos obligatorios o los datos son inválidos.' });
-    }
-
-    try {
-        await usuariosService.activarUsuario({
+        
+        try {
+            await activarUsuarioSequelize({
             pk_id_usuario,
             id_usuario_accion
-        });
-
-        res.json({ message: 'Usuario activado exitosamente.' });
-    } catch (error) {
-        console.error('Error activando usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
+            });
+            res.json({ message: 'Usuario activado exitosamente.' });
+        } catch (error) {
+            console.error('Error activando usuario (Sequelize):', error);
+            res.status(500).json({ error: 'Error interno del servidor.' });
+        }
+    };
+      
+  /**
+   * @description Inactivar un usuario existente (ADMIN)
+   * @route PUT /api/usuarios/InactivarUsuario/:id
+   * @access Admin
+   */
+  export const inactivarUsuario = async (req, res) => {
+    const { id } = req.params;
+    const id_usuario = Number(id);
+    const fk_id_usuario = req.user.id; // Admin que hace la operación
+  
+    if (!id_usuario || !fk_id_usuario) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios o datos inválidos.' });
     }
-};
+  
+    try {
+      await inactivarUsuarioSequelize({
+        id_usuario,
+        fk_id_usuario
+      });
+      res.json({ message: 'Usuario inactivado exitosamente.' });
+    } catch (error) {
+      console.error('Error inactivando usuario (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+  };
+  
+  /**
+   * @description El usuario inactiva su propia cuenta, verificando su correo y password
+   * @route PUT /api/usuarios/InactivarUsuarioElMismo
+   * @access Cliente
+   */
+  export const inactivarUsuarioElMismo = async (req, res) => {
+    const { correo, password } = req.body;
+    const pk_id_usuario = req.user.id;
+  
+    if (!correo || !password) {
+      return res.status(400).json({ message: 'Se requieren el correo y la contraseña.' });
+    }
+  
+    try {
+      await inactivarUsuarioElMismoSequelize({
+        pk_id_usuario,
+        correo,
+        password
+      });
+      res.json({ message: 'Cuenta inactivada exitosamente.' });
+    } catch (error) {
+      console.error('Error inactivarUsuarioElMismo (Sequelize):', error);
+      res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+  };
+  
