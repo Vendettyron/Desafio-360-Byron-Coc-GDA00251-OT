@@ -13,8 +13,7 @@ const Carrito = sequelize.define('Carrito', {
   },
   fecha_creacion: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
+    allowNull: true,
   },
   total: {
     type: DataTypes.DECIMAL(10,2),

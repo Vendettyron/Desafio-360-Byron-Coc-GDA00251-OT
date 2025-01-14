@@ -16,7 +16,6 @@ import { obtenerDetallesCarritoPorUsuario,
     EliminarDetallesCarritoAdmin
 } from "../controllers/carrito.Controller.js";
 
-
 const router = express.Router();
 
 /**
@@ -32,7 +31,6 @@ router.get(
     obtenerDetallesCarritoPorUsuario
 );
 
-
 /**
  * @route GET /api/carrito/ObtenerDetallesCarritoPorUsuarioAdmin
  * @desc Ver detalles del carrito de un usuario desde el admin
@@ -46,11 +44,10 @@ router.get(
     obtenerDetallesCarritoPorUsuarioAdmin
 );
 
-
 /**
  * @route POST /api/carrito/AgregarProductoAlCarrito/:id
  * @desc Agregar un producto al carrito
- * @access cliuente y admin
+ * @access cliente y admin
  * @param {number} id - ID del producto
  */
 
@@ -73,20 +70,6 @@ router.post(
     authMiddleware,
     roleMiddleware([Roles.ADMIN]),
     AgregarProductoAlCarritoAdmin
-);
-
-/**
- * @route POST /api/carrito/AgregarProductoAlCarrito/:id
- * @desc Agregar un producto al carrito
- * @access cliuente y admin
- * @param {number} id - ID del producto
- */
-
-router.post( 
-    "/AgregarProductoAlCarrito/:id",
-    authMiddleware,
-    roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
-    AgregarProductoAlCarrito
 );
 
 /**
@@ -141,7 +124,6 @@ router.delete(
     EliminarDetallesCarritoAdmin
 );
 
-
 /**
  * @route PUT /api/carrito/ConfirmarCarrito
  * @desc Confirmar un carrito para que se vuelva un Pedido
@@ -180,7 +162,5 @@ router.put(
     roleMiddleware([Roles.ADMIN]),
     ActualizarDetalleCarritoAdmin
 );
-
-
 
 export default router;

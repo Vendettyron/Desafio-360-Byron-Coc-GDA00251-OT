@@ -15,7 +15,7 @@ import categoriasRoutes from './routes/categorias.routes.js';
 import proveedorRoutes from './routes/proveedor.routes.js';
 import estadosRoutes from './routes/estados.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
-//import carritoRoutes from './routes/carrito.routes.js';
+import carritoRoutes from './routes/carrito.routes.js';
 //import pedidoRoutes from './routes/pedido.routes.js';
 
 // Importar middleware de manejo de errores
@@ -23,8 +23,6 @@ const corsOptions = {
     origin: 'http://localhost:5173',
     credentials: true,
 };
-
-
 
 const app = express();
 
@@ -41,7 +39,7 @@ app.use('/api/categorias', categoriasRoutes);
 app.use('/api/proveedor', proveedorRoutes);
 app.use('/api/estados', estadosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
-//app.use('/api/carrito', carritoRoutes);
+app.use('/api/carrito', carritoRoutes);
 //app.use('/api/pedido', pedidoRoutes);
 
 app.get('/api', (req, res) => {

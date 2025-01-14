@@ -90,7 +90,7 @@ CREATE TABLE Productos (
 CREATE TABLE Pedidos (
     pk_id_pedido INT PRIMARY KEY IDENTITY(1,1),
     fk_cliente INT NOT NULL,
-    fecha_pedido DATETIME NOT NULL DEFAULT GETDATE(),
+    fecha_pedido DATETIME DEFAULT GETDATE(),
     total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
 	fk_estado INT NOT NULL,
     FOREIGN KEY (fk_cliente) REFERENCES Usuarios(pk_id_usuario),
@@ -136,7 +136,7 @@ CREATE TABLE Detalle_Carrito (
 -- Tabla: Log
 CREATE TABLE log (
     pk_id_log INT IDENTITY(1,1) PRIMARY KEY,
-    fechaHora DATETIME NOT NULL,         -- Fecha y hora del evento
+    fechaHora DATETIME DEFAULT GETDATE(),         -- Fecha y hora del evento
     fk_id_usuario INT NULL,              -- Usuario que realiz� la operaci�n
     entidadAfectada VARCHAR(50) NOT NULL, -- Nombre de la tabla o m�dulo afectado
     operacion VARCHAR(20) NOT NULL,      -- Tipo de operaci�n (INSERT, UPDATE, DELETE, etc.)
