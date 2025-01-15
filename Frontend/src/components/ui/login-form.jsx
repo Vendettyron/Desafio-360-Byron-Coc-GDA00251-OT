@@ -12,6 +12,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Roles from "@/config/roles";
+import toast from "react-hot-toast";
 
 
 export function LoginForm({ className, ...props }) {
@@ -61,10 +62,10 @@ export function LoginForm({ className, ...props }) {
           navigate('/admin');
         }
        
-       
+       toast.success('Inicio de sesión exitoso');
 
       } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        toast.error('Credenciales inválidas. Por favor, intenta de nuevo.');
         setErrorMessage(error.message || 'Credenciales inválidas. Por favor, intenta de nuevo.');
       } finally {
         setLoading(false); // Finalizar estado de carga

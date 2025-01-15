@@ -15,6 +15,7 @@ const Pedidos = () => {
     try {
       setCargando(50);
       const data = await obtenerPedidosCliente();
+      console.log(data);
       setPedidos(Array.isArray(data) ? data : []);
       setCargando(80);
     } catch (err) {
@@ -64,7 +65,7 @@ const Pedidos = () => {
           </thead>
           <tbody className='divide-y divide-gray-200 bg-white'>
             {pedidos.map((pedido) => (
-              <PedidosItem key={pedido.id_pedido} order={pedido} onUpdate={fetchPedidos} />
+              <PedidosItem key={pedido.pk_id_pedido} order={pedido} onUpdate={fetchPedidos} />
             ))}
           </tbody>
         </table>

@@ -63,7 +63,7 @@ const VerDetallesPedido = ({ orderId }) => {
               <td className="px-4 py-2">
                 <img src={`/assets/productos/${item.fk_id_producto}.jpg?t=${Date.now()}`} alt={item.nombre_producto} className=" w-24 h-auto object-cover" />
               </td>
-              <td className="px-4 py-2">{item.nombre_producto}</td>
+              <td className="px-4 py-2">{item.ProductoDetallePedido.nombre}</td>
               <td className="px-4 py-2">Q{item.precio_unitario.toLocaleString()}</td>
               <td className="px-4 py-2">{item.cantidad}</td>
               <td className="px-4 py-2">Q{item.subtotal.toLocaleString()}</td>

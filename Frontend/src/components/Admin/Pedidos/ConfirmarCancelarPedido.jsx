@@ -100,13 +100,19 @@ const ConfirmarCancelarPedido = () => {
 
     return (
         <>
-            <h1 className="text-2xl font-semibold text-gray-800">Confirmar o Cancelar Pedido</h1>
+            <h1 className="title-table-admin">Confirmar o Cancelar Pedido</h1>
             <FormLayout>
                 {/* /* Información del Pedido */}
                 <div className='max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm/6 shadow-lg ring-1 ring-gray-900/5 p-4'>   
                     <p><strong>Id Pedido:</strong> {idpedido}</p>
-                    <p><strong>Fecha Pedido y Hora:</strong> {pedido.length > 0 ? new Date(pedido[0].fecha_pedido).toLocaleString() : 'N/A'}</p>
-                    <p><strong>Total:</strong> {pedido.length > 0 ? `Q${pedido[0].total.toLocaleString()}` : 'N/A'}</p>
+                    <p><strong>Fecha Pedido y Hora:</strong> {pedido.fecha_pedido
+                ? new Date(pedido.fecha_pedido).toLocaleString()
+                : 'N/A'
+              }</p>
+                    <p><strong>Total:</strong> {pedido.total
+                ? `Q${pedido.total.toLocaleString()}`
+                : 'N/A'
+              }</p>
                 </div>
 
                 {/* Botones de Acción */}

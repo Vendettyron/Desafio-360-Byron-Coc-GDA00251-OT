@@ -97,6 +97,7 @@ const Carrito = () => {
     }
 
     try {
+      console.log('Confirmar carrito');
       const respuesta = await confirmarCarrito();
       if (respuesta && respuesta.message) {
         toast.success(respuesta.message);

@@ -105,13 +105,22 @@ export const crearCategoriaSequelize = async (data) => {
         descripcion,
         fk_estado,
       }, { transaction: t });
+
+      // 3. Inactivar Productos asociados
+      const [numProductosAfectados] = await Producto.update({
+        fk_estado: Estados.INACTIVO,
+      }, {
+        where: { fk_categoria: id_categoria },
+        transaction: t,
+      });
+
   
-      // 3. Registrar en Log
+      // 4. Registrar en Log
       await Log.create({
         fk_id_usuario,
         entidadAfectada: 'Categorias',
         operacion: 'UPDATE',
-        detalles: `Categoría actualizada: ID=${id_categoria} nombre=${nombre}`,
+        detalles: `Categoría actualizada: ID=${id_categoria} nombre=${nombre} productosInactivados=${numProductosAfectados}`,
         resultado: 'Éxito',
       }, { transaction: t });
   

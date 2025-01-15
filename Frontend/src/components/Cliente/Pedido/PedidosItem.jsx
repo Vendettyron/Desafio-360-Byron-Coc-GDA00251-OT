@@ -17,7 +17,7 @@ const PedidosItem = ({ order, onUpdate }) => {
     if (!window.confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
     setLoading(true);
     try {
-      await cancelarPedidoCliente(order.id_pedido);
+      await cancelarPedidoCliente(order.pk_id_pedido);
       toast.success('Pedido cancelado exitosamente.');
       onUpdate();
     } catch (error) {
@@ -49,12 +49,12 @@ const PedidosItem = ({ order, onUpdate }) => {
   return (
     <>
       <tr>
-        <td className="px-4 py-2">{order.id_pedido}</td>
+        <td className="px-4 py-2">{order.pk_id_pedido}</td>
         <td className="px-4 py-2">{new Date(order.fecha_pedido).toLocaleDateString()}</td>
         <td className="px-4 py-2">Q{order.total.toLocaleString()}</td>
-        <td className={`w-full h-full mt-3 ${getEstadoColor(order.estado)}`}>
+        <td className={`w-full h-full mt-3 ${getEstadoColor(order.fk_estado)}`}>
           <div className='w-full h-full flex justify-center items-center font-bold '>
-            {getEstadoTexto(order.estado)}
+            {getEstadoTexto(order.fk_estado)}
           </div>
            
         </td>
@@ -65,7 +65,7 @@ const PedidosItem = ({ order, onUpdate }) => {
           >
             {isExpanded ? 'Ocultar' : 'Ver Detalles'}
           </button>
-          {order.estado === Estados.EN_PROCESO && (
+          {order.fk_estado === Estados.EN_PROCESO && (
             <button
               onClick={handleEliminar}
               className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
@@ -79,7 +79,7 @@ const PedidosItem = ({ order, onUpdate }) => {
       {isExpanded && (
         <tr>
           <td colSpan="5" className="bg-blue-100 px-4 py-2 ">
-            <VerDetallesPedido orderId={order.id_pedido} estado={order.estado} onUpdate={onUpdate} />
+            <VerDetallesPedido orderId={order.pk_id_pedido} fk_estado={order.fk_estado} onUpdate={onUpdate} />
           </td>
         </tr>
       )}
@@ -89,10 +89,10 @@ const PedidosItem = ({ order, onUpdate }) => {
 
 PedidosItem.propTypes = {
   order: PropTypes.shape({
-    id_pedido: PropTypes.number.isRequired,
+    pk_id_pedido: PropTypes.number.isRequired,
     fecha_pedido: PropTypes.string.isRequired,
     total: PropTypes.number.isRequired,
-    estado: PropTypes.number.isRequired,
+    fk_estado: PropTypes.number.isRequired,
   }).isRequired,
   onUpdate: PropTypes.func.isRequired,
 };

@@ -23,6 +23,10 @@ export const obtenerPedidos = async () => {
 export const obtenerPedidosCliente = async () => {
     try {
         const response = await api.get(`/pedido/ObtenerPedidosCliente`);
+        console.log(response.data);
+        console.log(response.data);
+        console.log(response.data);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(`Error al obtener pedidos del cliente`, error);
@@ -40,6 +44,7 @@ export const obtenerDetallesClientePorAdmin = async (idcliente, idpedido) => {
     try {
         console.log(idcliente, idpedido);
         const response = await api.get(`/pedido/obtenerDetallesClientePorAdmin/${idcliente}/${idpedido}`);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(`Error al obtener detalles del pedido ${idpedido} para el cliente ${idcliente}:`, error);

@@ -1,6 +1,7 @@
 import { useState,lazy,Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '@/hooks/ProtectedRoute';
+import { Toaster } from 'react-hot-toast';
 
 import {AdminLayout } from '@/layouts/admin/AdminLayout'; // Layout de Admin
 import ClienteLayout from '@/layouts/client/ClienteLayout'; // Layout de Cliente
@@ -32,7 +33,12 @@ function App() {
               <Route path="/cliente/*" element={<ClienteLayout/>} />
             </Route>
 
+
           </Routes>
+          <Toaster
+                    position="center-top"
+                    reverseOrder={false}
+                />
         </Suspense>
     </>
   )

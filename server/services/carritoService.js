@@ -30,6 +30,13 @@ export const obtenerDetallesCarritoPorUsuarioSequelize = async (fk_id_usuario) =
     // Retornar los registros de DetalleCarrito
     const detalles = await DetalleCarrito.findAll({
       where: { fk_id_carrito: carritoPendiente.pk_id_carrito },
+      include:[
+        {
+        model: Producto,
+        as: 'ProductoDetalleCarrito',
+        attributes: ['nombre'] 
+        }
+      ]
     });
     return detalles;
   } catch (error) {
@@ -362,7 +369,7 @@ export const confirmarCarritoSequelize = async (fk_id_usuario) => {
       // 2. Obtener todos los DetalleCarrito con su Producto (para verificar stock)
       const detalles = await DetalleCarrito.findAll({
         where: { fk_id_carrito: carritoPendiente.pk_id_carrito },
-        include: [{ model: Producto }],
+        include: [{ model: Producto, as: 'ProductoDetalleCarrito' }],
         transaction: t,
       });
       if (!detalles.length) {
@@ -371,7 +378,7 @@ export const confirmarCarritoSequelize = async (fk_id_usuario) => {
   
       // 3. Verificar stock de cada producto
       for (const det of detalles) {
-        const prod = det.Producto;
+        const prod = det.ProductoDetalleCarrito;
         if (det.cantidad > prod.stock) {
           // Registrar error en Log
           await Log.create({
@@ -388,7 +395,7 @@ export const confirmarCarritoSequelize = async (fk_id_usuario) => {
   
       // 4. Descontar stock de cada producto
       for (const det of detalles) {
-        const prod = det.Producto;
+        const prod = det.ProductoDetalleCarrito;
         const nuevoStock = prod.stock - det.cantidad;
         await prod.update({ stock: nuevoStock }, { transaction: t });
       }

@@ -177,8 +177,8 @@ const EditarCarritoAdmin = () => {
         },
         {
             name: 'Nombre Producto',
-            selector: row => row.nombre_producto,
-            cell: row => <p>{row.nombre_producto}</p>,
+            selector: row => row.ProductoDetalleCarrito.nombre,
+            cell: row => <p>{row.ProductoDetalleCarrito.nombre}</p>,
             sortable: true,
         },
         {

@@ -94,14 +94,6 @@ Pedido.hasMany(DetallePedido, {
   foreignKey: 'fk_id_pedido',
 });
 
-// 11. Producto (1)---(N) DetallePedido
-DetallePedido.belongsTo(Producto, {
-  foreignKey: 'fk_id_producto',
-});
-Producto.hasMany(DetallePedido, {
-  foreignKey: 'fk_id_producto',
-});
-
 // 12. Usuario (1)---(N) Carrito
 Carrito.belongsTo(Usuario, {
   foreignKey: 'fk_id_usuario',
@@ -129,8 +121,18 @@ Carrito.hasMany(DetalleCarrito, {
 // 15. Producto (1)---(N) DetalleCarrito
 DetalleCarrito.belongsTo(Producto, {
   foreignKey: 'fk_id_producto',
+  as: 'ProductoDetalleCarrito',
 });
 Producto.hasMany(DetalleCarrito, {
+  foreignKey: 'fk_id_producto',
+});
+
+// 11. Producto (1)---(N) DetallePedido
+DetallePedido.belongsTo(Producto, {
+  foreignKey: 'fk_id_producto',
+  as: 'ProductoDetallePedido',
+});
+Producto.hasMany(DetallePedido, {
   foreignKey: 'fk_id_producto',
 });
 

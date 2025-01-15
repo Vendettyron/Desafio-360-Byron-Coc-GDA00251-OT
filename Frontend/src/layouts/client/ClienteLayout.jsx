@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom'; 
-import { Toaster } from 'react-hot-toast';
 
 //Componenetes Productos
 import Productos from '@/components/Cliente/Productos/Productos';
@@ -43,10 +42,6 @@ const ClinteLayout = () => {
                     <Route path="cambiarPassword" element={<CambiarPassword/>}/>
 
                 </Routes>
-                <Toaster
-                    position="top-right"
-                    reverseOrder={false}
-                />
         </div>
         
     );

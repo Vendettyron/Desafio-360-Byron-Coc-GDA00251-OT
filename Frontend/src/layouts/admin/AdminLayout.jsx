@@ -44,8 +44,6 @@ import EditarCarritoAdmin from '@/components/Admin/Usuarios/EditarCarritoAdmin';
 import Pedidos from '@/components/Admin/Pedidos/Pedidos';
 import PedidoDetallesPorUsuario from '@/components/Admin/Pedidos/PedidoDetallesPorUsuario';
 import ConfirmarCancelarPedido from '@/components/Admin/Pedidos/ConfirmarCancelarPedido';
-import { Toaster } from 'react-hot-toast';
-
 
 const AdminLayout  = () => {
   return (
@@ -106,10 +104,6 @@ const AdminLayout  = () => {
           </div>
         </SidebarInset>
       </SidebarProvider>
-      <Toaster
-          position="bottom-center"
-          reverseOrder={false}
-      />
     </>
   );
 }

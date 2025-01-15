@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 import DataTableExtensions from 'react-data-table-component-extensions';
 import 'react-data-table-component-extensions/dist/index.css';
 import configureDataTableTheme from '@/config/dataTableTheme';
+import toast from 'react-hot-toast';
 
 import {
   obtenerCategorias,
@@ -47,8 +48,9 @@ const Categorias = () => {
       await activarCategoria(id);
       const updatedData = await obtenerCategorias();
       setCategorias(updatedData);
+      toast.success('Categoría activada exitosamente.');
     } catch (err) {
-      console.error('Error al activar categoría:', err);
+      toast.error('Error al activar la categoría.');
       setError('Error al activar la categoría.');
     }
   };
@@ -58,8 +60,9 @@ const Categorias = () => {
       await inactivarCategoria(id);
       const updatedData = await obtenerCategorias();
       setCategorias(updatedData);
+      toast.success('Categoría inactivada exitosamente.');
     } catch (err) {
-      console.error('Error al inactivar categoría:', err);
+      toast.error('Error al inactivar la categoría.');
       setError('Error al inactivar la categoría.');
     }
   };

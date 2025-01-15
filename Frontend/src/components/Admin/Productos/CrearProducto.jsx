@@ -200,7 +200,7 @@ const CrearProducto = () => {
           />
 
           {/* BOTÓN DE CREAR */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', cursor: 'pointer' }}>
             <Button type="submit" disabled={isSubmitting || !isDirty}>
               {isSubmitting ? 'Creando...' : 'Crear'}
             </Button>

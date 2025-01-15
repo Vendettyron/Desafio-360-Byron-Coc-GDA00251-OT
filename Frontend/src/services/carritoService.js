@@ -71,9 +71,10 @@ export const eliminarDetallesCarrito = async () => {
 // Confirmar el carrito para que se vuelva un pedido
 
 export const confirmarCarrito = async () => {
+  console.log('Confirmar carrito');
   try {
     const response = await api.put('/carrito/ConfirmarCarrito');
-
+    console.log('Confirmar carrito');
     if (response.status === 204) {
       return null; 
     }
