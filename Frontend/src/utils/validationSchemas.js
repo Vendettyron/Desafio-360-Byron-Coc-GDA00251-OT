@@ -5,7 +5,7 @@ import Estados from '@/config/estados';
 // esquema de validación para el formulario de inicio de sesión
 export const loginSchema = Yup.object().shape({
 
-  email: Yup.string()
+  correo: Yup.string()
     .email('Correo electrónico inválido')
     .required('El correo electrónico es requerido'),
     

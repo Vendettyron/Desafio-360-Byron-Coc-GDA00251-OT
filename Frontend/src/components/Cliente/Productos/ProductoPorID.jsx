@@ -111,6 +111,7 @@ const ProductoPorId = () => {
             src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
             alt={producto.nombre || 'Imagen del producto'}
             className=" w-2/3 h-auto "
+            onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
           />
         </div>
 

@@ -17,6 +17,7 @@ import estadosRoutes from './routes/estados.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import carritoRoutes from './routes/carrito.routes.js';
 import pedidoRoutes from './routes/pedido.routes.js';
+import logRoutes from './routes/log.routes.js';
 
 // Importar middleware de manejo de errores
 const corsOptions = {
@@ -41,6 +42,7 @@ app.use('/api/estados', estadosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/carrito', carritoRoutes);
 app.use('/api/pedido', pedidoRoutes);
+app.use('/api/log', logRoutes);
 
 app.get('/api', (req, res) => {
     res.json({ message: 'API de la tienda online' });

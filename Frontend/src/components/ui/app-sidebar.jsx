@@ -7,6 +7,7 @@ import {
   ShoppingBasket,
   ShoppingCart,
   PackagePlus,
+  NotebookText
 } from "lucide-react";
 
 import { NavMain } from "@/components/ui/nav-main";
@@ -43,6 +44,7 @@ export function AppSidebar({ ...props }) {
         plan: "Admin",
       },
     ],
+    // Define las secciones de la barra lateral
     navMain: [
       {
         title: "Proveedores",
@@ -80,7 +82,7 @@ export function AppSidebar({ ...props }) {
         title: "Pedidos",
         url: "#",
         icon: ShoppingCart,
-        isActive: false,
+        isActive: true,
         items: [
           {
             title: "Ver Pedidos",
@@ -133,6 +135,18 @@ export function AppSidebar({ ...props }) {
           {
             title: "Crear Usuario",
             url: "/admin/usuarios/crear",
+          },
+        ],
+      },
+      {
+        title: "Log",
+        url: "#",
+        icon: NotebookText,
+        isActive: false,
+        items: [
+          {
+            title: "Ver Log",
+            url: "/admin/log",
           },
         ],
       },

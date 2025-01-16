@@ -4,6 +4,17 @@ import toast from 'react-hot-toast';
 import VerDetallesPedido from '@/components/Cliente/Pedido/VerDetallesPedido';
 import { cancelarPedidoCliente } from '@/services/pedidosService';
 import Estados from '@/config/estados';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const PedidosItem = ({ order, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -14,7 +25,6 @@ const PedidosItem = ({ order, onUpdate }) => {
   };
 
   const handleEliminar = async () => {
-    if (!window.confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
     setLoading(true);
     try {
       await cancelarPedidoCliente(order.pk_id_pedido);
@@ -66,13 +76,31 @@ const PedidosItem = ({ order, onUpdate }) => {
             {isExpanded ? 'Ocultar' : 'Ver Detalles'}
           </button>
           {order.fk_estado === Estados.EN_PROCESO && (
-            <button
-              onClick={handleEliminar}
-              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-              disabled={loading}
-            >
-              {loading ? 'Cancelando Pedido...' : 'Cancelar Pedido'}
-            </button>
+            <>
+              {/* Botón para vaciar carrito y alerta*/}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                    disabled={loading}
+                  >
+                    {loading ? 'Cancelando Pedido...' : 'Cancelar Pedido'}
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Estas seguro de cancelar el pedido ID: {order.pk_id_pedido}?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Al cancelar el pedido, quedara el registro en el sistema pero no se procesara el pedido.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Regresar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleEliminar} className="mt-2">Cancelar Pedido</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
           )}
         </td>
       </tr>

@@ -1,12 +1,21 @@
-// src/components/Carrito/Carrito.jsx
-
 import React, { useEffect, useState, useContext } from 'react';
 import CarritoPedidoDetalle from '@/components/Cliente/Carrito/CarritoPedidoDetalle';
 import { obtenerDetallesCarritoPorUsuario, eliminarDetallesCarrito, confirmarCarrito } from '@/services/carritoService';
 import toast from 'react-hot-toast';
 import { AuthContext } from '@/context/AuthContext';
 import { Progress } from '@/components/ui/progress';
-import { set } from 'react-hook-form';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 const Carrito = () => {
   const [detallesCarrito, setDetallesCarrito] = useState([]);
@@ -70,10 +79,6 @@ const Carrito = () => {
 
   // Función para eliminar todos los detalles del carrito
   const handleEliminarCarrito = async () => {
-    if (!window.confirm('¿Estás seguro de que deseas eliminar todos los productos del carrito?')) {
-      return;
-    }
-
     try {
       await eliminarDetallesCarrito();
       toast.success('Carrito eliminado exitosamente.');
@@ -89,10 +94,6 @@ const Carrito = () => {
   const handleConfirmarCarrito = async () => {
     if (detallesCarrito.length === 0) {
       toast.error('El carrito está vacío.');
-      return;
-    }
-
-    if (!window.confirm('¿Estás seguro de que deseas confirmar el carrito?')) {
       return;
     }
 
@@ -165,18 +166,52 @@ const Carrito = () => {
 
             {/* Botones de Confirmar y Eliminar Carrito */}
               <div className="flex justify-end mt-4">
-                <button
-                  onClick={handleConfirmarCarrito}
-                  className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 mx-3"
-                >
-                  Confirmar Carrito
-                </button>
-                <button
-                  onClick={handleEliminarCarrito}
-                  className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Eliminar Carrito
-                </button>
+
+                {/* Botón para confirmar carrito y alerta*/}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                  <button
+                    className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 mx-3"
+                  >
+                    Confirmar Carrito
+                  </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Estas seguro de Confirmar tu carrito?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Al cofirmar el carrito se creara un pedido con los productos seleccionados.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Regresar</AlertDialogCancel>
+                      <AlertDialogAction  onClick={handleConfirmarCarrito} className={'mt-2'}>Confirmar Carrito</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                {/* Botón para vaciar carrito y alerta*/}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      Vaciar Carrito
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Estas seguro de vaciar el carrito?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Se eliminarán todos los productos del carrito.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Regresar</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleEliminarCarrito} className="mt-2">Vaciar Carrito</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
           </div>
         </>

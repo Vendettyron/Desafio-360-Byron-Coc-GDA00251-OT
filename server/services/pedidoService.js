@@ -6,13 +6,22 @@ import Log from '../models/Log.js';
 import Estados from '../config/estados.js';
 
 /**
- * @description Obtiene la lista de todos los pedidos 
+ * @description Obtiene la lista de todos los pedidos (mostrando primero los "En proceso" y luego los demás) 
  * @returns {Promise<Array>} - Lista de pedidos encontrados
  * @access Accesible para Admin 
  * */
 export const obtenerPedidosSequelize = async () => {
-    const pedidos = await Pedido.findAll();
-    return pedidos;
+     
+  return await Pedido.findAll({
+    order: [
+
+      [
+        sequelize.literal(`CASE WHEN "Pedido"."fk_estado" = 4 THEN 0 ELSE 1 END`), 
+        'ASC'
+      ],
+      ['pk_id_pedido', 'DESC'],
+    ],
+  });
 };
 
 /**

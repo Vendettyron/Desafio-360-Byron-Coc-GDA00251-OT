@@ -228,19 +228,21 @@ const ActualizarProducto = () => {
                 alt="Imagen actual del producto"
                 style={{ maxWidth: '200px', maxHeight: '200px', borderRadius: '8px' }}
                 className='mt-4 p-3 shadow-lg bg-white rounded-lg'
+                onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
               />
             </div>
           </div>
 
           {/* NUEVA IMAGEN */}
+          <p className='mt-3 mb-3'>Cambiar Imagen:</p>
           <FormInput
-            label="Nueva Imagen:"
             id="imagen"
             type="file"
             accept="image/jpeg, image/png"
             placeholder="Seleccione una nueva imagen"
             register={register('imagen')}
             error={errors.imagen?.message}
+            className={'cursor-pointer hover:bg-primary hover:text-white'}  
           />
 
           {/* BOTÓN DE ACTUALIZAR */}

@@ -133,7 +133,13 @@ const AgregarProductosCarritoAdmin = () => {
     {
       name: 'Imagen',
       selector: row => row.pk_id_producto,
-      cell: row => <img src={`/assets/productos/${row.pk_id_producto}.jpg?t=${imageTimestamp}`} alt={row.nombre}/>,
+      cell: row => (
+        <img 
+          src={`/assets/productos/${row.pk_id_producto}.jpg?t=${imageTimestamp}`} 
+          alt="Producto" 
+          onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
+        />
+      ),
       export: false // No exportar esta columna
     },
     {

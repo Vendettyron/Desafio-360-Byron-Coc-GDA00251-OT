@@ -111,7 +111,6 @@ const __dirname = dirname(__filename);
 // Configuración de multer para subir imagen
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Usar 'join' con __dirname correctamente definido
     const destino = join(__dirname, '../../Frontend/public/assets/productos');
     cb(null, destino);
   },

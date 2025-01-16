@@ -1,12 +1,14 @@
-// src/components/Cliente/Productos/ProductosCard.jsx
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const ProductosCard = ({ nombre, precio, proveedor, pk_id_producto, stock, onClick, imageTimestamp }) => {
     // Añadir el timestamp como parámetro de consulta para evitar la caché
     const rutaImagen = `/assets/productos/${pk_id_producto}.jpg?ts=${imageTimestamp}`;
-    console.log('Ruta de la imagen:', rutaImagen);
+    const rutaImagenDefault = '/assets/productos/default.jpg';
+
+    const handleImageError = (e) => {
+        e.target.src = rutaImagenDefault;
+    };
 
     return (
         <div id="productoCard">
@@ -16,6 +18,7 @@ const ProductosCard = ({ nombre, precio, proveedor, pk_id_producto, stock, onCli
             >
                 <img
                     src={rutaImagen}
+                    onError={handleImageError}
                     className="p-8 rounded-t-lg w-full h-full"
                     alt={nombre}
                 />

@@ -29,6 +29,7 @@ const CrearProducto = () => {
   const [proveedores, setProveedores] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Configuración de react-hook-form
   const {
     register,
     handleSubmit,
@@ -83,12 +84,12 @@ const CrearProducto = () => {
     try {
       // Crear el producto y obtener el ID
       const respuesta = await crearProducto(nuevoProducto); 
-      const { id_producto } = respuesta; // Obtener el ID del producto creado
+      const { idProducto } = respuesta; // Obtener el ID del producto creado
 
       // Subir la imagen
       const imagenData = new FormData();
       imagenData.append('imagen', formData.imagen[0]);
-      await subirImagenProducto(id_producto, imagenData);
+      await subirImagenProducto(idProducto, imagenData);
       
       reset();
       // Redirecciona al listado de productos
@@ -177,13 +178,15 @@ const CrearProducto = () => {
             ]}
           />
           {/* Imagen */}
+          {/* NUEVA IMAGEN */}
+          <p className='mt-3 mb-3'>Subir imagen:</p>
           <FormInput
-            label="Imagen:"
             id="imagen"
             type="file"
             accept="image/jpeg, image/png"
             register={register('imagen')}
             error={errors.imagen?.message}
+            className={'cursor-pointer hover:bg-primary hover:text-white'}  
           />
 
           {/* ESTADO */}

@@ -15,6 +15,7 @@ import { Progress } from '@/components/ui/progress';
 
 const PedidoDetallesPorUsuario = () => {
   const { idcliente, idpedido } = useParams();
+  const [imageTimestamp, setImageTimestamp] = useState(Date.now());
   const navigate = useNavigate();
 
   // INFORMACIÓN DEL PEDIDO
@@ -54,6 +55,7 @@ const PedidoDetallesPorUsuario = () => {
         setError('No se pudieron obtener los detalles del pedido. Intenta nuevamente más tarde.');
       } finally {
         setCargando(100);
+        setImageTimestamp(Date.now()); // Actualizar el timestamp
         setLoading(false);
       }
     };
@@ -81,6 +83,19 @@ const PedidoDetallesPorUsuario = () => {
       name: 'ID Producto',
       selector: row => row.fk_id_producto,
       sortable: true,
+    },
+    {
+      name: 'Imagen',
+      selector: row => row.fk_id_producto,
+      cell: row => (
+        <img 
+          src={`/assets/productos/${row.fk_id_producto}.jpg?t=${imageTimestamp}`} 
+          alt="Producto" 
+          onError={(e) => e.target.src = '/assets/productos/default.jpg'}
+          style={{ width: '100px', height: '100px' }} 
+        />
+      ),
+      export: false // No exportar esta columna
     },
     {
       name: 'Nombre Producto',
@@ -119,7 +134,7 @@ const PedidoDetallesPorUsuario = () => {
   return (
     <>
       <h2 className='title-table-admin'>Detalles del Pedido</h2>
-      <div className='w-screen max-w-md bg-white p-4 ...'>
+      <div className='w-screen max-w-md flex-auto rounded-3xl bg-white text-sm/6 shadow-lg ring-1 ring-gray-900/5 p-4 mb-6'>
         <div className='grid grid-cols-2 gap-4'>
           <div className='text-left font-bold'>
             <p>ID Cliente:</p>
@@ -160,7 +175,7 @@ const PedidoDetallesPorUsuario = () => {
           Confirmar / Cancelar
         </button>
       ) : (
-        <p className="w-screen max-w-md bg-white p-4 ...">
+        <p className="w-screen max-w-md flex-auto rounded-3xl bg-white text-sm/6 shadow-lg ring-1 ring-gray-900/5 p-4 mb-6">
           Este pedido ya ha sido Confirmado o Cancelado
         </p>
       )}

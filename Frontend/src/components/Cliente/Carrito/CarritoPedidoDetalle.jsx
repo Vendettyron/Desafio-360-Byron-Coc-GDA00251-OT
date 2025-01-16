@@ -51,6 +51,7 @@ const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
           src={`/assets/productos/${item.fk_id_producto}.jpg`}
           alt={item.nomr}
           className="w-16 h-16 object-cover"
+          onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
         />
       </td>
 

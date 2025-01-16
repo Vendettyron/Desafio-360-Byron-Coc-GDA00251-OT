@@ -40,10 +40,13 @@ import CrearProducto from '@/components/Admin/Productos/CrearProducto';
 import ActualizarProducto from '@/components/Admin/Productos/ActualizarProducto';
 import EditarCarritoAdmin from '@/components/Admin/Usuarios/EditarCarritoAdmin';
 
-// componeente de pedidos
+// componentes de pedidos
 import Pedidos from '@/components/Admin/Pedidos/Pedidos';
 import PedidoDetallesPorUsuario from '@/components/Admin/Pedidos/PedidoDetallesPorUsuario';
 import ConfirmarCancelarPedido from '@/components/Admin/Pedidos/ConfirmarCancelarPedido';
+
+// componentes de log
+import Log from '@/components/Admin/Log/Log';
 
 const AdminLayout  = () => {
   return (
@@ -99,6 +102,8 @@ const AdminLayout  = () => {
               <Route path="pedido" element={<Pedidos/>} />
               <Route path="pedido/obtenerDetallesClientePorAdmin/:idcliente/:idpedido" element={<PedidoDetallesPorUsuario />} />
               <Route path="pedido/confirmar-cancelar/:idpedido" element={<ConfirmarCancelarPedido />} />
+               {/* Rutas de Log */}
+              <Route path="log" element={<Log/>} /> 
               
             </Routes>
           </div>

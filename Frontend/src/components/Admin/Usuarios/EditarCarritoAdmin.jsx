@@ -17,6 +17,17 @@ import configureDataTableTheme from '@/config/dataTableTheme';
 import { Progress } from '@/components/ui/progress';
 import toast from 'react-hot-toast'; 
 import {CirclePlus, CircleMinus,Trash2   } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 // Estilos
 import "styled-components";
 
@@ -28,6 +39,7 @@ const EditarCarritoAdmin = () => {
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(20);
     const navigate = useNavigate();
+    const [imageTimestamp, setImageTimestamp] = useState(Date.now());
 
     useEffect(() => {
         const fetchDetallesCarrito = async () => {
@@ -48,6 +60,7 @@ const EditarCarritoAdmin = () => {
                 setError('No se pudieron obtener los detalles del carrito. Intenta nuevamente más tarde.');
                 toast.error('No se pudieron obtener los detalles del carrito. Intenta nuevamente más tarde.');
             } finally {
+                setImageTimestamp(Date.now()); // Actualizar el timestamp
                 setCargando(100);
                 setLoading(false);
             }
@@ -78,20 +91,19 @@ const EditarCarritoAdmin = () => {
     // Función para decrementar la cantidad de un producto en el carrito
     const handleDecrementar = async (idProducto, cantidadActual) => {
         if (cantidadActual === 1) {
-            // Confirmar eliminación del detalle
-            if (window.confirm('La cantidad es 1. ¿Deseas eliminar este producto del carrito?')) {
-                try {
-                    await eliminarDetalleCarritoAdmin(id, idProducto);
-                    toast.success('Producto eliminado del carrito.');
-                    // Actualizar el estado local
-                    setCarritoDetalles(prevDetalles =>
-                        prevDetalles.filter(detalle => detalle.fk_id_producto !== idProducto)
-                    );
-                } catch (err) {
-                    console.error('Error al eliminar el producto:', err);
-                    toast.error('No se pudo eliminar el producto. Intenta nuevamente.');
-                }
+          
+            try {
+                await eliminarDetalleCarritoAdmin(id, idProducto);
+                toast.success('Producto eliminado del carrito.');
+                // Actualizar el estado local
+                setCarritoDetalles(prevDetalles =>
+                    prevDetalles.filter(detalle => detalle.fk_id_producto !== idProducto)
+                );
+            } catch (err) {
+                console.error('Error al eliminar el producto:', err);
+                toast.error('No se pudo eliminar el producto. Intenta nuevamente.');
             }
+            
         } else {
             const nuevaCantidad = cantidadActual - 1;
             try {
@@ -114,32 +126,28 @@ const EditarCarritoAdmin = () => {
 
     // Función para eliminar un producto específico del carrito
     const handleEliminarProducto = async (idProducto) => {
-        if (window.confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
-            try {
-                await eliminarDetalleCarritoAdmin(id, idProducto);
-                toast.success('Producto eliminado del carrito.');
-                // Actualizar el estado local
-                setCarritoDetalles(prevDetalles =>
-                    prevDetalles.filter(detalle => detalle.fk_id_producto !== idProducto)
-                );
-            } catch (err) {
-                console.error('Error al eliminar el producto:', err);
-                toast.error('No se pudo eliminar el producto. Intenta nuevamente.');
-            }
-        }
+        try {
+            await eliminarDetalleCarritoAdmin(id, idProducto);
+            toast.success('Producto eliminado del carrito.');
+            // Actualizar el estado local
+            setCarritoDetalles(prevDetalles =>
+                prevDetalles.filter(detalle => detalle.fk_id_producto !== idProducto)
+            );
+        } catch (err) {
+            console.error('Error al eliminar el producto:', err);
+            toast.error('No se pudo eliminar el producto. Intenta nuevamente.');
+        }   
     };
 
     // Función para vaciar todo el carrito
     const handleVaciarCarrito = async () => {
-        if (window.confirm('¿Estás seguro de que deseas vaciar todo el carrito?')) {
-            try {
-                await eliminarDetallesCarritoAdmin(id);
-                toast.success('Carrito vaciado exitosamente.');
-                setCarritoDetalles([]);
-            } catch (err) {
-                console.error('Error al vaciar el carrito:', err);
-                toast.error('No se pudo vaciar el carrito. Intenta nuevamente.');
-            }
+        try {
+            await eliminarDetallesCarritoAdmin(id);
+            toast.success('Carrito vaciado exitosamente.');
+            setCarritoDetalles([]);
+        } catch (err) {
+            console.error('Error al vaciar el carrito:', err);
+            toast.error('No se pudo vaciar el carrito. Intenta nuevamente.');
         }
     };
 
@@ -175,6 +183,19 @@ const EditarCarritoAdmin = () => {
             cell: row => <p>{row.fk_id_producto}</p>,
             sortable: true,
         },
+        {
+            name: 'Imagen',
+            selector: row => row.fk_id_producto,
+            cell: row => (
+              <img 
+                src={`/assets/productos/${row.fk_id_producto}.jpg?t=${imageTimestamp}`} 
+                alt="Producto" 
+                onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
+                style={{ width: '100px', height: '100px' }} 
+              />
+            ),
+            export: false // No exportar esta columna
+          },
         {
             name: 'Nombre Producto',
             selector: row => row.ProductoDetalleCarrito.nombre,
@@ -265,12 +286,29 @@ const EditarCarritoAdmin = () => {
 
             {/* Botones de Acción */}
             <div className='flex space-x-4 mb-6'>
-                <button
-                    onClick={handleVaciarCarrito}
-                    className="focus:outline-none text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                >
-                    Vaciar Carrito
-                </button>
+
+                {/* Botón para vaciar carrito y alerta*/}
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                    <button
+                        className="focus:outline-none text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                    >
+                        Vaciar Carrito
+                    </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Estas seguro de vaciar el carrito?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                        Se eliminaran todos los productos del carrito.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleVaciarCarrito} className="mt-2">Vaciar carrito</AlertDialogAction>
+                    </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 <button
                     onClick={handleAgregarProductos}
                     className="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"

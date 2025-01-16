@@ -4,7 +4,6 @@ import { ObtenerDetallesPedidoCliente } from '@/services/pedidosService';
 import { obtenerProductos } from '@/services/productosService';
 import toast from 'react-hot-toast';
 import { Progress } from '@/components/ui/progress';
-import { set } from 'react-hook-form';
 
 const VerDetallesPedido = ({ orderId }) => {
   const [details, setDetails] = useState([]);
@@ -61,7 +60,7 @@ const VerDetallesPedido = ({ orderId }) => {
           {details.map((item) => (
             <tr key={item.id_detalle}>
               <td className="px-4 py-2">
-                <img src={`/assets/productos/${item.fk_id_producto}.jpg?t=${Date.now()}`} alt={item.nombre_producto} className=" w-24 h-auto object-cover" />
+                <img src={`/assets/productos/${item.fk_id_producto}.jpg?t=${Date.now()}`} alt={item.nombre_producto} className=" w-24 h-auto object-cover" onError={(e) => e.target.src = '/assets/productos/default.jpg'}  />
               </td>
               <td className="px-4 py-2">{item.ProductoDetallePedido.nombre}</td>
               <td className="px-4 py-2">Q{item.precio_unitario.toLocaleString()}</td>
