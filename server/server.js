@@ -53,9 +53,6 @@ app.use((req, res, next) => {
     res.status(404).json({ message: 'Ruta no encontrada o no importada desde server' });
 });
 
-// Middleware de manejo de errores globales
-
-
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -90,12 +90,32 @@ export const inactivarProducto = async (id) => {
   }
 };
 
+/**
+ * Obtiene los productos activos.
+ * @returns {Promise<Array>} - Lista de productos activos
+ */
+
 export const obtenerProductosActivos = async () => {
   try {
     const response = await api.get('/productos/ObtenerProductosActivos');
     return response.data; 
   } catch (error) {
     console.error('Error al obtener productos:', error);
+    throw error;
+  }
+};
+
+/**
+ * Obtiene los productos filtrados por categoría.
+ * @param {number|string} idCategoria - ID de la categoría.
+ * @returns {Promise<Array>} - Lista de productos filtrados.
+ */
+export const obtenerProductosPorCategoria = async (idCategoria) => {
+  try {
+    const response = await api.get(`/productos/ObtenerProductosPorCategoria/${idCategoria}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener productos por categoría (${idCategoria}):`, error);
     throw error;
   }
 };

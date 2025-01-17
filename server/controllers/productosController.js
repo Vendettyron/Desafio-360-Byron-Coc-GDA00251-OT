@@ -6,6 +6,7 @@ import {
     inactivarProductoSequelize,
     activarProductoSequelize,
     obtenerProductosActivosSequelize,
+    obtenerProductosPorCategoriaSequelize
   } from '../services/productosService.js';
   
   /**
@@ -77,6 +78,27 @@ import {
       res.status(500).json({ error: 'Error interno del servidor.' });
     }
   };
+
+  /**
+ * @description Obtener los productos de una categoría específica (solo activos).
+ * @route GET /api/productos/ObtenerProductosPorCategoria/:idCategoria
+ * @access Privado (Admin, Cliente)
+ */
+export const obtenerProductosPorCategoria = async (req, res) => {
+  const { idCategoria } = req.params;
+
+  if (!idCategoria) {
+    return res.status(400).json({ message: 'Faltan campos obligatorios.' });
+  }
+
+  try {
+    const productos = await obtenerProductosPorCategoriaSequelize(idCategoria);
+    res.json(productos);
+  } catch (error) {
+    console.error('Error obteniendo productos por categoría (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
   
   /**
    * @description Obtener un producto por su ID

@@ -15,6 +15,21 @@ export const obtenerCategorias = async () => {
 };
 
 /**
+ * Obtiene la lista de categorías activas.
+ * @returns {Promise<Array>} - Lista de categorías activas
+ */
+
+export const obtenerCategoriasActivas = async () => {
+  try {
+    const response = await api.get('/categorias/ObtenerCategoriasActivas');
+    return response.data; 
+  } catch (error) {
+    console.error('Error al obtener categorías:', error);
+    throw error;
+  }
+};
+
+/**
  * Obtiene una categoría por su ID.
  * @param {number|string} id - ID de la categoría
  * @returns {Promise<Object>} - Datos de la categoría

@@ -23,7 +23,7 @@ function App() {
               <Route path="register" element={<Register />} /> {/* Ruta para "/register" */}
             </Route>
 
-            {/* Rutas protegidas para usuarios con rol "Operador" */}
+            {/* Rutas protegidas para usuarios con rol "Admin" */}
             <Route element={<ProtectedRoute roles={[Roles.ADMIN]} />}>
               <Route path="/admin/*" element={<AdminLayout/>} />
             </Route>

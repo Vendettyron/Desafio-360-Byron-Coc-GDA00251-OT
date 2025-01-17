@@ -20,6 +20,21 @@ export const obtenerCategoriasSequelize = async () => {
   };
 
 /**
+ * @description Obtener todas las categorías activas de la base de datos.
+ * @returns  {Promise<Object>} - Lista de categorías activas
+ * */
+  export const obtenerCategoriasActivasSequelize = async () => {
+    try {
+      const categorias = await Categoria.findAll({
+        where: { fk_estado: Estados.ACTIVO },
+      });
+      return categorias;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+/**
  * @description Obtener una categoría por su ID de la base de datos.
  * @param {Number} id - ID de la categoría
  * @returns  {Promise<Object>} - Categoría encontrada

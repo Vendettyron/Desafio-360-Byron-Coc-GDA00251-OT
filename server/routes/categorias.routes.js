@@ -9,11 +9,9 @@ import {
     activarCategoria,
     inactivarCategoria,
     obtenerCategoriaPorId,
-    obtenerCategorias
+    obtenerCategorias,
+    obtenerCategoriasActivas
 } from "../controllers/categoriasController.js";
-
-// Role 1: Administrador
-// Role 2: Cliente
 
 const router = express.Router();
 
@@ -26,9 +24,23 @@ const router = express.Router();
 router.get( 
     "/ObtenerCategorias",
     authMiddleware,
-    roleMiddleware([Roles.ADMIN]),
+    roleMiddleware([Roles.ADMIN,Roles.CLIENTE]),
     obtenerCategorias
 );
+
+/**
+ * @route POST /api/categorias/obtenerCategoriasActivas
+ * @desc Ver la lista de categorias activas
+ * @access cliente y admin
+ */
+
+router.get( 
+    "/ObtenerCategoriasActivas",
+    authMiddleware,
+    roleMiddleware([Roles.ADMIN,Roles.CLIENTE]),
+    obtenerCategoriasActivas
+);
+
 
 /**
  * @route POST /api/categorias/ObtenerCategoriasPorId/:id

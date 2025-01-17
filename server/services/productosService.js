@@ -72,6 +72,25 @@ export const obtenerProductoPorIdSequelize = async (pk_id_producto) => {
     }
   };
 
+/**
+ * @description Obtiene los productos activos filtrados por ID de categoría.
+ * @param {number|string} idCategoria - ID de la categoría
+ * @returns {Promise<Array>} - Lista de productos activos de esa categoría
+ */
+export const obtenerProductosPorCategoriaSequelize = async (idCategoria) => {
+  try {
+    const productos = await Producto.findAll({
+      where: {
+        fk_categoria: idCategoria,
+        fk_estado: Estados.ACTIVO, // Filtra solo los activos
+      },
+    });
+    return productos;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /** 
  * @description Actualizar un producto existente
  * @param {Object} data - Datos del producto a actualizar

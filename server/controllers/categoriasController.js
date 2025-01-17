@@ -5,6 +5,7 @@ import {
   activarCategoriaSequelize,
   inactivarCategoriaSequelize,
   obtenerCategoriaPorIdSequelize,
+  obtenerCategoriasActivasSequelize
 } from '../services/categoriasService.js';
 
 /**
@@ -14,6 +15,20 @@ import {
 export const obtenerCategorias = async (req, res) => {
   try {
     const categorias = await obtenerCategoriasSequelize();
+    res.json(categorias);
+  } catch (error) {
+    console.error('Error obteniendo categorias (Sequelize):', error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+};
+
+/**
+ * @description Obtener todas las categorias 
+ * @returns {Array} - Lista de categorias
+ * */
+export const obtenerCategoriasActivas = async (req, res) => {
+  try {
+    const categorias = await obtenerCategoriasActivasSequelize();
     res.json(categorias);
   } catch (error) {
     console.error('Error obteniendo categorias (Sequelize):', error);

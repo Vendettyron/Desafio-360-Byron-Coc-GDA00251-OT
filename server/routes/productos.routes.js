@@ -9,7 +9,8 @@ import {
   inactivarProducto,
   obtenerProductoPorId,
   subirImagenProducto,
-  obtenerProductosActivos
+  obtenerProductosActivos,
+  obtenerProductosPorCategoria,
 } from "../controllers/productosController.js";
 import  Roles  from "../config/roles.js"; 
 import multer from 'multer';
@@ -54,6 +55,18 @@ router.get(
   authMiddleware,
   roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
   obtenerProductoPorId
+);
+
+/**
+ * @route GET /api/productos/ObtenerProductosPorCategoria/:idCategoria
+ * @desc Obtener productos activos de una categoría específica
+ * @access Admin y/o Cliente (dependiendo de tu lógica)
+ */
+router.get(
+  "/ObtenerProductosPorCategoria/:idCategoria",
+  authMiddleware,
+  roleMiddleware([Roles.ADMIN, Roles.CLIENTE]),
+  obtenerProductosPorCategoria
 );
 
 /**

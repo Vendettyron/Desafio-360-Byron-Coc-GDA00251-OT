@@ -106,7 +106,6 @@ const CarritoPedidoDetalle = ({ item, onUpdate, onDelete }) => {
 CarritoPedidoDetalle.propTypes = {
   item: PropTypes.shape({
     fk_id_producto: PropTypes.number.isRequired,
-    fk_id_producto: PropTypes.number.isRequired,
     nombre_producto: PropTypes.string.isRequired,
     precio_unitario: PropTypes.number.isRequired,
     cantidad: PropTypes.number.isRequired,
