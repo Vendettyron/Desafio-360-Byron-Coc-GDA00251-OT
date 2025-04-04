@@ -1,21 +1,18 @@
 // src/components/ProductoPorId.jsx
 
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { obtenerProductoPorId } from '@/services/productosService';
-import { obtenerProveedorPorId } from '@/services/proveedoresService';
-import { agregarProductoAlCarrito } from '@/services/carritoService';
-import toast from 'react-hot-toast';
-import { AuthContext } from '@/context/AuthContext';
-
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { obtenerProductoPorId } from "@/services/productosService";
+import { obtenerProveedorPorId } from "@/services/proveedoresService";
+import { agregarProductoAlCarrito } from "@/services/carritoService";
+import toast from "react-hot-toast";
+import { AuthContext } from "@/context/AuthContext";
 
 //componentes reutilizables
-import {CirclePlus, CircleMinus } from 'lucide-react';
-import FormInput from '@/components/Forms/FormInput';
-import { set } from 'react-hook-form';
-import { Progress } from '@/components/ui/progress';
-
-
+import { CirclePlus, CircleMinus } from "lucide-react";
+import FormInput from "@/components/Forms/FormInput";
+import { set } from "react-hook-form";
+import { Progress } from "@/components/ui/progress";
 
 const ProductoPorId = () => {
   const { id } = useParams(); // Obtener el ID del producto desde la ruta
@@ -24,7 +21,7 @@ const ProductoPorId = () => {
   const [cantidad, setCantidad] = useState(1); // Cantidad inicial
   const [loading, setLoading] = useState(true);
   const [cargando, setCargando] = useState(20);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [imageTimestamp, setImageTimestamp] = useState(Date.now());
   const { auth } = useContext(AuthContext); // Acceder al contexto de autenticación
 
@@ -39,7 +36,9 @@ const ProductoPorId = () => {
 
         // Verificar si el producto tiene un proveedor asociado
         if (productoData.fk_proveedor) {
-          const proveedorData = await obtenerProveedorPorId(productoData.fk_proveedor);
+          const proveedorData = await obtenerProveedorPorId(
+            productoData.fk_proveedor
+          );
           setProveedor(proveedorData);
           console.log("Datos del proveedor obtenidos:", proveedorData);
         } else {
@@ -48,8 +47,8 @@ const ProductoPorId = () => {
         }
         setCargando(80);
       } catch (err) {
-        setError(err.message || 'Error al cargar los datos del producto.');
-        toast.error(err.message || 'Error al cargar los datos del producto.');
+        setError(err.message || "Error al cargar los datos del producto.");
+        toast.error(err.message || "Error al cargar los datos del producto.");
       } finally {
         setCargando(100);
         setLoading(false);
@@ -71,25 +70,23 @@ const ProductoPorId = () => {
   // Función para agregar al carrito
   const handleAgregarAlCarrito = async () => {
     if (!auth.token) {
-      toast.error('Debes iniciar sesión para agregar productos al carrito.');
+      toast.error("Debes iniciar sesión para agregar productos al carrito.");
       return;
     }
 
     try {
       await agregarProductoAlCarrito(producto.pk_id_producto, cantidad);
-      toast.success('Producto agregado al carrito exitosamente.');
+      toast.success("Producto agregado al carrito exitosamente.");
     } catch (err) {
-      toast.error(err.message || 'Error al agregar el producto al carrito.');
+      toast.error(err.message || "Error al agregar el producto al carrito.");
     }
   };
 
   // Renderizado condicional
 
   if (loading) {
-       return (
-           <Progress value={cargando} />
-       );
-     }
+    return <Progress value={cargando} />;
+  }
 
   if (error) {
     return (
@@ -109,9 +106,9 @@ const ProductoPorId = () => {
         <div className="md:w-1/2 flex flex-col items-center content-center justify-center">
           <img
             src={`/assets/productos/${id}.jpg?t=${imageTimestamp}`}
-            alt={producto.nombre || 'Imagen del producto'}
+            alt={producto.nombre || "Imagen del producto"}
             className=" w-2/3 h-auto "
-            onError={(e) => e.target.src = '/assets/productos/default.jpg'} 
+            onError={(e) => (e.target.src = "/assets/productos/default.jpg")}
           />
         </div>
 
@@ -121,20 +118,22 @@ const ProductoPorId = () => {
             <h2 className="text-4xl font-bold mb-2">{producto.nombre}</h2>
             {proveedor.nombre && (
               <p className="text-gray-800 mb-4 ">
-                <strong className='font-semibold'>Proveedor:</strong> {proveedor.nombre}
+                <strong className="font-semibold">Proveedor:</strong>{" "}
+                {proveedor.nombre}
               </p>
             )}
-            <p className="text-gray-700 mb-4 font-normal  ">{producto.descripcion}</p>
+            <p className="text-gray-700 mb-4 font-normal  ">
+              {producto.descripcion}
+            </p>
 
             <p className="text-gray-800 mb-4">
-              <strong className='font-semibold'>Stock:</strong> {producto.stock}
+              <strong className="font-semibold">Stock:</strong> {producto.stock}
             </p>
 
             <p className="text-gray-800 mb-4 font-bold text-2xl ">
-              <p className='font-semibold'>Precio:</p> Q{producto.precio.toLocaleString()}
+              <p className="font-semibold">Precio:</p> Q
+              {producto.precio.toLocaleString()}
             </p>
-
-
           </div>
 
           {/* Renderizado Condicional basado en el Stock */}
@@ -158,7 +157,11 @@ const ProductoPorId = () => {
                 />
                 <button
                   onClick={incrementarCantidad}
-                  className={`btn-plus-minus ${cantidad >= producto.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`btn-plus-minus ${
+                    cantidad >= producto.stock
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   aria-label="Incrementar cantidad"
                   disabled={cantidad >= producto.stock}
                 >
@@ -167,7 +170,8 @@ const ProductoPorId = () => {
               </div>
 
               {/* Botón de Añadir al Carrito */}
-              <button id='btnAgregarCarrito'
+              <button
+                id="btnAgregarCarrito"
                 onClick={handleAgregarAlCarrito}
                 className="w-full text-white py-2 rounded transition-colors"
               >

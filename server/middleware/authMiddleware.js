@@ -4,10 +4,21 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * Middleware para autenticar al usuario mediante JWT almacenado en cookies
+ * Middleware para autenticar al usuario mediante JWT desde header o cookie
  */
 const authMiddleware = (req, res, next) => {
-    const token = req.cookies.token; // Extraer el token de la cookie 'token'
+    // Buscar token en Authorization header o en cookie
+    let token = null;
+
+    // Prioridad 1: Header Authorization
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+
+    // Prioridad 2: Cookie
+    if (!token && req.cookies?.token) {
+        token = req.cookies.token;
+    }
 
     if (!token) {
         return res.status(401).json({ message: 'Acceso denegado. No se proporcionó el token.' });
@@ -15,11 +26,11 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded; // { id: usuario.id, rol: usuario.rol }
+        req.user = decoded; // { id, rol }
         next();
     } catch (error) {
-        console.error('Error en authMiddleware:', error);
-        res.status(401).json({ message: 'Token inválido o expirado.' });
+        console.error('Error en authMiddleware:', error.message);
+        return res.status(401).json({ message: 'Token inválido o expirado.' });
     }
 };
 

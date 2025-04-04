@@ -11,13 +11,16 @@ export default function LoginPage() {
         <div className="flex flex-1 items-center justify-center" >
           <div className="w-full max-w-sm">
            <Suspense>
+              
+              
+              
               <Outlet/>
            </Suspense>
           </div>
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img src={Img} alt="Login" className="object-cover w-full h-full" />
+        <img src={Img} alt="Login" className="object-left w-full h-full" />
       </div>
     </div>
   )

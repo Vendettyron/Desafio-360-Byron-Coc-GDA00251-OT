@@ -155,7 +155,7 @@ export const obtenerProductosPorCategoriaSequelize = async (idCategoria) => {
  * */
 
   export const inactivarProductoSequelize = async (data) => {
-    const { id_producto, fk_id_usuario } = data;
+    const { id_producto, fk_id_usuario,ip } = data;
   
     const t = await sequelize.transaction();
     try {
@@ -173,7 +173,7 @@ export const obtenerProductosPorCategoriaSequelize = async (idCategoria) => {
         fk_id_usuario,
         entidadAfectada: 'Productos',
         operacion: 'UPDATE',
-        detalles: `Producto inactivado: ID=${id_producto} nomre=${producto.nombre}`,
+        detalles: `Producto inactivado: ID=${id_producto} nomre=${producto.nombre} ip=${ip}`,
         resultado: 'Éxito',
       }, { transaction: t });
   
@@ -193,7 +193,7 @@ export const obtenerProductosPorCategoriaSequelize = async (idCategoria) => {
  * */
 
   export const activarProductoSequelize = async (data) => {
-    const { pk_id_producto, id_usuario_accion } = data;
+    const { pk_id_producto, id_usuario_accion,ip } = data;
   
     const t = await sequelize.transaction();
     try {
@@ -208,7 +208,7 @@ export const obtenerProductosPorCategoriaSequelize = async (idCategoria) => {
         fk_id_usuario: id_usuario_accion,
         entidadAfectada: 'Productos',
         operacion: 'ACTIVACIÓN',
-        detalles: `El producto con ID ${pk_id_producto} y nombre=${producto.nombre} fue activado.`,
+        detalles: `El producto con ID ${pk_id_producto} y nombre=${producto.nombre} fue activado. ip=${ip}`,
         resultado: 'Éxito'
       }, { transaction: t });
   

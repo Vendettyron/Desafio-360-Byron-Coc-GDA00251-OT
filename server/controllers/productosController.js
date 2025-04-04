@@ -8,6 +8,7 @@ import {
     obtenerProductosActivosSequelize,
     obtenerProductosPorCategoriaSequelize
   } from '../services/productosService.js';
+  import os from 'os';
   
   /**
    * @description Crear un producto
@@ -171,8 +172,35 @@ export const obtenerProductosPorCategoria = async (req, res) => {
    * @route PUT /api/productos/InactivarProducto/:id
    * @access Privado (Admin)
    */
+
   export const inactivarProducto = async (req, res) => {
     const { id } = req.params;
+  
+    // 🔹 Obtener IP del cliente
+    const ipOriginal = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const ipCliente = ipOriginal.replace(/^::ffff:/, '').trim(); // Limpieza básica
+  
+    // 🔹 Obtener IP del servidor (IPv6 no link-local)
+    const interfaces = os.networkInterfaces();
+    let ipServidor = 'IPv6 no encontrada';
+  
+    for (const name in interfaces) {
+      for (const iface of interfaces[name]) {
+        if (iface.family === 'IPv6' && !iface.internal && !iface.address.startsWith('fe80')) {
+          ipServidor = iface.address;
+          break;
+        }
+      }
+      if (ipServidor !== 'IPv6 no encontrada') break;
+    }
+  
+    // 🔄 Decidir qué IP usar según si la solicitud es local o remota
+    const ipFinal = (ipCliente === '127.0.0.1' || ipCliente === '::1') ? ipServidor : ipCliente;
+  
+    console.log("🌐 IP cliente:", ipCliente);
+    console.log("🖥️ IP servidor:", ipServidor);
+    console.log("✅ IP enviada a Sequelize:", ipFinal);
+  
     const id_producto = Number(id);
     const fk_id_usuario = req.user.id;
   
@@ -183,11 +211,14 @@ export const obtenerProductosPorCategoria = async (req, res) => {
     try {
       const productoInactivado = await inactivarProductoSequelize({
         id_producto,
-        fk_id_usuario
+        fk_id_usuario,
+        ip: ipFinal // Aquí se manda la IP ya validada según tu lógica
       });
+  
       res.json({
         message: 'Producto inactivado con éxito',
-        producto: productoInactivado
+        producto: productoInactivado,
+        ip_reportada: ipFinal
       });
     } catch (error) {
       console.error('Error inactivando producto (Sequelize):', error);
@@ -200,8 +231,35 @@ export const obtenerProductosPorCategoria = async (req, res) => {
    * @description Activar un producto por su ID
    * @access Privado (Admin)
    */
+
   export const activarProducto = async (req, res) => {
     const { id } = req.params;
+  
+    // 🔹 Obtener IP del cliente
+    const ipOriginal = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const ipCliente = ipOriginal.replace(/^::ffff:/, '').trim();
+  
+    // 🔹 Obtener IP del servidor (IPv6 no link-local)
+    const interfaces = os.networkInterfaces();
+    let ipServidor = 'IPv6 no encontrada';
+  
+    for (const name in interfaces) {
+      for (const iface of interfaces[name]) {
+        if (iface.family === 'IPv6' && !iface.internal && !iface.address.startsWith('fe80')) {
+          ipServidor = iface.address;
+          break;
+        }
+      }
+      if (ipServidor !== 'IPv6 no encontrada') break;
+    }
+  
+    // 🔄 Condicional: si es localhost, usamos la IP del servidor
+    const ipFinal = (ipCliente === '127.0.0.1' || ipCliente === '::1') ? ipServidor : ipCliente;
+  
+    console.log("🌐 IP cliente:", ipCliente);
+    console.log("🖥️ IP servidor:", ipServidor);
+    console.log("✅ IP enviada a Sequelize:", ipFinal);
+  
     const pk_id_producto = Number(id);
     const id_usuario_accion = req.user.id;
   
@@ -212,17 +270,22 @@ export const obtenerProductosPorCategoria = async (req, res) => {
     try {
       const productoActivado = await activarProductoSequelize({
         pk_id_producto,
-        id_usuario_accion
+        id_usuario_accion,
+        ip: ipFinal
       });
+  
       res.json({
         message: 'Producto activado con éxito',
-        producto: productoActivado
+        producto: productoActivado,
+        ip_reportada: ipFinal
       });
     } catch (error) {
       console.error('Error activando producto (Sequelize):', error);
       res.status(500).json({ error: 'Error interno del servidor.' });
     }
   };
+  
+  
 
 /**
  * @description Subir una imagen de un producto
